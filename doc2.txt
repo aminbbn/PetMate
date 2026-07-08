@@ -1,0 +1,155 @@
+﻿Pet Mate — Design Document
+Visual & Interaction System
+________________
+
+
+1. Design Intent
+Pet Mate should feel like a warm, energetic, slightly playful companion — never clinical, never corporate, never cluttered. The emotional target is somewhere between "a caring friend" and "a happy little creature bouncing at your feet." Every screen should feel light, soft, and alive, even when it's showing something practical like a reminder list or a health record.
+Three words to hold onto for every design decision: Soft. Alive. Uncrowded.
+* Soft — nothing sharp. No hard corners, no harsh shadows, no stark contrast walls.
+* Alive — motion has personality. Things bounce, settle, and respond like they have a little energy of their own.
+* Uncrowded — generous breathing room everywhere. If a screen feels busy, it's wrong, no matter how useful the information is.
+________________
+
+
+2. Color System — "Coral Pink"
+The palette should feel warm and appetizing without tipping into "childish" or "medical pink." Coral pink is the hero; everything else exists to support it.
+Role
+	Description
+	Suggested Hex
+	Usage
+	Primary — Coral Pink
+	The signature brand color
+	#FF6F72
+	Primary buttons, active states, key icons, highlights
+	Primary Light
+	Softer tint for backgrounds/glows
+	#FFB3AE
+	Glow effects, soft backgrounds behind cards, hover/press states
+	Primary Deep
+	Slightly deeper shade for contrast/text-on-light
+	#E85A5D
+	Pressed states, emphasis text on light backgrounds
+	Secondary — Peach Cream
+	Warm neutral, main background tone
+	#FFF3EC
+	App background, card fill
+	Accent — Sunny Coral-Gold
+	A warm complementary pop for highlights, not overused
+	#FFB56B
+	Badges, streaks/progress highlights, small accents
+	Accent — Soft Mint
+	A gentle cool counterbalance for calm states
+	#A8E6CF
+	"All good / healthy" indicators, calm confirmations
+	Success
+	Positive confirmation
+	#6FCF97
+	"Reminder done," "vaccine up to date"
+	Caution
+	Gentle attention, not alarm
+	#FFC26B
+	"Recheck later," mild triage flags
+	Alert / Escalate
+	Reserved strictly for "see a vet now" moments
+	#F4514E
+	Triage escalation messages only — never decorative
+	Ink (text)
+	Primary text color, warm charcoal rather than pure black
+	#3A2E2E
+	Body text, headings
+	Muted text
+	Secondary/supporting text
+	#8C7A78
+	Captions, timestamps, placeholder text
+	Surface White
+	Clean card/content surface
+	#FFFFFF
+	Cards, sheets, input fields
+	Rules of thumb:
+* Coral pink is a highlight color, not a wallpaper — most of the screen should be Peach Cream or white, with coral drawing the eye to what matters (primary actions, active nav item, key data).
+* The Alert red is sacred — it should only ever appear for a genuine "please see a vet" escalation. If it starts showing up for minor UI states, it loses its meaning exactly when it matters most.
+* Glow effects (see Section 4) should use very low-opacity versions of Primary Light or Accent Mint, never full-saturation color, so they stay atmospheric rather than loud.
+________________
+
+
+3. Typography
+The type should read as rounded, friendly, and confident — never a stiff corporate sans-serif.
+* Headings: A rounded, geometric sans-serif with real personality — something in the spirit of Quicksand, Baloo 2, or Comfortaa. Slightly bold weight for hierarchy, generous letter-spacing on shorter labels.
+* Body text: A warmer, highly legible rounded sans-serif — something in the spirit of Nunito or Rubik — prioritizing comfortable reading over character.
+* Numerals (weight tracker, dates, reminders): should feel friendly, not tabular/cold — rounded numeral styles fit the tone better than monospace or purely geometric digits.
+* Farsi/Persian support: typography choices need a rounded Persian-compatible counterpart (e.g., a rounded Vazirmatn-style face) so the warmth of the Latin type carries over consistently if/when the app supports Persian text.
+* Hierarchy discipline: no more than 3–4 type sizes per screen. The softness of the design depends on restraint, not variety.
+________________
+
+
+4. Shape & Surface Language
+* No sharp corners, anywhere. Cards, buttons, input fields, images, modals — everything uses generous rounding. Small elements (chips, tags) can be fully pill-shaped; larger surfaces (cards, sheets) use large consistent corner radii rather than tiny "safe" rounding.
+* Organic backgrounds. Rather than flat rectangles, background zones can use soft blob shapes and gentle gradients — think a calm pond of color behind content, not a grid.
+* Minimal glow, not glassmorphism. A very soft, low-opacity radial glow (using Primary Light or Accent Mint) behind key elements — an active card, the AI assistant's avatar, a "healthy" status — gives the screen life without needing heavy blur/frosted-glass effects. Keep it subtle: glow should feel like ambient light, not a special effect competing for attention.
+* Shadow style: soft, diffused, warm-tinted shadows (a hint of coral/peach in the shadow color rather than pure gray) — this keeps depth feeling cozy rather than techy.
+* Imagery: pet photos and illustrations should be shown in rounded frames (rounded-square or circular), never hard-edged rectangles.
+________________
+
+
+5. Motion & Animation
+Motion is a core part of Pet Mate's personality — this is where "energetic and special" actually shows up, more than in static layout.
+* Bounce is the signature. Buttons, icons, and cards should respond to taps with a small spring/bounce (slight overshoot before settling) rather than a flat linear animation. It should feel like the interface has a tiny bit of "puppy energy."
+* Smoothness matters as much as bounce. The bounce should never feel jittery or slow down the experience — quick, springy, and resolved within a few hundred milliseconds. Playful, not laggy.
+* Purposeful, not constant. Motion should draw attention to state changes (a reminder gets checked off, the AI assistant starts "thinking," a new health record entry is added) — not run continuously in the background where it becomes noise.
+* Page transitions: soft slide-and-fade rather than hard cuts; modals and sheets should rise/settle with a gentle spring rather than snapping into place.
+* Micro-interactions to design deliberately:
+* Checking off a reminder → small celebratory bounce/confetti-lite moment.
+* Uploading a photo (health record, image analyzer) → a friendly, reassuring loading animation, not a bare spinner.
+* The AI assistant "typing"/"thinking" → an animated paw-print or heartbeat-style pulse rather than generic dots.
+* Navigating between bottom-nav tabs → icons get a light bounce/scale on selection.
+* Restraint principle: if a user would call an animation "annoying" on the fifth use, it's too much. Big personality on first impression, quiet reliability on repeat use.
+________________
+
+
+6. Layout & Composition Principles
+* Breathing room over density. Generous padding around cards and between sections. When in doubt, remove an element rather than shrink it to fit.
+* One primary action per screen. Each screen should have a clear, obvious "main thing to do" (rendered in Coral Pink), with secondary actions visually quieter.
+* Cards as the core building block. Health record entries, reminders, service listings, shop recommendations — nearly everything can live in a consistent rounded-card format, which keeps the whole app feeling cohesive even across very different feature areas.
+* Bottom navigation for core areas, keeping the top of the screen calm and content-focused. The AI Assistant (chat/triage entry point) is a strong candidate for a distinct, slightly elevated entry point (e.g., a central floating action button) since it's the emotional heart of the app — the place someone goes when they're worried.
+* No dense tables or spreadsheet-like views, even for data-heavy features like the growth chart or health record — favor a friendly chart/timeline visualization over raw rows of numbers.
+________________
+
+
+7. Key Screens — Design Notes
+Onboarding & Pet Profile Setup Should feel like meeting a new friend, not filling out a form — one focused question at a time, pet photo upload framed as a warm moment ("let's meet your buddy"), soft celebratory animation once the profile is complete.
+Home Dashboard A warm overview: pet's photo/avatar front and center, today's reminders, a gentle prompt toward the AI assistant, and quick shortcuts to the most-used tools. This is the screen that should most clearly express the color palette and glow treatment, since it's seen most often.
+AI Symptom Triage (Chat) Conversational, chat-bubble format, with the assistant's tone visibly warm and careful. The eventual recommendation (home care / monitor / see a vet) should be shown as a clear, unmissable card at the end of the conversation — using Success/Caution/Alert colors precisely as defined in Section 2, never blended or ambiguous.
+Health Record A timeline view, each entry as a soft card (date, reason, notes, optional attached file/photo). The "add entry" flow should offer the file-upload and manual-entry paths as two equally easy, clearly labeled choices.
+Growth & Weight Tracker A soft, rounded line chart rather than a sharp technical graph — friendly gridlines, a highlighted "healthy range" band if breed data is available, gentle color coding (mint for on-track, amber if trending outside range).
+Smart Training Coach Presented as a set of friendly "programs" or "challenges" (cards with progress indicators) rather than a plain list of articles — reinforces the sense of coaching and momentum.
+Service Navigator Map-first with a filter bar (clinics / boarding / shops / parks), results as rounded cards with distance, and — where available — a simple trust/rating signal, styled consistently with the rest of the app rather than looking like a generic maps SDK.
+Smart Shop Product cards with soft imagery, a clear "recommended for [pet name]" framing tied to the pet's profile, and a visible trust indicator for verified sources, given how much authenticity matters to this audience.
+Image Analyzer A calm, guided photo-capture screen (framing guide, good-lighting tip) followed by a results view that presents possibilities as a short, clearly labeled list — each with a plain-language note and a visible reminder that this narrows things down but doesn't replace a vet's eyes.
+Behavior & Emotion Translator Framed as a delightful, discovery-oriented feature — an inviting "let's find out what they're feeling" entry point, a simple record/upload step, and a results screen that reads more like a warm little insight card than a clinical report.
+________________
+
+
+8. Iconography
+* Rounded, friendly, single-weight line or soft-filled icon style — consistent stroke width throughout, no mixing of styles.
+* Paw prints, hearts, and simple animal silhouettes can be used sparingly as personality accents (e.g., loading states, empty states) without turning every icon into a cartoon.
+* Icons should read clearly at small sizes (bottom nav) without needing color to be understood — color is an enhancement, not a crutch for legibility.
+________________
+
+
+9. Empty & Loading States
+These are an opportunity, not an afterthought, for a personality-driven app like this:
+* Empty states (no reminders yet, no health records yet) should feel encouraging rather than blank — a friendly illustration and a warm one-line nudge ("Nothing here yet — want to add your pet's first reminder?").
+* Loading states should use the app's motion language (soft bounce/pulse, paw-print or heartbeat motifs) rather than generic spinners, especially on the AI-driven features where the user is often a little anxious and benefits from a reassuring, unhurried loading moment.
+________________
+
+
+10. Accessibility & Legibility Notes
+* Maintain sufficient contrast between Coral Pink/Primary Deep text and the Peach Cream/White backgrounds for body copy — reserve the lightest tint (Primary Light) for decorative/glow use only, never for text.
+* Don't rely on color alone for triage results (Success/Caution/Alert) — pair each with a clear icon and label, since color-only signaling fails for colorblind users in exactly the moment it matters most.
+* Keep tap targets generously sized given the bouncy, tactile interaction style — small targets undercut the playful feel if they're fiddly to actually tap.
+________________
+
+
+11. What "On-Brand" Looks Like at a Glance
+If a screen has hard corners, sits on a stark white or gray background, uses more than one or two saturated colors at once, feels dense with information, or animates nothing at all — it's off-brand. If it's soft-edged, breathing room everywhere, coral pink used sparingly but clearly as the hero color, a gentle glow somewhere in the frame, and at least one small moment of bounce — it's Pet Mate.

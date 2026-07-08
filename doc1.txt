@@ -1,0 +1,125 @@
+﻿Pet Mate — Project Document
+AI-Powered Pet Care Companion for Iranian Pet Owners
+________________
+
+
+1. Vision
+Pet Mate is a single home for everything an Iranian pet owner needs to take care of their dog or cat — reminders, health records, growth tracking, training help, finding trustworthy places and people, shopping for the right supplies, and an AI companion that helps them think clearly when something feels wrong with their pet.
+The app is not trying to replace a veterinarian. It's trying to be the calm, competent friend a pet owner can turn to at any hour — one who never gets tired of questions, remembers everything about their pet, and always tells them honestly when it's time to call a real vet.
+One-line positioning: Pet Mate is the daily companion app that helps Iranian pet owners feel confident and prepared, from routine care to the 2 a.m. "is this an emergency?" moment.
+________________
+
+
+2. Why This App, Why Now
+Three things about the Iranian pet-care landscape shape this product:
+1. The pet-owning population is young and growing. Most current owners have had their pet for under five years, meaning most users are still learning — they need guidance, not just tools.
+2. Existing local apps are narrow. They mostly offer one thing — chat with a vet — with no memory of the pet, no daily-use reason to open the app, and no AI depth. Nobody has built a genuine day-to-day companion.
+3. Trust is a daily problem, not just a health one. From counterfeit food to inconsistent vet pricing to uncertainty about where to even find a decent boarding house, Iranian pet owners are constantly making decisions without reliable information. An app that reduces that uncertainty earns daily trust, not just occasional use.
+Pet Mate's edge is combining utility people open every day (reminders, records, shopping, finding places) with AI companionship people need at the exact moment they're anxious (symptom triage, photo check, behavior read). That combination is what turns an app into a habit instead of a one-time download.
+________________
+
+
+3. Who We're Building For
+Primary persona — "The New Pet Parent." Got their first dog or cat in the last 1–3 years. Genuinely loves the animal but feels a bit lost — doesn't always know what's normal, what's worth worrying about, or which clinic/shop to trust. Price-conscious. Uses their phone for almost everything. Wants reassurance more than raw information.
+Secondary persona — "The Experienced Owner." Has had pets for years, knows the basics, but is tired of juggling paper vaccine cards, WhatsApp numbers of three different vets, and half-remembered feeding schedules. Wants organization and efficiency, not hand-holding.
+Both personas share one thing: they want a place that remembers their pet so they don't have to hold everything in their head.
+________________
+
+
+4. Feature Set
+Features are grouped into two families that work together: Daily Companion Tools (the reasons someone opens the app on an ordinary Tuesday) and AI Care Assistant (the reasons someone opens the app when something feels off).
+4.1 Onboarding & Pet Profile
+* Simple account creation/login.
+* Pet profile setup: species, breed, name, birthdate or estimated age, sex, weight, photo, and any known conditions or allergies.
+* Support for multiple pets under one account (many households have more than one).
+* This profile is the backbone of everything else — reminders, the AI assistant, the nutrition planner, and the shop recommendations all read from it, so onboarding should feel quick and friendly, not like filling out a form.
+4.2 Reminders & Alarms
+* User-created reminders for anything — deworming, vaccines, grooming appointments, medication doses, birthdays.
+* Two modes: recurring (e.g., daily medication) and one-time/dated (e.g., a specific vet appointment).
+* Gentle, non-intrusive notification style consistent with the app's warm tone — this is a caretaking nudge, not an alarm clock.
+4.3 Digital Health Record
+* A running timeline of the pet's health history.
+* Two ways to add an entry: upload a file/photo from a clinic visit, or fill in the details manually (visit date, reason, diagnosis, treatment, vet name).
+* Acts as the pet's portable medical history — useful when visiting a new vet, boarding house, or in an emergency.
+4.4 Growth & Weight Tracker
+* Simple chart showing weight over time.
+* Optional breed-based healthy-range reference so owners can see if their pet is trending in a normal direction — framed as informational context, not a diagnosis.
+4.5 Smart Training Coach
+* A structured, self-guided training companion: house-training, basic commands, leash manners, socialization, and common behavior fixes (excessive barking, chewing, litter box issues).
+* Organized as short, trackable programs or challenges the owner can follow at their own pace, with progress markers so it feels like a coach, not a static article library.
+4.6 Service Navigator
+* A map/list-based directory to find nearby clinics, boarding houses, pet shops, and pet-friendly parks or open spaces.
+* Filterable by service type and distance.
+* Because trust in "which clinic is legit" is a real pain point, this should support ratings/reviews from other users over time, not just a raw listing.
+4.7 Vet Contact Directory
+* A place to save and quickly reach veterinarians — by phone number or social/messaging handle — including ones the user has personally worked with.
+* Doubles as a personal address book (their regular vet) and a discovery tool (find a new one nearby via the Service Navigator).
+4.8 Smart Shop
+* Personalized product recommendations (food, medical supplies, accessories) based on the pet's age, breed, weight, and health profile.
+* Can link out to trusted external retailers or, longer-term, an in-app storefront.
+* Given how real the counterfeit-food problem is for Iranian pet owners, this is also the natural home for a trusted-source / authenticity signal — flagging which listed products come from verified sellers. This becomes a genuine differentiator, not just a shopping list.
+4.9 AI Symptom Triage (Smart Health Chatbot)
+* The user describes what's going on in plain language ("she hasn't eaten since yesterday," "he's limping on his back leg").
+* The assistant asks a few clarifying questions, then gives a clear recommendation: home care is likely fine, keep an eye on it and recheck in X hours, or this needs a vet now.
+* Always visibly framed as guidance, never a diagnosis — the assistant's job is to help the owner decide what to do next, not to replace the vet.
+* Anything that reads as urgent or severe should escalate clearly and cannot be soft-pedaled by the AI, regardless of how the conversation goes.
+4.10 Image Analyzer (Skin & Appearance Check)
+* User photographs a visible issue — a bald patch, redness, a bump, something on the coat — and the assistant offers a short list of possibilities (e.g., "this pattern is often associated with fleas, allergies, or fungal irritation") with a plain-language explanation of each and next steps.
+* Framed explicitly as narrowing down possibilities to help the owner describe the issue better to a vet — not as a diagnosis.
+4.11 Personalized Nutrition & Diet Planner
+* Takes breed, age, weight, activity level, and any known health conditions and turns them into a practical feeding recommendation — roughly how much, what type of food, and things to avoid.
+* Should connect naturally to the Smart Shop (recommend food → let them find/buy it) and the Weight Tracker (adjust recommendations as weight trends change).
+4.12 Behavior & Emotion Translator
+* User uploads a short audio clip (a bark/meow) or short video of body language, and the assistant offers an interpretation — signs of stress, discomfort, fear, excitement, or contentment — in accessible language.
+* The most experimental and technically ambitious feature in the set; framed to the user as a fun, insightful companion tool rather than a clinical instrument.
+________________
+
+
+5. What Makes the AI Features Trustworthy, Not Reckless
+Because these features touch animal health, a few principles apply across all of them, and should be treated as non-negotiable product requirements, not just legal fine print:
+* No definitive diagnoses, ever. Every AI-driven feature (triage, image analyzer, behavior translator) communicates in terms of likelihood and next steps, never certainty.
+* No medication guidance. The app helps people decide whether to see a vet — it never recommends specific drugs, dosages, or treatments. That stays firmly with licensed veterinarians, both for the animal's safety and because prescribing legally has to come from a licensed vet, not an app.
+* Escalation cannot be dismissed. When the AI flags something as urgent, that message should be impossible for the flow to quietly downgrade — the user can choose to ignore it, but the app never softens it for them.
+* The disclaimer is part of the first interaction, not something buried in settings — every AI feature should make clear, in a light and non-alarming way, that it's a helpful first read, not a replacement for professional care.
+* Full history of AI conversations is retained on the backend (not necessarily shown prominently to the user) so that, if something goes wrong, there's a clear record of what guidance was actually given.
+These principles exist because, without clear regulation specifically covering AI in animal health advice, the responsible default is to be conservative — this protects users' pets and protects the product long-term.
+________________
+
+
+6. Privacy Posture
+Because pet ownership (particularly dogs) can be a socially and legally sensitive topic for some users in Iran, the app should default to a private-by-design posture:
+* No public social feed, no default sharing of a user's location or address.
+* Easy, complete account and data deletion available at any time, with no friction or "are you sure" maze.
+* Location data used for the Service Navigator should be handled as narrowly as possible (used to find nearby results, not stored or exposed).
+This isn't just a nice-to-have — it's a meaningful trust signal for a user base that may be cautious about how visible their pet ownership is.
+________________
+
+
+7. Suggested Build Phasing
+Everything above belongs in the product vision. For an actual build sequence, it makes sense to stage complexity so the app has a solid, lovable core before layering in the more technically demanding AI features.
+Phase 1 — Core Companion Onboarding & pet profile, Reminders, Digital Health Record, Growth & Weight Tracker, Service Navigator, Vet Contact Directory, Smart Shop, and the AI Symptom Triage chatbot (text-based, the least infrastructure-heavy of the AI features and the one that solves the single biggest pain point — knowing what to do in the moment).
+Phase 2 — Deeper Guidance Personalized Nutrition Planner and Smart Training Coach — both build on the pet profile data already collected and don't require heavy media processing.
+Phase 3 — Rich Media AI Image Analyzer and Behavior & Emotion Translator — these are the most exciting features in concept but also the most demanding technically (image/audio/video processing), so they land once the core app already has a stable, loyal user base and the team has bandwidth to get the media-handling experience right rather than rushed.
+This phasing is a recommendation, not a constraint — if the AI Studio build process makes it easy to prototype all screens at once (even before every feature is fully functional on the backend), it's reasonable to design and showcase the full experience end-to-end and simply sequence the real backend build in this order.
+________________
+
+
+8. Monetization Direction
+Given how price-sensitive pet spending already is for Iranian households, a single "pay to use the app" model is risky. A layered approach fits better:
+* Free core experience — profile, reminders, health record, growth tracker, and AI triage available with no paywall, so the app earns daily habit and trust first.
+* Paid connection to real veterinarians — when the AI triage (or the owner directly) determines a live vet is needed, a paid consultation or booking is the natural upsell moment — this is also the point where the user is most motivated to pay.
+* Commerce commission — a cut from Smart Shop purchases, especially valuable once the app has built a reputation as a trustworthy source (tying back to the authenticity angle in section 4.8).
+* Premium tier, considered later, once there's a proven base of daily-active, loyal users who'd pay for extras (deeper training programs, more detailed nutrition plans, priority vet access, etc.).
+________________
+
+
+9. Success Signals to Track
+* Daily/weekly active use of the non-AI utility features (reminders opened, health record updated) — this is the real test of whether the app becomes a habit.
+* Return usage of the AI triage feature — repeat use signals trust; one-time use followed by abandonment signals the tone or guidance didn't land.
+* Escalation-to-vet conversion — how often a triage flag that recommends a vet visit actually results in the user booking/contacting one through the app.
+* Service Navigator engagement — a proxy for whether the app is becoming the default place people look for trustworthy pet services.
+________________
+
+
+10. Naming & Tone
+App name: Pet Mate Tone: Warm, encouraging, a little playful — like a knowledgeable friend, never clinical or alarmist. Even the AI safety messaging ("this needs a vet visit") should feel caring and clear rather than cold or scary.

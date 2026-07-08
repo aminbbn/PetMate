@@ -1,0 +1,6 @@
+{
+  "name": "Pet Mate",
+  "description": "AI-Powered Pet Care Companion for Iranian Pet Owners",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

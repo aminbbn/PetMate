@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;900&display=swap');
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-coral: #FF6F72;
+  --color-coral-light: #FFB3AE;
+  --color-coral-deep: #E85A5D;
+  --color-peach: #FFF3EC;
+  --color-sunny: #FFB56B;
+  --color-mint: #4ADE80;
+  --color-success: #22C55E;
+  --color-caution: #EAB308;
+  --color-alert: #EF4444;
+
+  --font-sans: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-warm-lg: 0 20px 45px -12px rgba(232, 90, 93, 0.12), 0 0 45px 4px rgba(255, 181, 107, 0.04);
+  --shadow-warm-md: 0 12px 28px -10px rgba(232, 90, 93, 0.08), 0 4px 12px -4px rgba(255, 181, 107, 0.02);
+  --shadow-warm-sm: 0 6px 14px -8px rgba(232, 90, 93, 0.06);
+}
+
+body {
+  background-color: #FFFDFB;
+  color: #1F2937;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+/* Hide scrollbars globally */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Premium Dot Grid Pattern */
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(232, 90, 93, 0.05) 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+}
+
+/* Custom Swing / Pulse Microinteractions */
+@keyframes swing {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(10deg); }
+  40% { transform: rotate(-10deg); }
+  60% { transform: rotate(5deg); }
+  80% { transform: rotate(-5deg); }
+}
+
+.animate-swing {
+  animation: swing 1s ease-in-out;
+}
+
