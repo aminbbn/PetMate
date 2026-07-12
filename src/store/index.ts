@@ -19,6 +19,9 @@ export interface Reminder {
   title: string;
   date: string; // ISO string
   completed: boolean;
+  alarmEnabled?: boolean;
+  alarmDate?: string; // e.g. YYYY-MM-DD
+  alarmTime?: string; // e.g. HH:MM
 }
 
 export interface HealthRecord {
@@ -43,11 +46,14 @@ interface AppState {
   setProfile: (profile: PetProfile) => void;
   updateProfile: (profile: Partial<PetProfile>) => void;
   
-  addReminder: (title: string, date: string) => void;
+  addReminder: (title: string, date: string, alarmEnabled?: boolean, alarmDate?: string, alarmTime?: string) => void;
+  updateReminder: (id: string, updates: Partial<Omit<Reminder, 'id'>>) => void;
   toggleReminder: (id: string) => void;
   deleteReminder: (id: string) => void;
   
   addHealthRecord: (reason: string, notes: string, date: string) => void;
+  updateHealthRecord: (id: string, updates: Partial<Omit<HealthRecord, 'id'>>) => void;
+  deleteHealthRecord: (id: string) => void;
   
   addWeightEntry: (weight: number, date: string) => void;
 }
@@ -62,14 +68,27 @@ export const useAppStore = create<AppState>()(
       
       setProfile: (profile) => set({ profile }),
       updateProfile: (updates) => set((state) => ({ 
-        profile: state.profile ? { ...state.profile, ...updates } : null 
+         profile: state.profile ? { ...state.profile, ...updates } : null 
       })),
       
-      addReminder: (title, date) => set((state) => ({
+      addReminder: (title, date, alarmEnabled, alarmDate, alarmTime) => set((state) => ({
         reminders: [
           ...state.reminders,
-          { id: uuidv4(), title, date, completed: false }
+          { 
+            id: uuidv4(), 
+            title, 
+            date, 
+            completed: false,
+            alarmEnabled,
+            alarmDate,
+            alarmTime
+          }
         ]
+      })),
+      updateReminder: (id, updates) => set((state) => ({
+        reminders: state.reminders.map(r =>
+          r.id === id ? { ...r, ...updates } : r
+        )
       })),
       toggleReminder: (id) => set((state) => ({
         reminders: state.reminders.map(r => 
@@ -85,6 +104,14 @@ export const useAppStore = create<AppState>()(
           { id: uuidv4(), reason, notes, date },
           ...state.healthRecords
         ]
+      })),
+      updateHealthRecord: (id, updates) => set((state) => ({
+        healthRecords: state.healthRecords.map(r =>
+          r.id === id ? { ...r, ...updates } : r
+        )
+      })),
+      deleteHealthRecord: (id) => set((state) => ({
+        healthRecords: state.healthRecords.filter(r => r.id !== id)
       })),
       
       addWeightEntry: (weight, date) => set((state) => ({

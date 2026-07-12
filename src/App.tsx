@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { 
   Home, Calendar, Stethoscope, LineChart, Map, Phone, 
   ShoppingBag, Bot, Utensils, Smile, Award, Trash2, Heart, Sparkles 
@@ -232,19 +232,8 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-coral-light rounded-full blur-[120px] pointer-events-none" style={{ opacity: 0.03 }} />
         <div className="absolute bottom-10 left-10 w-[400px] h-[400px] bg-sunny rounded-full blur-[100px] pointer-events-none" style={{ opacity: 0.03 }} />
         
-        <div className="flex-1 flex flex-col relative z-10">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ type: "spring", stiffness: 260, damping: 25 }}
-              className="flex-1 flex flex-col"
-            >
-              {children}
-            </motion.div>
-          </AnimatePresence>
+        <div className="flex-1 flex flex-col relative z-10 p-4 md:p-8">
+          {children}
         </div>
       </main>
     </div>
@@ -279,8 +268,8 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AppContent />
-    </BrowserRouter>
+    </HashRouter>
   );
 }

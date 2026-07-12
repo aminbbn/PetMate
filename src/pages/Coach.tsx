@@ -348,14 +348,38 @@ export default function Coach() {
             {/* Right Side: AI Tip Card (4 cols) */}
             <div className="lg:col-span-4 space-y-6">
               
-              <Card glow glowColor="sunny" className="bg-gradient-to-br from-white to-sunny/5 border-sunny/20 p-6 space-y-4">
-                <h3 className="font-black text-gray-800 text-base flex items-center gap-2">
-                  <Sparkles className="text-sunny" size={18} />
-                  نکته طلایی مربی هوشمند
-                </h3>
-                <p className="text-xs text-gray-500 leading-relaxed font-bold">
-                  {selectedLesson.aiTip}
-                </p>
+              <Card 
+                glow 
+                glowColor="sunny" 
+                hoverEffect={true}
+                ambientCorner="bottom-right"
+                className="bg-white border-sunny/25 shadow-warm-lg flex flex-col justify-between p-6 text-right"
+              >
+                <div className="flex items-start gap-5">
+                  <div className="w-14 h-14 rounded-2xl bg-sunny/15 text-sunny flex items-center justify-center shrink-0 shadow-sm shadow-sunny/10 relative overflow-visible group-hover:bg-sunny/20 group-hover:shadow-md transition-all duration-500">
+                    <Sparkles size={24} className="stroke-[2.2] group-hover:scale-110 group-hover:rotate-[15deg] transition-all duration-500 z-10" />
+                    
+                    {/* 4 Custom Star Shards that animate in the frame on hover */}
+                    <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-current text-sunny absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-shard-1 z-0 drop-shadow-[0_0_8px_rgba(255,181,107,0.95)]">
+                      <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+                    </svg>
+                    <svg viewBox="0 0 24 24" className="w-[14px] h-[14px] fill-current text-sunny absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-shard-2 z-0 drop-shadow-[0_0_8px_rgba(255,181,107,0.95)]">
+                      <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+                    </svg>
+                    <svg viewBox="0 0 24 24" className="w-[20px] h-[20px] fill-current text-sunny absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-shard-3 z-0 drop-shadow-[0_0_8px_rgba(255,181,107,0.95)]">
+                      <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+                    </svg>
+                    <svg viewBox="0 0 24 24" className="w-[16px] h-[16px] fill-current text-sunny absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-shard-4 z-0 drop-shadow-[0_0_8px_rgba(255,181,107,0.95)]">
+                      <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+                    </svg>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="font-black text-gray-900 text-lg leading-snug">نکته طلایی مربی هوشمند</h3>
+                    <p className="text-gray-500 text-xs leading-relaxed font-medium">
+                      {selectedLesson.aiTip}
+                    </p>
+                  </div>
+                </div>
               </Card>
 
               <Card className="bg-white border-coral-light/10 p-6 space-y-4">

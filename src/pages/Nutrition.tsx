@@ -147,14 +147,29 @@ export default function Nutrition() {
           </Card>
 
           {/* Calorie Guidelines Tip */}
-          <Card glow glowColor="sunny" className="bg-gradient-to-br from-white to-sunny/5 border-sunny/20 p-6 space-y-4">
-            <h3 className="font-black text-gray-800 text-base flex items-center gap-2">
-              <Flame className="text-sunny" size={18} />
-              چرا تغذیه دقیق مهم است؟
-            </h3>
-            <p className="text-xs text-gray-500 leading-relaxed font-bold">
-              اضافه وزن بیش از ۱۰ درصد در حیوانات خانگی، خطر بروز آرتروز، کبد چرب و دیابت را تا ۳ برابر افزایش می‌دهد. رژیم‌های تولید شده توسط هوش مصنوعی پت میت توازن دقیقی بین کربوهیدرات، پروتئین و رطوبت ایجاد می‌کنند.
-            </p>
+          <Card 
+            glow 
+            glowColor="sunny" 
+            hoverEffect={true}
+            ambientCorner="bottom-right"
+            className="bg-white border-sunny/25 shadow-warm-lg flex flex-col justify-between p-6 text-right"
+          >
+            <div className="flex items-start gap-5">
+              <div className="w-14 h-14 rounded-2xl bg-sunny/15 text-sunny flex items-center justify-center shrink-0 shadow-sm shadow-sunny/10 relative overflow-visible group-hover:bg-sunny/20 group-hover:shadow-md transition-all duration-500">
+                <Flame size={24} className="stroke-[2.2] group-hover:scale-110 group-hover:rotate-[-10deg] transition-all duration-500 z-10" />
+                
+                {/* Floating Ember Particles */}
+                <span className="w-2.5 h-2.5 bg-orange-500 rounded-full absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-ember-1 z-0 drop-shadow-[0_0_6px_rgba(249,115,22,0.85)]" />
+                <span className="w-1.5 h-1.5 bg-red-500 rounded-full absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-ember-2 z-0 drop-shadow-[0_0_6px_rgba(239,68,68,0.85)]" />
+                <span className="w-2 h-2 bg-yellow-500 rounded-full absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-ember-3 z-0 drop-shadow-[0_0_6px_rgba(251,146,60,0.85)]" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-black text-gray-900 text-lg leading-snug">چرا تغذیه دقیق مهم است؟</h3>
+                <p className="text-gray-500 text-xs leading-relaxed font-medium">
+                  اضافه وزن بیش از ۱۰ درصد در حیوانات خانگی، خطر بروز آرتروز، کبد چرب و دیابت را تا ۳ برابر افزایش می‌دهد. رژیم‌های تولید شده توسط هوش مصنوعی پت میت توازن دقیقی بین کربوهیدرات، پروتئین و رطوبت ایجاد می‌کنند.
+                </p>
+              </div>
+            </div>
           </Card>
         </div>
 

@@ -3,7 +3,7 @@ import { useAppStore } from '../store';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { Bot, ArrowRight, Send, AlertTriangle, Info, CheckCircle2, Sparkles, MessageSquare, ShieldAlert, Heart, Stethoscope } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
 import { toPersian } from '../lib/persian';
@@ -29,6 +29,8 @@ export default function Triage() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const hasSentPrefilled = useRef(false);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -71,6 +73,13 @@ export default function Triage() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (location.state?.prefilled && !hasSentPrefilled.current) {
+      hasSentPrefilled.current = true;
+      handleSend(location.state.prefilled);
+    }
+  }, [location.state]);
 
   const UrgencyCard = ({ level }: { level: 'SUCCESS' | 'CAUTION' | 'ALERT' }) => {
     const config = {
@@ -262,16 +271,40 @@ export default function Triage() {
           </Card>
 
           {/* Explanatory Guide Card */}
-          <Card glow glowColor="coral" className="border border-coral-light/10 p-6 bg-gradient-to-l from-white to-coral-light/5" hoverEffect={false}>
-            <h3 className="font-black text-gray-800 text-base mb-3 flex items-center gap-2.5">
-              <ShieldAlert size={18} className="text-coral" />
-              راهنمای سطوح فوریت پزشکی
-            </h3>
-            <p className="text-gray-500 text-xs leading-relaxed mb-4 font-medium">
-              سیستم تریآژ سلامت پت میت پس از ارزیابی پاسخ‌های شما یکی از سطوح زیر را اعلام می‌کند:
-            </p>
+          <Card 
+            glow 
+            glowColor="sunny" 
+            hoverEffect={true}
+            ambientCorner="bottom-right"
+            className="bg-white border-sunny/25 shadow-warm-lg flex flex-col justify-between p-6 text-right"
+          >
+            <div className="flex items-start gap-5 mb-4">
+              <div className="w-14 h-14 rounded-2xl bg-sunny/15 text-sunny flex items-center justify-center shrink-0 shadow-sm shadow-sunny/10 relative overflow-visible group-hover:bg-sunny/20 group-hover:shadow-md transition-all duration-500">
+                <ShieldAlert size={24} className="stroke-[2.2] group-hover:scale-110 group-hover:rotate-[-5deg] transition-all duration-500 z-10" />
+                
+                {/* 4 Custom Sunny Star Shards with curved trajectory smooth animations */}
+                <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] fill-current text-sunny absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-shard-smooth-1 z-0 drop-shadow-[0_0_8px_rgba(255,181,107,0.95)]">
+                  <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+                </svg>
+                <svg viewBox="0 0 24 24" className="w-[14px] h-[14px] fill-current text-sunny absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-shard-smooth-2 z-0 drop-shadow-[0_0_8px_rgba(255,181,107,0.95)]">
+                  <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+                </svg>
+                <svg viewBox="0 0 24 24" className="w-[20px] h-[20px] fill-current text-sunny absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-shard-smooth-3 z-0 drop-shadow-[0_0_8px_rgba(255,181,107,0.95)]">
+                  <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+                </svg>
+                <svg viewBox="0 0 24 24" className="w-[16px] h-[16px] fill-current text-sunny absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-shard-smooth-4 z-0 drop-shadow-[0_0_8px_rgba(255,181,107,0.95)]">
+                  <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z" />
+                </svg>
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-black text-gray-900 text-lg leading-snug">راهنمای سطوح فوریت پزشکی</h3>
+                <p className="text-gray-500 text-xs leading-relaxed font-medium">
+                  سیستم تریآژ سلامت پت میت پس از ارزیابی پاسخ‌های شما یکی از سطوح زیر را اعلام می‌کند:
+                </p>
+              </div>
+            </div>
             
-            <div className="space-y-3 text-xs font-medium">
+            <div className="space-y-3 text-xs font-medium border-t border-gray-100 pt-4">
               <div className="flex gap-2.5">
                 <span className="w-2 h-2 rounded-full bg-green-500 shrink-0 mt-1.5" />
                 <div>

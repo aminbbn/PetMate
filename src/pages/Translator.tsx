@@ -219,14 +219,29 @@ export default function Translator() {
           </Card>
 
           {/* AI Advisor Card */}
-          <Card glow glowColor="coral" className="bg-gradient-to-br from-white to-coral-light/5 border-coral-light/20 p-6 space-y-4">
-            <h3 className="font-black text-gray-800 text-base flex items-center gap-2">
-              <Heart className="text-coral" size={18} />
-              رابطه عمیق‌تر با {profile.name}
-            </h3>
-            <p className="text-xs text-gray-500 leading-relaxed font-bold">
-              تعبیر رفتارها بر اساس اصول روانشناسی و بیولوژی رفتارشناسی حیوانات است. شناخت بهتر زبان بدن، از سوءتفاهم‌های رفتاری جلوگیری کرده و رابطه پیوندی عاطفی شما را تا ۲ برابر مستحکم‌تر می‌کند.
-            </p>
+          <Card 
+            glow 
+            glowColor="coral" 
+            hoverEffect={true}
+            ambientCorner="bottom-right"
+            className="bg-white border-coral-light/25 shadow-warm-lg flex flex-col justify-between p-6 text-right"
+          >
+            <div className="flex items-start gap-5">
+              <div className="w-14 h-14 rounded-2xl bg-coral/15 text-coral-deep flex items-center justify-center shrink-0 shadow-sm shadow-coral/10 relative overflow-visible group-hover:bg-coral/20 group-hover:shadow-md transition-all duration-500">
+                <Heart size={24} className="stroke-[2.2] group-hover:scale-110 group-hover:rotate-[10deg] transition-all duration-500 z-10" />
+                
+                {/* Floating Heart Particles */}
+                <Heart size={14} className="fill-coral text-coral absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-heart-1 z-0 drop-shadow-[0_0_6px_rgba(244,63,94,0.85)]" />
+                <Heart size={10} className="fill-coral text-coral-deep absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-heart-2 z-0 drop-shadow-[0_0_6px_rgba(225,29,72,0.85)]" />
+                <Heart size={16} className="fill-coral-light text-coral-light absolute left-1/2 top-1/2 opacity-0 pointer-events-none animate-heart-3 z-0 drop-shadow-[0_0_6px_rgba(244,63,94,0.85)]" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="font-black text-gray-900 text-lg leading-snug">رابطه عمیق‌تر با {profile.name}</h3>
+                <p className="text-gray-500 text-xs leading-relaxed font-medium">
+                  تعبیر رفتارها بر اساس اصول روانشناسی و بیولوژی رفتارشناسی حیوانات است. شناخت بهتر زبان بدن، از سوءتفاهم‌های رفتاری جلوگیری کرده و رابطه پیوندی عاطفی شما را تا ۲ برابر مستحکم‌تر می‌کند.
+                </p>
+              </div>
+            </div>
           </Card>
         </div>
 
