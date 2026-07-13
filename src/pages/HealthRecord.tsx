@@ -315,7 +315,10 @@ export default function HealthRecord() {
         <div className="lg:col-span-7 space-y-6">
           <h3 className="text-lg font-black text-gray-700 mb-2 mr-2">خط زمانی سلامت</h3>
           
-          <div className="relative pr-8 border-r-2 border-coral-light/25 space-y-8">
+          <div className="relative pr-8 space-y-8">
+            {records.length > 0 && (
+              <div className="absolute right-0 top-6 bottom-6 w-[2px] bg-gradient-to-b from-transparent via-coral-light/35 to-transparent pointer-events-none" />
+            )}
             {records.length === 0 ? (
               <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-coral-light/15 p-10">
                 <FileText className="mx-auto text-coral-light/35 mb-4 stroke-[1.5]" size={56} />
