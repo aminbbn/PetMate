@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAppStore } from '../store';
+import { useAppStore, Vet } from '../store';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Phone, User, Plus, Trash2, Heart, Shield, Star, ShieldAlert, Sparkles, MessageSquare, Clipboard } from 'lucide-react';
@@ -7,38 +7,12 @@ import { motion, AnimatePresence } from 'motion/react';
 import { toPersian } from '../lib/persian';
 import { cn } from '../lib/utils';
 
-interface Vet {
-  id: string;
-  name: string;
-  clinic: string;
-  phone: string;
-  specialty: string;
-  isEmergency: boolean;
-  notes: string;
-}
-
 export default function Vets() {
   const profile = useAppStore(state => state.profile);
-  const [vets, setVets] = useState<Vet[]>([
-    {
-      id: 'vet-1',
-      name: 'دکتر علیرضا مرادی',
-      clinic: 'کلینیک تخصصی آریا',
-      phone: '۰۲۱-۲۲۰۰۳۳۴۴',
-      specialty: 'متخصص داخلی و غدد حیوانات کوچک',
-      isEmergency: true,
-      notes: 'پزشک اصلی همیشگی، واکسیناسیون‌های سالانه و آزمایش خون دوره‌ای در این مرکز انجام می‌شود.'
-    },
-    {
-      id: 'vet-2',
-      name: 'دکتر مریم سعادت',
-      clinic: 'بیمارستان دامپزشکی مهرگان',
-      phone: '۰۲۱-۸۸۳۳۹۹۰۰',
-      specialty: 'جراح عمومی و دندانپزشک اختصاصی پت',
-      isEmergency: false,
-      notes: 'عملیات جرم‌گیری دندان و جراحی‌های سرپایی را با نظارت مستقیم ایشان انجام می‌دهیم.'
-    }
-  ]);
+  const vets = useAppStore(state => state.vets || []);
+  const addVetStore = useAppStore(state => state.addVet);
+  const deleteVetStore = useAppStore(state => state.deleteVet);
+  const toggleVetEmergencyStore = useAppStore(state => state.toggleVetEmergency);
 
   const [name, setName] = useState('');
   const [clinic, setClinic] = useState('');
@@ -64,7 +38,7 @@ export default function Vets() {
       notes: notes.trim()
     };
 
-    setVets([newVet, ...vets]);
+    addVetStore(newVet);
     setName('');
     setClinic('');
     setPhone('');
@@ -76,12 +50,12 @@ export default function Vets() {
 
   const handleDeleteVet = (id: string) => {
     if (window.confirm('آیا مطمئن هستید که می‌خواهید این مخاطب دامپزشک را حذف کنید؟')) {
-      setVets(vets.filter(v => v.id !== id));
+      deleteVetStore(id);
     }
   };
 
   const toggleEmergency = (id: string) => {
-    setVets(vets.map(v => v.id === id ? { ...v, isEmergency: !v.isEmergency } : v));
+    toggleVetEmergencyStore(id);
   };
 
   return (

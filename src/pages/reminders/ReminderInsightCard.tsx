@@ -3,6 +3,7 @@ import { useAppStore, ReminderCategory, ReminderRecurrence } from '../../store';
 import { Sparkles, ArrowLeft, Heart, FileText, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../../components/Card';
+import { AnimatedCardIcon } from '../../components/AnimatedCardIcon';
 
 interface ReminderInsightCardProps {
   onAddPrefilled: (title: string, category: ReminderCategory, recurrence: ReminderRecurrence, notes: string) => void;
@@ -88,14 +89,12 @@ export default function ReminderInsightCard({ onAddPrefilled }: ReminderInsightC
       glowColor="sunny" 
       hoverEffect={true}
       ambientCorner="bottom-right"
-      className="bg-white border-sunny/20 shadow-warm-md p-5 flex flex-col justify-between"
+      className="bg-white border-sunny/20 shadow-warm-md p-5 flex flex-col justify-between group"
     >
       {foundInsight ? (
         <div className="space-y-4 text-right">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-sunny/15 text-sunny flex items-center justify-center shrink-0">
-              <Sparkles size={20} className="stroke-[2.2] animate-pulse" />
-            </div>
+            <AnimatedCardIcon variant="sparkles" tone="sunny" size="sm" />
             <div className="space-y-1">
               <h3 className="font-black text-gray-900 text-sm leading-snug">{foundInsight.title}</h3>
               <p className="text-gray-500 text-[11px] leading-relaxed font-medium">
@@ -122,9 +121,7 @@ export default function ReminderInsightCard({ onAddPrefilled }: ReminderInsightC
       ) : (
         <div className="space-y-4 text-right">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gray-50 text-gray-400 flex items-center justify-center shrink-0 border border-gray-100">
-              <FileText size={20} />
-            </div>
+            <AnimatedCardIcon variant="document" tone="neutral" size="sm" />
             <div className="space-y-1">
               <h3 className="font-black text-gray-800 text-sm leading-snug">شخصی‌سازی توصیه‌های مراقبتی</h3>
               <p className="text-gray-400 text-[11px] leading-relaxed font-normal">

@@ -242,6 +242,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 
 function AppContent() {
   const profile = useAppStore(state => state.profile);
+  const location = useLocation();
 
   if (!profile) {
     return <Onboarding />;
@@ -249,19 +250,21 @@ function AppContent() {
 
   return (
     <MainLayout>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/health" element={<HealthRecord />} />
-        <Route path="/growth" element={<Growth />} />
-        <Route path="/triage" element={<Triage />} />
-        <Route path="/reminders" element={<Reminders />} />
-        <Route path="/coach" element={<Coach />} />
-        <Route path="/navigator" element={<Navigator />} />
-        <Route path="/vets" element={<Vets />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/nutrition" element={<Nutrition />} />
-        <Route path="/translator" element={<Translator />} />
-      </Routes>
+      <AnimatePresence mode="wait" initial={false}>
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/health" element={<HealthRecord />} />
+          <Route path="/growth" element={<Growth />} />
+          <Route path="/triage" element={<Triage />} />
+          <Route path="/reminders" element={<Reminders />} />
+          <Route path="/coach" element={<Coach />} />
+          <Route path="/navigator" element={<Navigator />} />
+          <Route path="/vets" element={<Vets />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/nutrition" element={<Nutrition />} />
+          <Route path="/translator" element={<Translator />} />
+        </Routes>
+      </AnimatePresence>
     </MainLayout>
   );
 }
