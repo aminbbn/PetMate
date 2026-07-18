@@ -36,7 +36,6 @@ export const PortionCalculator: React.FC = () => {
   return (
     <Card
       glow={true}
-      glowColor="mint"
       hoverLift={false}
       className="p-6 border-green-200"
       dir="rtl"

@@ -353,87 +353,110 @@ export const AnimatedCardIcon: React.FC<AnimatedCardIconProps> = ({
           50% { transform: scale(1.6); opacity: 1; }
         }
 
-        /* 10. HOVER TRIGGER BOUND TO GROUP */
-        @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-          .group:hover .petmate-trend-path {
+        /* 10. HOVER AND FOCUS TRIGGER BOUND TO GROUP */
+        @media (prefers-reduced-motion: no-preference) {
+          .group:hover .petmate-trend-path,
+          .group:focus-within .petmate-trend-path {
             stroke-dasharray: 40;
             stroke-dashoffset: 40;
             animation: trend-draw 1.2s ease-out forwards;
           }
-          .group:hover .petmate-trend-arrow {
+          .group:hover .petmate-trend-arrow,
+          .group:focus-within .petmate-trend-arrow {
             opacity: 0;
             animation: fade-in 0.3s ease-out 0.9s forwards;
           }
-          .group:hover .petmate-trend-dot {
+          .group:hover .petmate-trend-dot,
+          .group:focus-within .petmate-trend-dot {
             opacity: 0;
             animation: trend-dot-glow 1.2s ease-out 0.8s forwards;
           }
-          .group:hover .petmate-bell-icon {
+          .group:hover .petmate-bell-icon,
+          .group:focus-within .petmate-bell-icon {
             animation: bell-swing 1s ease-in-out;
             transform-origin: top center;
           }
-          .group:hover .petmate-bell-left-wave {
+          .group:hover .petmate-bell-left-wave,
+          .group:focus-within .petmate-bell-left-wave {
             animation: bell-wave-left 1.1s ease-out 0.1s infinite;
           }
-          .group:hover .petmate-bell-right-wave {
+          .group:hover .petmate-bell-right-wave,
+          .group:focus-within .petmate-bell-right-wave {
             animation: bell-wave-right 1.1s ease-out 0.1s infinite;
           }
-          .group:hover .petmate-map-pin {
+          .group:hover .petmate-map-pin,
+          .group:focus-within .petmate-map-pin {
             animation: pin-drop 0.8s ease-out forwards;
             transform-origin: bottom center;
           }
-          .group:hover .petmate-map-ripple {
+          .group:hover .petmate-map-ripple,
+          .group:focus-within .petmate-map-ripple {
             animation: map-ripple 1.4s infinite ease-out 0.2s;
           }
-          .group:hover .petmate-shop-bag {
+          .group:hover .petmate-shop-bag,
+          .group:focus-within .petmate-shop-bag {
             animation: bag-bounce 0.9s ease-in-out forwards;
             transform-origin: bottom center;
           }
-          .group:hover .petmate-shop-item {
+          .group:hover .petmate-shop-item,
+          .group:focus-within .petmate-shop-item {
             animation: item-rise 1.2s ease-out forwards;
           }
-          .group:hover .petmate-bot {
+          .group:hover .petmate-bot,
+          .group:focus-within .petmate-bot {
             animation: bot-antenna 0.8s ease-in-out;
             transform-origin: center bottom;
           }
-          .group:hover .petmate-bot-light {
+          .group:hover .petmate-bot-light,
+          .group:focus-within .petmate-bot-light {
             animation: bot-blink 0.4s infinite alternate;
           }
-          .group:hover .petmate-leaf {
+          .group:hover .petmate-leaf,
+          .group:focus-within .petmate-leaf {
             animation: leaf-grow 1.2s ease-out forwards;
           }
-          .group:hover .petmate-emo-1 {
+          .group:hover .petmate-emo-1,
+          .group:focus-within .petmate-emo-1 {
             animation: emo-bubble-1 1.2s ease-out forwards;
           }
-          .group:hover .petmate-emo-2 {
+          .group:hover .petmate-emo-2,
+          .group:focus-within .petmate-emo-2 {
             animation: emo-bubble-2 1.4s ease-out 0.1s forwards;
           }
-          .group:hover .petmate-medal {
+          .group:hover .petmate-medal,
+          .group:focus-within .petmate-medal {
             animation: medal-swing 0.8s ease-in-out;
             transform-origin: top center;
           }
-          .group:hover .petmate-medal-ring {
+          .group:hover .petmate-medal-ring,
+          .group:focus-within .petmate-medal-ring {
             animation: ring-draw 1s ease-out forwards;
           }
-          .group:hover .petmate-scale-needle {
+          .group:hover .petmate-scale-needle,
+          .group:focus-within .petmate-scale-needle {
             animation: scale-needle 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
           }
-          .group:hover .petmate-doc-main {
+          .group:hover .petmate-doc-main,
+          .group:focus-within .petmate-doc-main {
             animation: document-tilt 1s ease-in-out;
             transform-origin: bottom center;
           }
-          .group:hover .petmate-doc-bg {
+          .group:hover .petmate-doc-bg,
+          .group:focus-within .petmate-doc-bg {
             animation: document-page-rise 1s ease-in-out forwards;
             transform-origin: bottom center;
           }
-          .group:hover .petmate-steth-icon {
+          .group:hover .petmate-steth-icon,
+          .group:focus-within .petmate-steth-icon {
             transform: scale(1.05);
             transition: transform 0.3s ease;
           }
-          .group:hover .petmate-steth-dot {
+          .group:hover .petmate-steth-dot,
+          .group:focus-within .petmate-steth-dot {
             animation: heartbeat-dot 0.8s infinite ease-in-out;
           }
-          .group:hover .petmate-primary-icon-standard {
+          .group:hover .petmate-primary-icon-standard,
+          .group:focus-within .petmate-primary-icon-standard {
             transform: scale(1.1);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
           }

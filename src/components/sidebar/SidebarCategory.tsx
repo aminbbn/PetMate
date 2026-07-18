@@ -18,6 +18,9 @@ interface SidebarCategoryProps {
   containsActiveRoute: boolean;
   onToggle: (id: SidebarCategoryId) => void;
   sidebarMode: SidebarMode;
+  isFlyoutOpen: boolean;
+  onFlyoutOpen: (id: SidebarCategoryId) => void;
+  onFlyoutClose: (id: SidebarCategoryId) => void;
 }
 
 export const SidebarCategory: React.FC<SidebarCategoryProps> = ({
@@ -28,11 +31,16 @@ export const SidebarCategory: React.FC<SidebarCategoryProps> = ({
   isOpen,
   containsActiveRoute,
   onToggle,
-  sidebarMode
+  sidebarMode,
+  isFlyoutOpen,
+  onFlyoutOpen,
+  onFlyoutClose
 }) => {
   const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const flyoutRef = useRef<HTMLDivElement>(null);
+  const flyoutWrapperRef = useRef<HTMLDivElement>(null);
   const { reducedMotion } = useMotionPreferences();
   const preferences = useAppStore(state => state.preferences);
 
@@ -42,7 +50,6 @@ export const SidebarCategory: React.FC<SidebarCategoryProps> = ({
 
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);
   const [flyoutCoords, setFlyoutCoords] = useState({ top: 0, left: 0 });
 
   // Find if there is an active item inside this category
@@ -110,23 +117,26 @@ export const SidebarCategory: React.FC<SidebarCategoryProps> = ({
     ([x, y]) => `radial-gradient(circle 45px at ${x}px ${y}px, rgba(${rgb}, ${edgeAlpha}) 0%, rgba(${rgb}, ${edgeAlpha * 0.3}) 50%, transparent 100%)`
   );
 
-  // Position and open Flyout for Collapsed mode
-  const openFlyout = () => {
-    if (!triggerRef.current) return;
-    const rect = triggerRef.current.getBoundingClientRect();
-    
-    // Position the flyout exactly to the left of the collapsed category button
-    // Subtract flyout width (e.g. 250px) plus gap of 8px from trigger left, or calculate based on viewport.
-    setFlyoutCoords({
-      top: rect.top,
-      left: rect.left - 250 - 8
-    });
-    setIsFlyoutOpen(true);
+  const updateFlyoutCoords = () => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setFlyoutCoords({
+        top: rect.top,
+        left: rect.left - 254 // Wrapper left is left of trigger - 254px (250px flyout + 4px transparent padding-right)
+      });
+    }
   };
 
   const closeFlyout = () => {
-    setIsFlyoutOpen(false);
+    onFlyoutClose(id);
   };
+
+  // Keep coordinates updated when open
+  useEffect(() => {
+    if (isFlyoutOpen) {
+      updateFlyoutCoords();
+    }
+  }, [isFlyoutOpen]);
 
   // Close flyout on Escape key
   useEffect(() => {
@@ -141,18 +151,108 @@ export const SidebarCategory: React.FC<SidebarCategoryProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isFlyoutOpen]);
 
-  // Close flyout on click outside
+  // Close flyout on click outside using ref
   useEffect(() => {
     if (!isFlyoutOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
-      const flyoutEl = document.getElementById(`flyout-panel-${id}`);
-      if (flyoutEl && !flyoutEl.contains(e.target as Node) && !triggerRef.current?.contains(e.target as Node)) {
-        closeFlyout();
+      if (
+        isNodeInside(e.target, triggerRef.current) ||
+        isNodeInside(e.target, flyoutWrapperRef.current)
+      ) {
+        return;
       }
+      closeFlyout();
     };
     window.addEventListener('mousedown', handleClickOutside);
     return () => window.removeEventListener('mousedown', handleClickOutside);
-  }, [isFlyoutOpen, id]);
+  }, [isFlyoutOpen]);
+
+  const isNodeInside = (
+    target: EventTarget | null,
+    element: HTMLElement | null
+  ): boolean => {
+    return target instanceof Node && !!element?.contains(target);
+  };
+
+  const isCoordsInside = (
+    clientX: number,
+    clientY: number,
+    element: HTMLElement | null
+  ): boolean => {
+    if (!element) return false;
+    const rect = element.getBoundingClientRect();
+    return (
+      clientX >= rect.left &&
+      clientX <= rect.right &&
+      clientY >= rect.top &&
+      clientY <= rect.bottom
+    );
+  };
+
+  const isPointerEnteringOther = (
+    event: React.PointerEvent<any>,
+    otherElement: HTMLElement | null
+  ): boolean => {
+    const nextTarget = event.relatedTarget;
+    if (nextTarget && isNodeInside(nextTarget, otherElement)) {
+      return true;
+    }
+    if (otherElement) {
+      return isCoordsInside(event.clientX, event.clientY, otherElement);
+    }
+    return false;
+  };
+
+  const handleTriggerPointerEnter = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (event.pointerType === 'touch') return;
+    setIsHovered(true);
+    updateFlyoutCoords();
+    onFlyoutOpen(id);
+  };
+
+  const handleTriggerPointerLeave = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (event.pointerType === 'touch') return;
+    setIsHovered(false);
+    
+    if (isPointerEnteringOther(event, flyoutWrapperRef.current)) {
+      return;
+    }
+    closeFlyout();
+  };
+
+  const handleFlyoutPointerEnter = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === 'touch') return;
+    onFlyoutOpen(id);
+  };
+
+  const handleFlyoutPointerLeave = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === 'touch') return;
+    
+    if (isPointerEnteringOther(event, triggerRef.current)) {
+      return;
+    }
+    closeFlyout();
+  };
+
+  const handleCombinedBlur = (event: React.FocusEvent<any>) => {
+    const nextTarget = event.relatedTarget;
+    if (
+      isNodeInside(nextTarget, triggerRef.current) ||
+      isNodeInside(nextTarget, flyoutWrapperRef.current)
+    ) {
+      return;
+    }
+    closeFlyout();
+  };
+
+  const handleTriggerClick = () => {
+    if (isFlyoutOpen) {
+      closeFlyout();
+    } else {
+      updateFlyoutCoords();
+      onFlyoutOpen(id);
+    }
+  };
 
   // Category Icon Animations
   const iconVariants: any = {
@@ -190,13 +290,19 @@ export const SidebarCategory: React.FC<SidebarCategoryProps> = ({
         >
           <button
             ref={triggerRef}
-            onClick={openFlyout}
-            onMouseEnter={openFlyout}
+            type="button"
+            onPointerEnter={handleTriggerPointerEnter}
+            onPointerLeave={handleTriggerPointerLeave}
+            onClick={handleTriggerClick}
             onFocus={() => {
               setIsFocused(true);
-              openFlyout();
+              updateFlyoutCoords();
+              onFlyoutOpen(id);
             }}
-            onBlur={() => setIsFocused(false)}
+            onBlur={(e) => {
+              setIsFocused(false);
+              handleCombinedBlur(e);
+            }}
             className={cn(
               "relative w-11 h-11 flex items-center justify-center rounded-xl border transition-all duration-200 outline-none select-none cursor-pointer overflow-hidden focus-visible:ring-2 focus-visible:ring-coral/40",
               isTriggerActive
@@ -205,6 +311,8 @@ export const SidebarCategory: React.FC<SidebarCategoryProps> = ({
             )}
             aria-expanded={isFlyoutOpen}
             aria-label={label}
+            aria-controls={`sidebar-flyout-${id}`}
+            aria-haspopup="true"
           >
             {/* Active status indicator dot */}
             {isTriggerActive && (
@@ -233,54 +341,80 @@ export const SidebarCategory: React.FC<SidebarCategoryProps> = ({
             )}
           </button>
 
-          {/* Portal-based Flyout Menu */}
-          {isFlyoutOpen && createPortal(
-            <div
-              id={`flyout-panel-${id}`}
-              role="navigation"
-              aria-label={label}
-              onMouseLeave={closeFlyout}
-              style={{
-                position: 'fixed',
-                top: flyoutCoords.top,
-                left: flyoutCoords.left,
-                width: '250px',
-                zIndex: 9999
-              }}
-              className="bg-white/95 backdrop-blur-md rounded-2xl border border-coral-light/20 shadow-2xl p-3 flex flex-col font-sans text-right animate-in fade-in slide-in-from-right-2 duration-200"
-              dir="rtl"
-            >
-              {/* Flyout Header */}
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-gray-100 select-none">
-                <span className={cn(
-                  "text-xs font-black tracking-tight",
-                  isAi ? "text-sunny-deep flex items-center gap-1" : "text-gray-800"
-                )}>
-                  {isAi && <Sparkles size={11} className="text-sunny animate-pulse" />}
-                  {label}
-                </span>
-                {activeChild && (
-                  <span className="text-[10px] text-gray-400 font-bold bg-peach/10 px-2 py-0.5 rounded-md">
-                    {activeChild.label}
-                  </span>
-                )}
-              </div>
+          {/* Portal-based Flyout Menu with AnimatePresence for exit animations and transparent bridge */}
+          {createPortal(
+            <AnimatePresence>
+              {isFlyoutOpen && (
+                <div
+                  ref={flyoutWrapperRef}
+                  style={{
+                    position: 'fixed',
+                    top: flyoutCoords.top,
+                    left: flyoutCoords.left,
+                    width: '254px',
+                    paddingRight: '4px', // 4px transparent hover bridge to trigger
+                    zIndex: 9999,
+                    pointerEvents: isFlyoutOpen ? 'auto' : 'none'
+                  }}
+                  className="outline-none"
+                  onPointerEnter={handleFlyoutPointerEnter}
+                  onPointerLeave={handleFlyoutPointerLeave}
+                  onBlur={handleCombinedBlur}
+                >
+                  <motion.div
+                    ref={flyoutRef}
+                    id={`sidebar-flyout-${id}`}
+                    role="navigation"
+                    aria-label={label}
+                    initial={reducedMotion ? { opacity: 0 } : { opacity: 0, x: -4 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={
+                      reducedMotion
+                        ? { opacity: 0 }
+                        : {
+                            opacity: 0,
+                            x: 3,
+                            transition: { duration: 0.09, ease: 'easeOut' }
+                          }
+                    }
+                    transition={{ duration: 0.12, ease: 'easeOut' }}
+                    className="w-[250px] bg-white/95 backdrop-blur-md rounded-2xl border border-coral-light/20 shadow-2xl p-3 flex flex-col font-sans text-right"
+                    dir="rtl"
+                  >
+                    {/* Flyout Header */}
+                    <div className="flex items-center justify-between pb-2 mb-2 border-b border-gray-100 select-none">
+                      <span className={cn(
+                        "text-xs font-black tracking-tight",
+                        isAi ? "text-sunny-deep flex items-center gap-1" : "text-gray-800"
+                      )}>
+                        {isAi && <Sparkles size={11} className="text-sunny animate-pulse" />}
+                        {label}
+                      </span>
+                      {activeChild && (
+                        <span className="text-[10px] text-gray-400 font-bold bg-peach/10 px-2 py-0.5 rounded-md">
+                          {activeChild.label}
+                        </span>
+                      )}
+                    </div>
 
-              {/* Child Links */}
-              <div className="space-y-1">
-                {items.map(item => (
-                  <SidebarNavItem
-                    key={item.path}
-                    icon={item.icon}
-                    path={item.path}
-                    label={item.label}
-                    isAi={item.isAi}
-                    isCollapsed={false}
-                    onClick={closeFlyout}
-                  />
-                ))}
-              </div>
-            </div>,
+                    {/* Child Links */}
+                    <div className="space-y-1">
+                      {items.map(item => (
+                        <SidebarNavItem
+                          key={item.path}
+                          icon={item.icon}
+                          path={item.path}
+                          label={item.label}
+                          isAi={item.isAi}
+                          isCollapsed={false}
+                          onClick={closeFlyout}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                </div>
+              )}
+            </AnimatePresence>,
             document.body
           )}
         </motion.div>

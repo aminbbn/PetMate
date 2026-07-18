@@ -109,7 +109,6 @@ export const VetCard: React.FC<VetCardProps> = ({ vet, onEdit, onDelete }) => {
   return (
     <Card 
       glow={vet.isPinned || vet.useForEmergency}
-      glowColor={vet.useForEmergency ? 'sunny' : 'coral'}
       className={cn(
         "bg-white border relative overflow-hidden transition-all duration-300 select-none",
         vet.useForEmergency 

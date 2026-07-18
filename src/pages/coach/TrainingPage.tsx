@@ -10,6 +10,7 @@ import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
 import { toPersian } from '../../lib/persian';
 import { motion, AnimatePresence } from 'motion/react';
+import { MotionDialog } from '../../motion/MotionDialog';
 import {
   Award,
   Calendar,
@@ -331,7 +332,7 @@ export const TrainingPage: React.FC = () => {
                       <Button
                         variant="primary"
                         size="sm"
-                        className="w-full text-xs font-bold bg-slate-900 text-white border-none"
+                        className="w-full text-xs"
                         onClick={() => handleAddGoalFromLesson(lesson)}
                       >
                         انتخاب به عنوان هدف تمرین
@@ -594,7 +595,7 @@ export const TrainingPage: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                 {EMERGENCIES_AND_VET_ROUTING.conditions.map((cond, i) => (
-                  <div key={i} className="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-2">
+                  <div key={i} className="bg-slate-800 p-4 rounded-xl border border-white/10 space-y-2">
                     <div className="text-xs font-extrabold text-amber-400 flex items-start gap-1">
                       <span className="bg-amber-400/10 text-amber-400 px-1.5 py-0.5 rounded text-xxs shrink-0">رویداد</span>
                       <span>{cond.trigger}</span>
@@ -612,9 +613,14 @@ export const TrainingPage: React.FC = () => {
       </div>
 
       {/* DETAIL MODAL FOR LIBRARY LESSONS */}
-      {selectedLesson && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-sm" dir="rtl">
-          <div className="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl border border-gray-100 animate-in fade-in duration-200">
+      <MotionDialog
+        isOpen={!!selectedLesson}
+        onClose={() => setSelectedLesson(null)}
+        size="lg"
+        className="max-h-[85vh] flex flex-col"
+      >
+        {selectedLesson && (
+          <div className="w-full h-full overflow-hidden flex flex-col">
             <div className="bg-slate-900 text-white p-6 flex items-center justify-between">
               <div>
                 <span className="text-brand text-xxs font-extrabold tracking-wider uppercase block">پروتکل گام‌به‌گام مهارتی</span>
@@ -628,7 +634,7 @@ export const TrainingPage: React.FC = () => {
               </button>
             </div>
 
-            <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+            <div className="p-6 space-y-5 flex-1 overflow-y-auto">
               <p className="text-gray-600 text-xs leading-relaxed">{selectedLesson.summary}</p>
 
               <div className="space-y-2">
@@ -688,7 +694,6 @@ export const TrainingPage: React.FC = () => {
               <Button
                 variant="primary"
                 size="sm"
-                className="bg-slate-900 text-white hover:bg-slate-800 border-none"
                 onClick={() => {
                   handleAddGoalFromLesson(selectedLesson);
                   setSelectedLesson(null);
@@ -698,86 +703,88 @@ export const TrainingPage: React.FC = () => {
               </Button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </MotionDialog>
 
       {/* CREATE CUSTOM GOAL DIALOG MODAL */}
-      {showGoalModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" dir="rtl">
-          <div className="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-gray-100 animate-in fade-in duration-200">
-            <div className="bg-slate-900 text-white p-5 flex items-center justify-between">
-              <div>
-                <h3 className="text-base font-bold">تعریف هدف تمرینی علمی جدید</h3>
-                <p className="text-slate-400 text-xxs mt-0.5">آموزش هدفمند و دور از خشونت فیزیکی</p>
-              </div>
-              <button
-                onClick={() => setShowGoalModal(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
-              >
-                <X size={18} />
-              </button>
+      <MotionDialog
+        isOpen={showGoalModal}
+        onClose={() => setShowGoalModal(false)}
+        size="sm"
+      >
+        <div className="w-full h-full overflow-hidden flex flex-col" dir="rtl">
+          <div className="bg-slate-900 text-white p-5 flex items-center justify-between">
+            <div>
+              <h3 className="text-base font-bold">تعریف هدف تمرینی علمی جدید</h3>
+              <p className="text-slate-400 text-xxs mt-0.5">آموزش هدفمند و دور از خشونت فیزیکی</p>
+            </div>
+            <button
+              onClick={() => setShowGoalModal(false)}
+              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          <form onSubmit={handleCreateGoalSubmit} className="p-5 space-y-4">
+            <div className="space-y-1">
+              <label className="text-xs font-extrabold text-gray-700 block">عنوان مهارت یا فرمان:</label>
+              <input
+                type="text"
+                required
+                value={goalTitle}
+                onChange={(e) => setGoalTitle(e.target.value)}
+                placeholder="مثال: آموزش داوطلبانه بیا (Recall)"
+                className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
+              />
             </div>
 
-            <form onSubmit={handleCreateGoalSubmit} className="p-5 space-y-4">
-              <div className="space-y-1">
-                <label className="text-xs font-extrabold text-gray-700 block">عنوان مهارت یا فرمان:</label>
-                <input
-                  type="text"
-                  required
-                  value={goalTitle}
-                  onChange={(e) => setGoalTitle(e.target.value)}
-                  placeholder="مثال: آموزش داوطلبانه بیا (Recall)"
-                  className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
-                />
-              </div>
+            <div className="space-y-1">
+              <label className="text-xs font-extrabold text-gray-700 block">توصیف رفتار مورد نظر:</label>
+              <textarea
+                required
+                value={goalBehavior}
+                onChange={(e) => setGoalBehavior(e.target.value)}
+                placeholder="مثال: آمدن سریع سگ به سمت سرپرست به محض شنیدن نام فرمان بدون تاخیر."
+                rows={2}
+                className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium resize-none"
+              />
+            </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-extrabold text-gray-700 block">توصیف رفتار مورد نظر:</label>
-                <textarea
-                  required
-                  value={goalBehavior}
-                  onChange={(e) => setGoalBehavior(e.target.value)}
-                  placeholder="مثال: آمدن سریع سگ به سمت سرپرست به محض شنیدن نام فرمان بدون تاخیر."
-                  rows={2}
-                  className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium resize-none"
-                />
-              </div>
+            <div className="space-y-1">
+              <label className="text-xs font-extrabold text-gray-700 block">معیار یا تعریف کسب موفقیت کامل:</label>
+              <input
+                type="text"
+                required
+                value={goalSuccessDef}
+                onChange={(e) => setGoalSuccessDef(e.target.value)}
+                placeholder="مثال: انجام موفق ۳ بار متوالی در فضای باز با بند بلند قلاده"
+                className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
+              />
+            </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-extrabold text-gray-700 block">معیار یا تعریف کسب موفقیت کامل:</label>
-                <input
-                  type="text"
-                  required
-                  value={goalSuccessDef}
-                  onChange={(e) => setGoalSuccessDef(e.target.value)}
-                  placeholder="مثال: انجام موفق ۳ بار متوالی در فضای باز با بند بلند قلاده"
-                  className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
-                />
-              </div>
+            <div className="space-y-1">
+              <label className="text-xs font-extrabold text-gray-700 block">توضیحات فرعی یا محیط اجرا:</label>
+              <input
+                type="text"
+                value={goalContext}
+                onChange={(e) => setGoalContext(e.target.value)}
+                placeholder="مثال: تمرین با سینه بند قلاده و تشویقی جگر مرغ"
+                className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
+              />
+            </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-extrabold text-gray-700 block">توضیحات فرعی یا محیط اجرا:</label>
-                <input
-                  type="text"
-                  value={goalContext}
-                  onChange={(e) => setGoalContext(e.target.value)}
-                  placeholder="مثال: تمرین با سینه بند قلاده و تشویقی جگر مرغ"
-                  className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
-                />
-              </div>
-
-              <div className="flex gap-2 justify-end pt-2 border-t border-gray-100">
-                <Button type="button" variant="outline" size="sm" onClick={() => setShowGoalModal(false)}>
-                  انصراف
-                </Button>
-                <Button type="submit" variant="primary" size="sm" className="bg-slate-900 text-white border-none hover:bg-slate-800">
-                  ذخیره و ایجاد هدف
-                </Button>
-              </div>
-            </form>
-          </div>
+            <div className="flex gap-2 justify-end pt-2 border-t border-gray-100">
+              <Button type="button" variant="outline" size="sm" onClick={() => setShowGoalModal(false)}>
+                انصراف
+              </Button>
+              <Button type="submit" variant="primary" size="sm">
+                ذخیره و ایجاد هدف
+              </Button>
+            </div>
+          </form>
         </div>
-      )}
+      </MotionDialog>
     </div>
   );
 };

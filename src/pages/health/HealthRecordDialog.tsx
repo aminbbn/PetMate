@@ -19,6 +19,7 @@ interface HealthRecordDialogProps {
     attachments: HealthAttachment[];
   }) => void;
   initialRecord?: HealthRecord; // Present for editing
+  initialView?: 'selection' | 'form_manual' | 'form_upload';
 }
 
 export const HealthRecordDialog: React.FC<HealthRecordDialogProps> = ({
@@ -26,6 +27,7 @@ export const HealthRecordDialog: React.FC<HealthRecordDialogProps> = ({
   onClose,
   onSubmit,
   initialRecord,
+  initialView = 'selection',
 }) => {
   const isEditing = !!initialRecord;
   const [view, setView] = useState<'selection' | 'form_manual' | 'form_upload'>('selection');
@@ -37,25 +39,11 @@ export const HealthRecordDialog: React.FC<HealthRecordDialogProps> = ({
       if (isEditing) {
         setView('form_manual');
       } else {
-        setView('selection');
+        setView(initialView);
         setInitialAttachments([]);
       }
     }
-
-    const handleCustomPath = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (detail === 'manual') {
-        setView('form_manual');
-      } else if (detail === 'upload') {
-        setView('form_upload');
-      }
-    };
-
-    window.addEventListener('petmate-dialog-path', handleCustomPath);
-    return () => {
-      window.removeEventListener('petmate-dialog-path', handleCustomPath);
-    };
-  }, [isOpen, isEditing]);
+  }, [isOpen, isEditing, initialView]);
 
   const handleSelection = (path: 'manual' | 'upload') => {
     if (path === 'manual') {
@@ -70,9 +58,7 @@ export const HealthRecordDialog: React.FC<HealthRecordDialogProps> = ({
     // When a file is successfully attached in the selection/upload view, 
     // transition directly to the form with the files attached so they can complete the record title & date!
     if (atts.length > 0) {
-      setTimeout(() => {
-        setView('form_manual');
-      }, 500);
+      setView('form_manual');
     }
   };
 

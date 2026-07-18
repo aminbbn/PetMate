@@ -86,7 +86,6 @@ export default function ReminderInsightCard({ onAddPrefilled }: ReminderInsightC
   return (
     <Card 
       glow 
-      glowColor="sunny" 
       hoverEffect={true}
       ambientCorner="bottom-right"
       className="bg-white border-sunny/20 shadow-warm-md p-5 flex flex-col justify-between group"

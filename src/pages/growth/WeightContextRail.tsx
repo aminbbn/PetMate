@@ -9,7 +9,6 @@ export const WeightContextRail: React.FC = () => {
   return (
     <Card
       hoverLift={false}
-      glowColor="coral"
       className="p-6 md:p-8 border border-coral-light/10 shadow-sm flex flex-col justify-between space-y-6 h-full min-h-[460px]"
     >
       {/* Sidebar Header */}

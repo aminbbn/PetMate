@@ -10,13 +10,11 @@ import { motion } from 'motion/react';
 interface ProductCardProps {
   product: Product;
   onViewDetails: (product: Product) => void;
-  onAddToCart: (e: React.MouseEvent<HTMLButtonElement>, product: Product) => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
-  onViewDetails,
-  onAddToCart
+  onViewDetails
 }) => {
   const { pets, selectedPetId, favorites, toggleFavorite } = useAppStore();
   
@@ -92,7 +90,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <Card 
       glow={matchResult.status === 'compatible'} 
-      glowColor="mint" 
       hoverLift={product.availability !== 'out_of_stock'}
       className="h-full flex flex-col justify-between"
     >
@@ -183,24 +180,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => onViewDetails(product)}
-              className="p-2 bg-slate-50 hover:bg-slate-100 text-slate-500 hover:text-slate-700 rounded-xl transition-all cursor-pointer"
-              title="مشاهده جزئیات محصول"
+              className="px-4 py-2 bg-coral hover:bg-coral-deep text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer shadow-sm shadow-coral/10 hover:shadow-md"
             >
-              <Eye className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={(e) => onAddToCart(e, product)}
-              disabled={product.availability === 'out_of_stock'}
-              id={`add-btn-${product.id}`}
-              className={`p-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${
-                product.availability === 'out_of_stock'
-                  ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
-                  : 'bg-coral text-white hover:bg-coral-deep shadow-sm shadow-coral/10 hover:shadow-md'
-              }`}
-            >
-              <ShoppingCart className="w-4 h-4 shrink-0" />
-              <span className="text-xs font-semibold">خرید</span>
+              <span>مشاهده قیمت‌ها</span>
             </button>
           </div>
         </div>

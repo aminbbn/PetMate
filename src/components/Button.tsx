@@ -11,11 +11,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', children, ...props }, ref) => {
     
     const variants = {
-      primary: "bg-coral text-white shadow-lg shadow-coral/20 hover:bg-coral-deep hover:shadow-coral/30",
-      secondary: "bg-gray-50 text-slate-600 border border-slate-100 hover:bg-gray-100 hover:text-slate-800",
-      outline: "border-2 border-coral-light/50 text-coral-deep hover:bg-coral-light/15",
-      ghost: "text-gray-500 hover:bg-coral-light/10 hover:text-coral-deep",
-      sunny: "bg-sunny text-white shadow-lg shadow-sunny/20 hover:bg-sunny/90 hover:shadow-sunny/30"
+      primary: "bg-coral text-white shadow-xl shadow-coral/35 hover:bg-coral-deep hover:shadow-coral/50 transition-all duration-300 font-bold",
+      secondary: "bg-peach text-coral-deep border border-coral-light/50 hover:bg-[#FFD4BA] hover:text-coral-deep hover:border-coral-light/80 shadow-md shadow-coral/5 transition-all duration-300 font-bold",
+      outline: "border-2 border-coral text-coral hover:bg-coral/15 hover:border-coral-deep hover:text-coral-deep shadow-sm transition-all duration-300 font-bold",
+      ghost: "text-coral hover:bg-coral-light/25 hover:text-coral-deep transition-all duration-300 font-bold",
+      sunny: "bg-sunny text-white shadow-xl shadow-sunny/35 hover:bg-sunny/95 hover:shadow-sunny/50 transition-all duration-300 font-bold"
     };
 
     const sizes = {

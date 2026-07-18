@@ -168,20 +168,20 @@ export const ShopToolbar: React.FC<ShopToolbarProps> = ({
                 <div className="flex gap-2">
                   <button
                     onClick={() => onChange({ requiresVeterinarianGuidance: undefined })}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
                       filters.requiresVeterinarianGuidance === undefined
-                        ? 'bg-slate-800 text-white'
-                        : 'bg-slate-50 text-slate-600 border border-slate-200/50 hover:bg-slate-100'
+                        ? 'bg-coral text-white shadow-md shadow-coral/30'
+                        : 'bg-peach/60 text-coral border border-coral-light/40 hover:bg-peach hover:text-coral-deep'
                     }`}
                   >
                     همه محصولات
                   </button>
                   <button
                     onClick={() => onChange({ requiresVeterinarianGuidance: true })}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ${
                       filters.requiresVeterinarianGuidance === true
-                        ? 'bg-amber-600 text-white'
-                        : 'bg-amber-50 text-amber-700 border border-amber-200/40 hover:bg-amber-100/60'
+                        ? 'bg-sunny text-white shadow-md shadow-sunny/30'
+                        : 'bg-peach/60 text-coral border border-coral-light/40 hover:bg-peach hover:text-coral-deep'
                     }`}
                   >
                     <Stethoscope className="w-3.5 h-3.5" />
@@ -189,10 +189,10 @@ export const ShopToolbar: React.FC<ShopToolbarProps> = ({
                   </button>
                   <button
                     onClick={() => onChange({ requiresVeterinarianGuidance: false })}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
                       filters.requiresVeterinarianGuidance === false
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200/40 hover:bg-emerald-100/60'
+                        ? 'bg-mint text-white shadow-md shadow-mint/30'
+                        : 'bg-peach/60 text-coral border border-coral-light/40 hover:bg-peach hover:text-coral-deep'
                     }`}
                   >
                     محصولات عادی عمومی

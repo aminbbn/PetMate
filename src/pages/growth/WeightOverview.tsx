@@ -4,8 +4,8 @@ import { useAppStore } from '../../store';
 import { selectSortedEntries, selectLatestEntry, selectPreviousEntry, selectWeightGoal } from './growthSelectors';
 import { compareWeightEntries, getDaysBetween } from './growthUtils';
 import { toPersian, formatPersianDate } from '../../lib/persian';
-import { AnimatedCardIcon } from '../../components/AnimatedCardIcon';
-import { ArrowUp, ArrowDown, Minus, Target } from 'lucide-react';
+import { CardCornerIcon } from '../../components/card/CardCornerIcon';
+import { ArrowUp, ArrowDown, Minus, Scale, TrendingUp, FileText, Check } from 'lucide-react';
 
 interface WeightOverviewProps {
   onSetGoal: () => void;
@@ -43,113 +43,105 @@ export const WeightOverview: React.FC<WeightOverviewProps> = ({ onSetGoal }) => 
       {/* 1. Latest Weight Card */}
       <Card
         glow
-        glowColor="sunny"
-        className="p-6 bg-gradient-to-l from-white to-sunny/5 border-sunny/10 flex flex-col justify-between"
+        className="p-6 bg-white border border-pm-stroke-subtle relative"
+        contentClassName="relative w-full h-full"
       >
-        <div className="flex justify-between items-start">
-          <div className="space-y-1">
-            <span className="text-xs font-bold text-gray-400">آخرین وزن</span>
-            <span className="text-3xl font-black text-gray-800 block" dir="ltr">
-              {toPersian(latestWeight.toFixed(1))} <span className="text-sm font-normal text-gray-400">کیلوگرم</span>
+        <CardCornerIcon icon={Scale} animationVariant="weight" tone="warning" size="sm" />
+        <div className="pr-14">
+          <span className="text-xs font-bold text-gray-400 block mb-1">آخرین وزن</span>
+          <span className="text-3xl font-black text-gray-800 block" dir="ltr">
+            {toPersian(latestWeight.toFixed(1))} <span className="text-sm font-normal text-gray-400">کیلوگرم</span>
+          </span>
+          <div className="mt-4 pt-3 border-t border-pm-stroke-subtle/50">
+            <span className="text-xs text-gray-400 font-bold block truncate">
+              {latestWeightLabel}
             </span>
           </div>
-          <AnimatedCardIcon variant="weight" tone="sunny" size="md" />
-        </div>
-        <div className="mt-4 pt-3 border-t border-gray-50">
-          <span className="text-xs text-gray-400 font-bold block truncate">
-            {latestWeightLabel}
-          </span>
         </div>
       </Card>
 
       {/* 2. Recent Change Card */}
       <Card
         glow
-        glowColor="coral"
-        className="p-6 bg-gradient-to-l from-white to-coral/5 border-coral/10 flex flex-col justify-between"
+        className="p-6 bg-white border border-pm-stroke-subtle relative"
+        contentClassName="relative w-full h-full"
       >
-        <div className="flex justify-between items-start">
-          <div className="space-y-1">
-            <span className="text-xs font-bold text-gray-400">تغییر اخیر</span>
-            {changeDetails ? (
-              <span className="text-xl font-black text-gray-800 flex items-center gap-1">
-                {changeDetails.direction === 'increase' && <ArrowUp size={18} className="text-coral" />}
-                {changeDetails.direction === 'decrease' && <ArrowDown size={18} className="text-blue-500" />}
-                {changeDetails.direction === 'no_change' && <Minus size={18} className="text-gray-400" />}
-                <span>{toPersian(changeDetails.diffKg.toFixed(1))} ک‌گ</span>
-              </span>
-            ) : (
-              <span className="text-xs font-black text-gray-400 block pt-1">
-                برای مقایسه، ثبت دیگری لازم است.
-              </span>
-            )}
+        <CardCornerIcon icon={TrendingUp} animationVariant="trend" tone="brand" size="sm" />
+        <div className="pr-14">
+          <span className="text-xs font-bold text-gray-400 block mb-1">تغییر اخیر</span>
+          {changeDetails ? (
+            <span className="text-xl font-black text-gray-800 flex items-center gap-1">
+              {changeDetails.direction === 'increase' && <ArrowUp size={18} className="text-coral" />}
+              {changeDetails.direction === 'decrease' && <ArrowDown size={18} className="text-blue-500" />}
+              {changeDetails.direction === 'no_change' && <Minus size={18} className="text-gray-400" />}
+              <span>{toPersian(changeDetails.diffKg.toFixed(1))} ک‌گ</span>
+            </span>
+          ) : (
+            <span className="text-xs font-black text-gray-400 block pt-1">
+              برای مقایسه، ثبت دیگری لازم است.
+            </span>
+          )}
+          <div className="mt-4 pt-3 border-t border-pm-stroke-subtle/50">
+            <span className="text-xs text-gray-400 font-bold block truncate">
+              {changeDetails 
+                ? `${toPersian(changeDetails.days)} روز فاصله نسبت به ثبت قبلی`
+                : 'داده کافی برای تغییر وجود ندارد.'}
+            </span>
           </div>
-          <AnimatedCardIcon variant="trend" tone="coral" size="md" />
-        </div>
-        <div className="mt-4 pt-3 border-t border-gray-50">
-          <span className="text-xs text-gray-400 font-bold block truncate">
-            {changeDetails 
-              ? `${toPersian(changeDetails.days)} روز فاصله نسبت به ثبت قبلی`
-              : 'داده کافی برای تغییر وجود ندارد.'}
-          </span>
         </div>
       </Card>
 
       {/* 3. Number of Entries Card */}
       <Card
         glow
-        glowColor="blue"
-        className="p-6 bg-gradient-to-l from-white to-blue/5 border-blue/10 flex flex-col justify-between"
+        className="p-6 bg-white border border-pm-stroke-subtle relative"
+        contentClassName="relative w-full h-full"
       >
-        <div className="flex justify-between items-start">
-          <div className="space-y-1">
-            <span className="text-xs font-bold text-gray-400">تعداد ثبت‌ها</span>
-            <span className="text-3xl font-black text-gray-800 block">
-              {toPersian(entriesCount)} <span className="text-sm font-normal text-gray-400">بار</span>
+        <CardCornerIcon icon={FileText} animationVariant="document" tone="info" size="sm" />
+        <div className="pr-14">
+          <span className="text-xs font-bold text-gray-400 block mb-1">تعداد ثبت‌ها</span>
+          <span className="text-3xl font-black text-gray-800 block">
+            {toPersian(entriesCount)} <span className="text-sm font-normal text-gray-400">بار</span>
+          </span>
+          <div className="mt-4 pt-3 border-t border-pm-stroke-subtle/50">
+            <span className="text-xs text-gray-400 font-bold block truncate">
+              ثبت‌های فعال برای این حیوان خانگی
             </span>
           </div>
-          <AnimatedCardIcon variant="document" tone="blue" size="md" />
-        </div>
-        <div className="mt-4 pt-3 border-t border-gray-50">
-          <span className="text-xs text-gray-400 font-bold block truncate">
-            ثبت‌های فعال برای این حیوان خانگی
-          </span>
         </div>
       </Card>
 
       {/* 4. Target Weight Card */}
       <Card
         glow
-        glowColor="mint"
-        className="p-6 bg-gradient-to-l from-white to-green-50/20 border-green-200 flex flex-col justify-between cursor-pointer"
+        className="p-6 bg-white border border-pm-stroke-subtle relative cursor-pointer"
+        contentClassName="relative w-full h-full"
         onClick={onSetGoal}
       >
-        <div className="flex justify-between items-start">
-          <div className="space-y-1 w-[calc(100%-48px)]">
-            <span className="text-xs font-bold text-gray-400">هدف وزن</span>
-            {goal ? (
-              <span className="text-sm font-black text-gray-800 block truncate" dir="ltr">
-                {goal.targetKg ? (
-                  `هدف: ${toPersian(goal.targetKg.toFixed(1))} ک‌گ`
-                ) : (
-                  `${toPersian(goal.minKg?.toFixed(1))} تا ${toPersian(goal.maxKg?.toFixed(1))} ک‌گ`
-                )}
-              </span>
-            ) : (
-              <span className="text-sm font-black text-gray-400 block pt-1">
-                هدف وزنی ثبت نشده
-              </span>
-            )}
+        <CardCornerIcon icon={Check} animationVariant="success" tone="success" size="sm" />
+        <div className="pr-14">
+          <span className="text-xs font-bold text-gray-400 block mb-1">هدف وزن</span>
+          {goal ? (
+            <span className="text-sm font-black text-gray-800 block truncate" dir="ltr">
+              {goal.targetKg ? (
+                `هدف: ${toPersian(goal.targetKg.toFixed(1))} ک‌گ`
+              ) : (
+                `${toPersian(goal.minKg?.toFixed(1))} تا ${toPersian(goal.maxKg?.toFixed(1))} ک‌گ`
+              )}
+            </span>
+          ) : (
+            <span className="text-sm font-black text-gray-400 block pt-1">
+              هدف وزنی ثبت نشده
+            </span>
+          )}
+          <div className="mt-4 pt-3 border-t border-pm-stroke-subtle/50 flex justify-between items-center">
+            <span className="text-[11px] text-gray-400 font-black truncate">
+              {goal ? (goal.source === 'veterinarian' ? 'توصیه دامپزشک' : 'برنامه شخصی') : 'افزودن هدف وزنی جدید'}
+            </span>
+            <span className="text-[10px] text-coral font-bold hover:underline shrink-0">
+              {goal ? 'ویرایش' : 'تعیین هدف'}
+            </span>
           </div>
-          <AnimatedCardIcon variant="success" tone="mint" size="md" />
-        </div>
-        <div className="mt-4 pt-3 border-t border-gray-50 flex justify-between items-center">
-          <span className="text-[11px] text-gray-400 font-black truncate">
-            {goal ? (goal.source === 'veterinarian' ? 'توصیه دامپزشک' : 'برنامه شخصی') : 'افزودن هدف وزنی جدید'}
-          </span>
-          <span className="text-[10px] text-coral font-bold hover:underline shrink-0">
-            {goal ? 'ویرایش' : 'تعیین هدف'}
-          </span>
         </div>
       </Card>
 

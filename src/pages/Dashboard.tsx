@@ -3,7 +3,8 @@ import { useAppStore, PetProfile, PetType, Reminder } from '../store';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { AnimatedCardIcon } from '../components/AnimatedCardIcon';
-import { MotionPage } from '../motion';
+import { CardCornerIcon } from '../components/card/CardCornerIcon';
+import { MotionPage, MotionDialog } from '../motion';
 import { 
   Bell, 
   Plus, 
@@ -221,128 +222,123 @@ export default function Dashboard() {
 
   function renderAddPetModal() {
     return (
-      <AnimatePresence>
-        {showAddPetModal && (
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50" dir="rtl">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-gray-100"
+      <MotionDialog
+        isOpen={showAddPetModal}
+        onClose={() => setShowAddPetModal(false)}
+        size="sm"
+      >
+        <div className="p-6">
+          <div className="flex items-center justify-between pb-4 border-b border-gray-50">
+            <h3 className="font-black text-gray-800 text-lg">ثبت حیوان خانگی جدید</h3>
+            <button 
+              onClick={() => setShowAddPetModal(false)}
+              className="p-1.5 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-gray-50">
-                <h3 className="font-black text-gray-800 text-lg">ثبت حیوان خانگی جدید</h3>
-                <button 
-                  onClick={() => setShowAddPetModal(false)}
-                  className="p-1.5 hover:bg-gray-100 rounded-lg cursor-pointer transition-colors"
-                >
-                  <X size={18} />
-                </button>
-              </div>
+              <X size={18} />
+            </button>
+          </div>
 
-              <form onSubmit={handleAddPetSubmit} className="space-y-4 pt-4">
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-black text-gray-500">نام پت</label>
-                  <input
-                    type="text"
-                    required
-                    value={newPetName}
-                    onChange={e => setNewPetName(e.target.value)}
-                    className="w-full bg-gray-50 border border-gray-200/60 rounded-xl px-4 py-2.5 outline-none focus:bg-white focus:border-coral/50 transition-all font-semibold"
-                    placeholder="مثال: لئو"
-                  />
-                </div>
+          <form onSubmit={handleAddPetSubmit} className="space-y-4 pt-4">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-black text-gray-500">نام پت</label>
+              <input
+                type="text"
+                required
+                value={newPetName}
+                onChange={e => setNewPetName(e.target.value)}
+                className="w-full bg-gray-50 border border-gray-200/60 rounded-xl px-4 py-2.5 outline-none focus:bg-white focus:border-coral/50 transition-all font-semibold"
+                placeholder="مثال: لئو"
+              />
+            </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-black text-gray-500">گونه</label>
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setNewPetType('dog')}
-                        className={`flex-1 py-2 rounded-xl border text-xs font-black cursor-pointer transition-all ${
-                          newPetType === 'dog'
-                            ? 'bg-coral text-white border-coral'
-                            : 'bg-gray-50 text-gray-600 border-gray-200/60'
-                        }`}
-                      >
-                        🐶 سگ
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setNewPetType('cat')}
-                        className={`flex-1 py-2 rounded-xl border text-xs font-black cursor-pointer transition-all ${
-                          newPetType === 'cat'
-                            ? 'bg-coral text-white border-coral'
-                            : 'bg-gray-50 text-gray-600 border-gray-200/60'
-                        }`}
-                      >
-                        🐱 گربه
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-black text-gray-500">نژاد</label>
-                    <input
-                      type="text"
-                      value={newPetBreed}
-                      onChange={e => setNewPetBreed(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200/60 rounded-xl px-4 py-2.5 outline-none focus:bg-white focus:border-coral/50 transition-all font-semibold"
-                      placeholder="هاسکی، بومی..."
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-black text-gray-500">سن (سال)</label>
-                    <input
-                      type="number"
-                      required
-                      min="0"
-                      value={newPetAge}
-                      onChange={e => setNewPetAge(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200/60 rounded-xl px-4 py-2.5 outline-none focus:bg-white focus:border-coral/50 transition-all font-semibold text-center"
-                      placeholder="2"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-black text-gray-500">وزن اولیه (ک‌گ)</label>
-                    <input
-                      type="number"
-                      required
-                      min="0"
-                      step="0.1"
-                      value={newPetWeight}
-                      onChange={e => setNewPetWeight(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200/60 rounded-xl px-4 py-2.5 outline-none focus:bg-white focus:border-coral/50 transition-all font-semibold text-center"
-                      placeholder="5.4"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex gap-3 pt-3">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-black text-gray-500">گونه</label>
+                <div className="flex gap-2">
                   <button
                     type="button"
-                    onClick={() => setShowAddPetModal(false)}
-                    className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold rounded-xl cursor-pointer transition-all"
+                    onClick={() => setNewPetType('dog')}
+                    className={`flex-1 py-2 rounded-xl border text-xs font-black cursor-pointer transition-all ${
+                      newPetType === 'dog'
+                        ? 'bg-coral text-white border-coral shadow-md shadow-coral/30'
+                        : 'bg-peach/60 text-coral-deep border-coral-light/40 hover:bg-[#FFD4BA] hover:text-coral-deep hover:border-coral-light'
+                    }`}
                   >
-                    انصراف
+                    🐶 سگ
                   </button>
-                  <Button
-                    type="submit"
-                    className="flex-1 py-3 font-bold justify-center"
+                  <button
+                    type="button"
+                    onClick={() => setNewPetType('cat')}
+                    className={`flex-1 py-2 rounded-xl border text-xs font-black cursor-pointer transition-all ${
+                      newPetType === 'cat'
+                        ? 'bg-coral text-white border-coral shadow-md shadow-coral/30'
+                        : 'bg-peach/60 text-coral-deep border-coral-light/40 hover:bg-[#FFD4BA] hover:text-coral-deep hover:border-coral-light'
+                    }`}
                   >
-                    ایجاد پروفایل
-                  </Button>
+                    🐱 گربه
+                  </button>
                 </div>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-black text-gray-500">نژاد</label>
+                <input
+                  type="text"
+                  value={newPetBreed}
+                  onChange={e => setNewPetBreed(e.target.value)}
+                  className="w-full bg-gray-50 border border-gray-200/60 rounded-xl px-4 py-2.5 outline-none focus:bg-white focus:border-coral/50 transition-all font-semibold"
+                  placeholder="هاسکی، بومی..."
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-black text-gray-500">سن (سال)</label>
+                <input
+                  type="number"
+                  required
+                  min="0"
+                  value={newPetAge}
+                  onChange={e => setNewPetAge(e.target.value)}
+                  className="w-full bg-gray-50 border border-gray-200/60 rounded-xl px-4 py-2.5 outline-none focus:bg-white focus:border-coral/50 transition-all font-semibold text-center"
+                  placeholder="2"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-black text-gray-500">وزن اولیه (ک‌گ)</label>
+                <input
+                  type="number"
+                  required
+                  min="0"
+                  step="0.1"
+                  value={newPetWeight}
+                  onChange={e => setNewPetWeight(e.target.value)}
+                  className="w-full bg-gray-50 border border-gray-200/60 rounded-xl px-4 py-2.5 outline-none focus:bg-white focus:border-coral/50 transition-all font-semibold text-center"
+                  placeholder="5.4"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 pt-3">
+              <button
+                type="button"
+                onClick={() => setShowAddPetModal(false)}
+                className="flex-1 py-3 bg-peach hover:bg-[#FFD4BA] text-coral-deep font-bold rounded-xl cursor-pointer transition-all border border-coral-light/50 shadow-md shadow-coral/5"
+              >
+                انصراف
+              </button>
+              <Button
+                type="submit"
+                className="flex-1 py-3 font-bold justify-center"
+              >
+                ایجاد پروفایل
+              </Button>
+            </div>
+          </form>
+        </div>
+      </MotionDialog>
     );
   }
 
@@ -381,8 +377,8 @@ export default function Dashboard() {
                 className={cn(
                   "flex items-center gap-2 px-4 py-2.5 rounded-xl border text-xs font-black transition-all shrink-0 cursor-pointer relative",
                   isSelected
-                    ? 'bg-coral border-coral text-white shadow-md shadow-coral/15'
-                    : 'bg-white border-gray-100 hover:border-gray-200 text-gray-600'
+                    ? 'bg-coral border-coral text-white shadow-xl shadow-coral/35'
+                    : 'bg-peach/70 border-coral-light/50 text-coral hover:bg-peach hover:border-coral-light/80 hover:text-coral-deep'
                 )}
               >
                 <span>{pet.type === 'dog' ? '🐶' : '🐱'}</span>
@@ -442,55 +438,55 @@ export default function Dashboard() {
         className="grid grid-cols-2 lg:grid-cols-4 gap-4 relative z-10"
       >
         {/* Metric 1: Today Reminders */}
-        <Card className="bg-white border border-gray-100 p-5 flex flex-col justify-between group" hoverEffect={true}>
-          <div className="flex justify-between items-start">
-            <span className="text-xs text-gray-400 font-bold">برنامه‌های امروز</span>
-            <AnimatedCardIcon variant="bell" tone="coral" size="sm" />
-          </div>
-          <div className="mt-4">
-            <span className="text-4xl font-black text-gray-800">{toPersian(todayRemainingCount)}</span>
-            <span className="text-xs font-bold text-gray-400 mr-1.5">کار ناتمام</span>
+        <Card className="bg-white border border-pm-stroke-subtle p-5 group relative" hoverEffect={true} contentClassName="relative w-full h-full">
+          <CardCornerIcon icon={Bell} animationVariant="bell" tone="brand" size="sm" />
+          <div className="pr-14">
+            <span className="text-xs text-gray-400 font-bold block">برنامه‌های امروز</span>
+            <div className="mt-4">
+              <span className="text-4xl font-black text-gray-800">{toPersian(todayRemainingCount)}</span>
+              <span className="text-xs font-bold text-gray-400 mr-1.5 inline-block">کار ناتمام</span>
+            </div>
           </div>
         </Card>
 
         {/* Metric 2: Overdue */}
-        <Card className="bg-white border border-gray-100 p-5 flex flex-col justify-between group" hoverEffect={true}>
-          <div className="flex justify-between items-start">
-            <span className="text-xs text-gray-400 font-bold">زمان‌گذشته (عقب‌افتاده)</span>
-            <AnimatedCardIcon variant="alert" tone="coral" size="sm" />
-          </div>
-          <div className="mt-4">
-            <span className="text-4xl font-black text-rose-600">{toPersian(overdueCount)}</span>
-            <span className="text-xs font-bold text-rose-400 mr-1.5">نیاز به توجه</span>
+        <Card className="bg-white border border-pm-stroke-subtle p-5 group relative" hoverEffect={true} contentClassName="relative w-full h-full">
+          <CardCornerIcon icon={AlertTriangle} animationVariant="alert" tone="danger" size="sm" />
+          <div className="pr-14">
+            <span className="text-xs text-gray-400 font-bold block">زمان‌گذشته (عقب‌افتاده)</span>
+            <div className="mt-4">
+              <span className="text-4xl font-black text-rose-600">{toPersian(overdueCount)}</span>
+              <span className="text-xs font-bold text-rose-400 mr-1.5 inline-block">نیاز به توجه</span>
+            </div>
           </div>
         </Card>
 
         {/* Metric 3: Weight */}
-        <Card className="bg-white border border-gray-100 p-5 flex flex-col justify-between group" hoverEffect={true}>
-          <div className="flex justify-between items-start">
-            <span className="text-xs text-gray-400 font-bold">آخرین وزن ثبت شده</span>
-            <AnimatedCardIcon variant="weight" tone="sunny" size="sm" />
-          </div>
-          <div className="mt-4">
-            <span className="text-4xl font-black text-gray-800">{toPersian(lastWeightVal)}</span>
-            <span className="text-xs font-bold text-gray-400 mr-1.5">ک‌گ</span>
-            <span className="text-[10px] font-black text-gray-400 block mt-1">{weightChangeText}</span>
+        <Card className="bg-white border border-pm-stroke-subtle p-5 group relative" hoverEffect={true} contentClassName="relative w-full h-full">
+          <CardCornerIcon icon={Scale} animationVariant="weight" tone="warning" size="sm" />
+          <div className="pr-14">
+            <span className="text-xs text-gray-400 font-bold block">آخرین وزن ثبت شده</span>
+            <div className="mt-4">
+              <span className="text-4xl font-black text-gray-800">{toPersian(lastWeightVal)}</span>
+              <span className="text-xs font-bold text-gray-400 mr-1.5 inline-block">ک‌گ</span>
+              <span className="text-[10px] font-black text-gray-400 block mt-1">{weightChangeText}</span>
+            </div>
           </div>
         </Card>
 
         {/* Metric 4: Health Record */}
-        <Card className="bg-white border border-gray-100 p-5 flex flex-col justify-between group" hoverEffect={true}>
-          <div className="flex justify-between items-start">
-            <span className="text-xs text-gray-400 font-bold">آخرین اقدام پزشکی</span>
-            <AnimatedCardIcon variant="stethoscope" tone="mint" size="sm" />
-          </div>
-          <div className="mt-4">
-            <span className="text-lg font-black text-gray-800 block truncate" title={lastRecordText}>
-              {lastRecordText}
-            </span>
-            <span className="text-xs font-bold text-emerald-600 block mt-1">
-              {lastRecordTime}
-            </span>
+        <Card className="bg-white border border-pm-stroke-subtle p-5 group relative" hoverEffect={true} contentClassName="relative w-full h-full">
+          <CardCornerIcon icon={Stethoscope} animationVariant="stethoscope" tone="success" size="sm" />
+          <div className="pr-14">
+            <span className="text-xs text-gray-400 font-bold block">آخرین اقدام پزشکی</span>
+            <div className="mt-4">
+              <span className="text-lg font-black text-gray-800 block truncate" title={lastRecordText}>
+                {lastRecordText}
+              </span>
+              <span className="text-xs font-bold text-emerald-600 block mt-1">
+                {lastRecordTime}
+              </span>
+            </div>
           </div>
         </Card>
       </motion.div>

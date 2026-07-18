@@ -101,7 +101,6 @@ export const WeightChart: React.FC<WeightChartProps> = ({ onAddWeight }) => {
   return (
     <Card
       hoverLift={false}
-      glowColor="sunny"
       className="p-6 md:p-8 border border-coral-light/10 shadow-sm min-h-[460px] flex flex-col justify-between"
     >
       {/* Chart Card Header */}

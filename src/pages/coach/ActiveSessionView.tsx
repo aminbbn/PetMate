@@ -6,6 +6,7 @@ import { Play, Pause, Square, AlertTriangle, CheckCircle, ChevronLeft, ChevronRi
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { toPersian } from '../../lib/persian';
+import { MotionDialog } from '../../motion/MotionDialog';
 
 interface ActiveSessionViewProps {
   lesson?: TrainingLesson;
@@ -127,7 +128,7 @@ export const ActiveSessionView: React.FC<ActiveSessionViewProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-6 bg-slate-800 px-6 py-3 rounded-xl border border-slate-700">
+        <div className="flex items-center gap-6 bg-slate-800 px-6 py-3 rounded-xl border border-white/10">
           <div className="text-center">
             <div className="text-slate-400 text-xxs font-semibold">زمان سپری‌شده</div>
             <div className="text-2xl font-mono font-bold text-brand">{formatTime(elapsedSeconds)}</div>
@@ -149,7 +150,7 @@ export const ActiveSessionView: React.FC<ActiveSessionViewProps> = ({
             variant={isTimerActive ? 'outline' : 'primary'}
             size="sm"
             onClick={() => setIsTimerActive(!isTimerActive)}
-            className="border-slate-700 text-white hover:bg-slate-800"
+            className="border-white/10 text-white hover:bg-slate-800"
           >
             {isTimerActive ? <Pause size={16} /> : <Play size={16} />}
           </Button>
@@ -354,122 +355,123 @@ export const ActiveSessionView: React.FC<ActiveSessionViewProps> = ({
       </div>
 
       {/* End Session Form Dialog Modal */}
-      {showEndModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" dir="rtl">
-          <div className="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-gray-100 animate-in fade-in zoom-in duration-200">
-            <div className="bg-slate-900 text-white p-5">
-              <h3 className="text-lg font-bold">ثبت نهایی و گزارش‌نویسی جلسه تمرین</h3>
-              <p className="text-slate-400 text-xxs mt-1">
-                ثبت دقیق داده‌های رفتاری به منظور ردیابی نرخ تسلط و امنیت جسمی پت شما در درازمدت
-              </p>
+      <MotionDialog
+        isOpen={showEndModal}
+        onClose={() => setShowEndModal(false)}
+        size="lg"
+      >
+        <div className="overflow-hidden">
+          <div className="bg-slate-900 text-white p-5 text-right">
+            <h3 className="text-lg font-bold">ثبت نهایی و گزارش‌نویسی جلسه تمرین</h3>
+            <p className="text-slate-400 text-xxs mt-1">
+              ثبت دقیق داده‌های رفتاری به منظور ردیابی نرخ تسلط و امنیت جسمی پت شما در درازمدت
+            </p>
+          </div>
+
+          <form onSubmit={handleEndSessionSubmit} className="p-6 space-y-4 text-right">
+            {/* Engagement Level */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-gray-700 block">
+                ۱. میزان انگیزه، تمرکز و نشاط حیوان در طول تمرین:
+              </label>
+              <select
+                value={engagement}
+                onChange={(e) => setEngagement(e.target.value as any)}
+                className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
+              >
+                <option value="engaged">🎯 پرنشاط، متمرکز و علاقه‌مند به دریافت تشویقی</option>
+                <option value="mixed">⚖️ متوسط / مشارکت پاره‌وقت با حواس‌پرتی جزئی</option>
+                <option value="disengaged">💤 بی‌علاقه / امتناع خفیف / نشانه خستگی</option>
+                <option value="stressed">⚠️ دارای نشانه‌های بارز تنش عضلانی یا اضطراب</option>
+              </select>
             </div>
 
-            <form onSubmit={handleEndSessionSubmit} className="p-6 space-y-4">
-              {/* Engagement Level */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-700 block">
-                  ۱. میزان انگیزه، تمرکز و نشاط حیوان در طول تمرین:
+            {/* Stop Reason */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-gray-700 block">
+                ۲. علت اصلی تصمیم شما برای پایان دادن به این جلسه:
+              </label>
+              <select
+                value={stopReason}
+                onChange={(e) => setStopReason(e.target.value as any)}
+                className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
+              >
+                <option value="completed">تکمیل موفقیت‌آمیز گام‌های از پیش تعیین‌شده</option>
+                <option value="pet_disengaged">کاهش انگیزه یا خستگی زیاد پت</option>
+                <option value="stress_signal">مشاهده نشانه‌های استرس شدید حیوان (له‌له زدن، لیسیدن لب)</option>
+                <option value="health_concern">احتمال وجود درد جسمانی یا خستگی مفصلی</option>
+                <option value="time_limit">رسیدن به سقف محدودیت زمانی پیشنهادی (زیر ۸ دقیقه)</option>
+                <option value="other">تصمیم مربی یا عوامل متفرقه دیگر</option>
+              </select>
+            </div>
+
+            {/* Safety Alert Warning in Form based on selections */}
+            {engagement === 'stressed' && (
+              <div className="bg-coral/5 border border-coral/15 p-3 rounded-xl text-xxs text-coral-deep leading-relaxed">
+                <strong>⚠️ هشدار رفتارشناسی:</strong> زمانی که حیوان نشانه‌های مداوم استرس دارد، آموزش متوقف شده و به نقطه آسایش قبلی بازگردید. ادامه تمرین در شرایط تنش باعث سرخوردگی و افت اعتماد گشته و ممکن است به واکنش‌های مدافعه‌جویانه فیزیکی ختم شود.
+              </div>
+            )}
+
+            {stopReason === 'health_concern' && (
+              <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl text-xxs text-amber-800 leading-relaxed">
+                <strong>🩺 توصیه پزشکی مربی:</strong> امتناع از نشستن یا راه رفتن غالباً ناشی از دردهای مفاصل یا ارتوپدی است. این موضوع را در بخش سلامت ثبت کنید یا با دامپزشک پشتیبان تماس بگیرید.
+              </div>
+            )}
+
+            {/* Goal Achieved Checkbox */}
+            <div className="flex items-start gap-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+              <input
+                type="checkbox"
+                id="markGoalAchieved"
+                checked={markGoalAchieved}
+                onChange={(e) => setMarkGoalAchieved(e.target.checked)}
+                className="mt-0.5 rounded border-gray-300 text-brand focus:ring-brand"
+              />
+              <div className="space-y-0.5">
+                <label htmlFor="markGoalAchieved" className="text-xs font-bold text-gray-800 cursor-pointer">
+                  مهارت کاملاً تثبیت شد و به دست آمد؟ (Mark as Achieved)
                 </label>
-                <select
-                  value={engagement}
-                  onChange={(e) => setEngagement(e.target.value as any)}
-                  className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
-                >
-                  <option value="engaged">🎯 پرنشاط، متمرکز و علاقه‌مند به دریافت تشویقی</option>
-                  <option value="mixed">⚖️ متوسط / مشارکت پاره‌وقت با حواس‌پرتی جزئی</option>
-                  <option value="disengaged">💤 بی‌علاقه / امتناع خفیف / نشانه خستگی</option>
-                  <option value="stressed">⚠️ دارای نشانه‌های بارز تنش عضلانی یا اضطراب</option>
-                </select>
+                <p className="text-xxs text-gray-400">
+                  تنها در صورتی تیک بزنید که حیوان این رفتار را در حداقل ۳ محیط کاملاً مجزا و با حداقل محرک حواس‌پرتی با موفقیت تکرار کرده باشد.
+                </p>
               </div>
+            </div>
 
-              {/* Stop Reason */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-700 block">
-                  ۲. علت اصلی تصمیم شما برای پایان دادن به این جلسه:
-                </label>
-                <select
-                  value={stopReason}
-                  onChange={(e) => setStopReason(e.target.value as any)}
-                  className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
-                >
-                  <option value="completed">تکمیل موفقیت‌آمیز گام‌های از پیش تعیین‌شده</option>
-                  <option value="pet_disengaged">کاهش انگیزه یا خستگی زیاد پت</option>
-                  <option value="stress_signal">مشاهده نشانه‌های استرس شدید حیوان (له‌له زدن، لیسیدن لب)</option>
-                  <option value="health_concern">احتمال وجود درد جسمانی یا خستگی مفصلی</option>
-                  <option value="time_limit">رسیدن به سقف محدودیت زمانی پیشنهادی (زیر ۸ دقیقه)</option>
-                  <option value="other">تصمیم مربی یا عوامل متفرقه دیگر</option>
-                </select>
-              </div>
+            {/* Notes */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-gray-700 block">
+                ۳. یادداشت‌های اضافی و مشاهدات شما:
+              </label>
+              <textarea
+                value={userNotes}
+                onChange={(e) => setUserNotes(e.target.value)}
+                placeholder="مثال: دیشب نسبت به صدای گام سوم کمی حساس بود، برای همین فردا گام دوم را دوباره مرور می‌کنیم."
+                rows={3}
+                className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium resize-none"
+              />
+            </div>
 
-              {/* Safety Alert Warning in Form based on selections */}
-              {engagement === 'stressed' && (
-                <div className="bg-coral/5 border border-coral/15 p-3 rounded-xl text-xxs text-coral-deep leading-relaxed">
-                  <strong>⚠️ هشدار رفتارشناسی:</strong> زمانی که حیوان نشانه‌های مداوم استرس دارد، آموزش متوقف شده و به نقطه آسایش قبلی بازگردید. ادامه تمرین در شرایط تنش باعث سرخوردگی و افت اعتماد گشته و ممکن است به واکنش‌های مدافعه‌جویانه فیزیکی ختم شود.
-                </div>
-              )}
-
-              {stopReason === 'health_concern' && (
-                <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl text-xxs text-amber-800 leading-relaxed">
-                  <strong>🩺 توصیه پزشکی مربی:</strong> امتناع از نشستن یا راه رفتن غالباً ناشی از دردهای مفاصل یا ارتوپدی است. این موضوع را در بخش سلامت ثبت کنید یا با دامپزشک پشتیبان تماس بگیرید.
-                </div>
-              )}
-
-              {/* Goal Achieved Checkbox */}
-              <div className="flex items-start gap-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
-                <input
-                  type="checkbox"
-                  id="markGoalAchieved"
-                  checked={markGoalAchieved}
-                  onChange={(e) => setMarkGoalAchieved(e.target.checked)}
-                  className="mt-0.5 rounded border-gray-300 text-brand focus:ring-brand"
-                />
-                <div className="space-y-0.5">
-                  <label htmlFor="markGoalAchieved" className="text-xs font-bold text-gray-800 cursor-pointer">
-                    مهارت کاملاً تثبیت شد و به دست آمد؟ (Mark as Achieved)
-                  </label>
-                  <p className="text-xxs text-gray-400">
-                    تنها در صورتی تیک بزنید که حیوان این رفتار را در حداقل ۳ محیط کاملاً مجزا و با حداقل محرک حواس‌پرتی با موفقیت تکرار کرده باشد.
-                  </p>
-                </div>
-              </div>
-
-              {/* Notes */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-700 block">
-                  ۳. یادداشت‌های اضافی و مشاهدات شما:
-                </label>
-                <textarea
-                  value={userNotes}
-                  onChange={(e) => setUserNotes(e.target.value)}
-                  placeholder="مثال: دیشب نسبت به صدای گام سوم کمی حساس بود، برای همین فردا گام دوم را دوباره مرور می‌کنیم."
-                  rows={3}
-                  className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium resize-none"
-                />
-              </div>
-
-              {/* Form Action Buttons */}
-              <div className="flex gap-2 justify-end pt-2 border-t border-gray-100">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowEndModal(false)}
-                >
-                  بازگشت به تمرین
-                </Button>
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="sm"
-                  className="bg-slate-900 text-white hover:bg-slate-800 border-none"
-                >
-                  ثبت دائمی در پرونده تمرین
-                </Button>
-              </div>
-            </form>
-          </div>
+            {/* Form Action Buttons */}
+            <div className="flex gap-2 justify-end pt-2 border-t border-gray-100">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setShowEndModal(false)}
+              >
+                بازگشت به تمرین
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                size="sm"
+              >
+                ثبت دائمی در پرونده تمرین
+              </Button>
+            </div>
+          </form>
         </div>
-      )}
+      </MotionDialog>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Product, ProductMatch, ProductMatchStatus } from './shopTypes';
+import { Product, ProductMatch } from './shopTypes';
 
 export interface PetProfileStub {
   name: string;
@@ -20,17 +20,9 @@ export function getProductCompatibility(
   }
 
   const reasons: string[] = [];
-  const comp = product.compatibility;
-
-  if (!comp) {
-    return {
-      status: 'unknown',
-      reasons: ['اطلاعات سازگاری کافی برای این محصول ثبت نشده است.']
-    };
-  }
 
   // 1. Check if veterinarian guidance is required (supplements, therapeutic diets)
-  if (comp.requiresVeterinarianGuidance) {
+  if (product.requiresVeterinarianGuidance) {
     return {
       status: 'requires_guidance',
       reasons: ['برای مصرف مکمل‌ها و رژیم‌های درمانی، پیش از خرید با دامپزشک مشورت کنید.']
@@ -39,23 +31,23 @@ export function getProductCompatibility(
 
   // 2. Check species compatibility
   const petSpecies = pet.type; // 'dog' | 'cat'
-  const isSpeciesMatch = comp.species.includes(petSpecies) || comp.species.includes('universal');
+  const productSpecies = product.species || ['universal'];
+  const isSpeciesMatch = productSpecies.includes(petSpecies) || productSpecies.includes('universal');
 
   if (!isSpeciesMatch) {
-    const targetSpeciesPersian = comp.species.includes('dog') ? 'سگ‌ها' : 'گربه‌ها';
+    const targetSpeciesPersian = productSpecies.includes('dog') ? 'سگ‌ها' : 'گربه‌ها';
     return {
       status: 'not_applicable',
       reasons: [`این محصول طبق اطلاعات شرکت سازنده، برای ${targetSpeciesPersian} مناسب است.`]
     };
   }
 
-  reasons.push(comp.species.includes('universal') 
+  reasons.push(productSpecies.includes('universal') 
     ? 'قابل استفاده برای هر دو گونه سگ و گربه'
     : petSpecies === 'dog' ? 'تولید شده اختصاصی برای سگ‌ها' : 'تولید شده اختصاصی برای گربه‌ها'
   );
 
   // 3. Derive pet lifestage and check compatibility
-  // pet.age is in years
   let petLifeStage: 'puppy_kitten' | 'adult' | 'senior' = 'adult';
   if (pet.age < 1) {
     petLifeStage = 'puppy_kitten';
@@ -63,8 +55,10 @@ export function getProductCompatibility(
     petLifeStage = 'senior';
   }
 
-  if (comp.lifeStages && comp.lifeStages.length > 0 && !comp.lifeStages.includes('all')) {
-    const isLifeStageMatch = comp.lifeStages.includes(petLifeStage);
+  const lifeStages = product.lifeStages || ['all'];
+
+  if (lifeStages.length > 0 && !lifeStages.includes('all')) {
+    const isLifeStageMatch = lifeStages.includes(petLifeStage);
     const lifeStagePersian = 
       petLifeStage === 'puppy_kitten' ? 'توله و بچه سال' :
       petLifeStage === 'senior' ? 'مسن و سالخورده' : 'بالغ';
@@ -73,7 +67,7 @@ export function getProductCompatibility(
       reasons.push(`کاملاً متناسب با مرحله سنی پت شما (${lifeStagePersian})`);
       return { status: 'compatible', reasons };
     } else {
-      const productLifeStagesPersian = comp.lifeStages.map(stage => {
+      const productLifeStagesPersian = lifeStages.map(stage => {
         if (stage === 'puppy_kitten') return 'توله‌ها';
         if (stage === 'senior') return 'پت‌های مسن';
         return 'بالغین';

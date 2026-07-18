@@ -7,7 +7,6 @@ export const NutritionSafetyNotice: React.FC = () => {
   return (
     <Card
       glow={true}
-      glowColor="sunny"
       hoverLift={false}
       className="p-6 border-sunny/30 bg-gradient-to-br from-white to-sunny/5"
       dir="rtl"

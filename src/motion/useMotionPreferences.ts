@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { useAppStore } from '../store';
 
 export function useMotionPreferences() {
-  const motionMode = useAppStore(state => state.preferences?.motion?.mode || 'full');
+  const preferences = useAppStore(state => state.preferences);
+  const motionMode = preferences?.motion?.mode || 'full';
+  const routeTransitionsEnabled = preferences?.motion?.routeTransitionsEnabled ?? true;
   const [systemReduced, setSystemReduced] = useState(false);
 
   useEffect(() => {
@@ -21,5 +23,5 @@ export function useMotionPreferences() {
     motionMode === 'reduced' || 
     (motionMode === 'system' && systemReduced);
 
-  return { reducedMotion };
+  return { reducedMotion, routeTransitionsEnabled: routeTransitionsEnabled && !reducedMotion };
 }

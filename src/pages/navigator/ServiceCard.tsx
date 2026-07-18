@@ -108,7 +108,6 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
     <Card 
       onClick={() => onSelect(service)}
       glow={service.emergencyCapability}
-      glowColor={service.emergencyCapability ? 'coral' : 'blue'}
       glowIntensity="subtle"
       className={cn(
         "cursor-pointer w-full text-right transition-all duration-300 relative border",

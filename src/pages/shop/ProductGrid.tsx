@@ -7,7 +7,6 @@ import { motion } from 'motion/react';
 interface ProductGridProps {
   products: Product[];
   onViewDetails: (product: Product) => void;
-  onAddToCart: (e: React.MouseEvent<HTMLButtonElement>, product: Product) => void;
   onResetFilters: () => void;
 }
 
@@ -37,7 +36,6 @@ const cardItemVariants = {
 export const ProductGrid: React.FC<ProductGridProps> = ({
   products,
   onViewDetails,
-  onAddToCart,
   onResetFilters
 }) => {
   if (products.length === 0) {
@@ -64,7 +62,6 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
           <ProductCard
             product={product}
             onViewDetails={onViewDetails}
-            onAddToCart={onAddToCart}
           />
         </motion.div>
       ))}

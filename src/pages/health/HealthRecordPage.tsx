@@ -57,14 +57,17 @@ export const HealthRecordPage: React.FC = () => {
   // 3. Dialog Modal state
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingRecord, setEditingRecord] = useState<HealthRecord | undefined>(undefined);
+  const [dialogInitialView, setDialogInitialView] = useState<'selection' | 'form_manual' | 'form_upload'>('selection');
 
   const handleOpenCreateDialog = (kind?: HealthRecordKind) => {
     setEditingRecord(undefined);
+    setDialogInitialView('selection');
     setIsDialogOpen(true);
   };
 
   const handleOpenEditDialog = (record: HealthRecord) => {
     setEditingRecord(record);
+    setDialogInitialView('form_manual');
     setIsDialogOpen(true);
   };
 
@@ -82,8 +85,10 @@ export const HealthRecordPage: React.FC = () => {
       date: '',
       reason: '',
     });
+    setDialogInitialView('form_manual');
     setIsDialogOpen(true);
   };
+
 
   // 4. Filter current pet's medical records
   const petRecords = useMemo(() => {
@@ -232,6 +237,7 @@ export const HealthRecordPage: React.FC = () => {
         onClose={() => setIsDialogOpen(false)}
         onSubmit={handleSaveRecord}
         initialRecord={editingRecord}
+        initialView={dialogInitialView}
       />
     </MotionPage>
   );
@@ -239,11 +245,7 @@ export const HealthRecordPage: React.FC = () => {
   // Helper to open dialog directly into a subview
   function setViewAndOpen(path: 'manual' | 'upload') {
     setEditingRecord(undefined);
+    setDialogInitialView(path === 'manual' ? 'form_manual' : 'form_upload');
     setIsDialogOpen(true);
-    // Let the dialog know about path via temporary selection or quick action triggers
-    setTimeout(() => {
-      const evt = new CustomEvent('petmate-dialog-path', { detail: path });
-      window.dispatchEvent(evt);
-    }, 50);
   }
 };

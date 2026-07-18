@@ -11,8 +11,16 @@ interface MotionPageProps {
 }
 
 export const MotionPage: React.FC<MotionPageProps> = ({ children, className, id, dir }) => {
-  const { reducedMotion } = useMotionPreferences();
+  const { reducedMotion, routeTransitionsEnabled } = useMotionPreferences();
   const variants = createPageVariants(reducedMotion);
+
+  if (!routeTransitionsEnabled) {
+    return (
+      <div id={id} dir={dir} className={className}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <motion.div

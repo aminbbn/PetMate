@@ -24,6 +24,7 @@ import ReminderRow from './ReminderRow';
 import ReminderForm from './ReminderForm';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
+import { MotionDialog } from '../../motion/MotionDialog';
 
 export default function ReminderPage() {
   const reminders = useAppStore(state => state.reminders || []);
@@ -354,83 +355,73 @@ export default function ReminderPage() {
       </div>
 
       {/* 4. Unified Add/Edit Form Overlay Modal Dialog */}
-      <AnimatePresence>
-        {showForm && (
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50" dir="rtl">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="bg-white rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-6 text-right relative border border-gray-100 overflow-y-auto max-h-[90vh]"
-            >
-              <button
-                onClick={handleCloseForm}
-                className="absolute top-5 left-5 text-gray-400 hover:text-gray-600 p-1.5 rounded-full hover:bg-gray-50 transition-colors"
-              >
-                <X size={16} />
-              </button>
+      <MotionDialog
+        isOpen={showForm}
+        onClose={handleCloseForm}
+        size="lg"
+      >
+        <div className="p-6 space-y-6 text-right relative">
+          <button
+            onClick={handleCloseForm}
+            className="absolute top-5 left-5 text-gray-400 hover:text-gray-600 p-1.5 rounded-full hover:bg-gray-50 transition-colors"
+          >
+            <X size={16} />
+          </button>
 
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-coral/10 text-coral flex items-center justify-center">
-                  <Bell size={18} />
-                </div>
-                <div>
-                  <h3 className="font-black text-gray-800 text-lg">
-                    {editingReminder ? 'ویرایش و بروزرسانی یادآور' : 'تعریف برنامه مراقبتی جدید'}
-                  </h3>
-                  <p className="text-[10px] text-gray-400 font-bold">بازه تکرار، نوع هشدار و دستورالعمل اجرایی را وارد کنید</p>
-                </div>
-              </div>
-
-              <ReminderForm
-                initialReminder={editingReminder}
-                onSave={handleSaveReminder}
-                onCancel={handleCloseForm}
-              />
-            </motion.div>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-coral/10 text-coral flex items-center justify-center">
+              <Bell size={18} />
+            </div>
+            <div>
+              <h3 className="font-black text-gray-800 text-lg">
+                {editingReminder ? 'ویرایش و بروزرسانی یادآور' : 'تعریف برنامه مراقبتی جدید'}
+              </h3>
+              <p className="text-[10px] text-gray-400 font-bold">بازه تکرار، نوع هشدار و دستورالعمل اجرایی را وارد کنید</p>
+            </div>
           </div>
-        )}
-      </AnimatePresence>
+
+          <ReminderForm
+            initialReminder={editingReminder}
+            onSave={handleSaveReminder}
+            onCancel={handleCloseForm}
+          />
+        </div>
+      </MotionDialog>
 
       {/* 5. Deletion Confirmation Dialog */}
-      <AnimatePresence>
-        {confirmDeleteId && (
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 z-50" dir="rtl">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 8 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 8 }}
-              className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center space-y-5 border border-gray-100"
-            >
-              <div className="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto">
-                <Trash2 size={22} className="animate-pulse" />
-              </div>
-
-              <div className="space-y-1">
-                <h4 className="font-black text-gray-800 text-base">حذف این برنامه مراقبتی؟</h4>
-                <p className="text-gray-400 text-xs leading-relaxed">
-                  این عمل غیرقابل بازگشت است و تاریخچه یادآور به طور کامل حذف خواهد شد.
-                </p>
-              </div>
-
-              <div className="flex items-center justify-center gap-3.5 pt-2">
-                <button
-                  onClick={() => setConfirmDeleteId(null)}
-                  className="px-4.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-500 text-xs font-bold rounded-xl transition-colors cursor-pointer"
-                >
-                  انصراف
-                </button>
-                <button
-                  onClick={handleConfirmDelete}
-                  className="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white text-xs font-black rounded-xl transition-colors shadow-md shadow-red-500/15 cursor-pointer"
-                >
-                  بله، حذف شود
-                </button>
-              </div>
-            </motion.div>
+      <MotionDialog
+        isOpen={!!confirmDeleteId}
+        onClose={() => setConfirmDeleteId(null)}
+        size="sm"
+      >
+        <div className="p-6 text-center space-y-5">
+          <div className="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto">
+            <Trash2 size={22} className="animate-pulse" />
           </div>
-        )}
-      </AnimatePresence>
+
+          <div className="space-y-1">
+            <h4 className="font-black text-gray-800 text-base">حذف این برنامه مراقبتی؟</h4>
+            <p className="text-gray-400 text-xs leading-relaxed">
+              این عمل غیرقابل بازگشت است و تاریخچه یادآور به طور کامل حذف خواهد شد.
+            </p>
+          </div>
+
+          <div className="flex items-center justify-center gap-3.5 pt-2">
+            <button
+              onClick={() => setConfirmDeleteId(null)}
+              className="px-4.5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-500 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+            >
+              انصراف
+            </button>
+            <button
+              onClick={handleConfirmDelete}
+              className="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white text-xs font-black rounded-xl transition-colors shadow-md shadow-red-500/15 cursor-pointer"
+            >
+              بله، حذف شود
+            </button>
+          </div>
+        </div>
+      </MotionDialog>
     </div>
   );
 }

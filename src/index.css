@@ -3,15 +3,39 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --color-coral: #FF6F72;
-  --color-coral-light: #FFB3AE;
-  --color-coral-deep: #E85A5D;
-  --color-peach: #FFF3EC;
-  --color-sunny: #FFB56B;
-  --color-mint: #4ADE80;
+  --color-brand: #FF4B4E;
+  --color-brand-light: #FF8E87;
+  --color-brand-deep: #E62C31;
+
+  --color-coral: #FF4B4E;
+  --color-coral-light: #FF8E87;
+  --color-coral-deep: #E62C31;
+  --color-peach: #FFE6D5;
+  --color-sunny: #FFA042;
+  --color-mint: #10B981;
   --color-success: #22C55E;
   --color-caution: #EAB308;
   --color-alert: #EF4444;
+
+  --color-pm-canvas: #FFFDFB;
+  --color-pm-surface: #FFFFFF;
+  --color-pm-surface-soft: #FFF9F6;
+
+  --color-pm-text-primary: #202733;
+  --color-pm-text-secondary: #667085;
+
+  --color-pm-stroke-subtle: #F1ECE8;
+  --color-pm-stroke-default: #E7DFDA;
+  --color-pm-stroke-strong: #D5CAC4;
+
+  --color-pm-brand-soft: #FFF1F0;
+  --color-pm-brand-border: #FFB9B8;
+  --color-pm-brand-border-strong: #FF8588;
+
+  --color-pm-info-border: #BFDBFE;
+  --color-pm-success-border: #BBF7D0;
+  --color-pm-warning-border: #FDE2A7;
+  --color-pm-danger-border: #FECACA;
 
   --font-sans: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Vazirmatn", ui-sans-serif, system-ui, sans-serif;
@@ -431,6 +455,51 @@ h1, h2, h3, h4, h5, h6 {
 .group:hover .animate-clock-num-9 {
   animation: clock-num-9 2s infinite linear;
 }
+
+/* Accessibility: Text Scale */
+.text-scale-large {
+  font-size: 1.125rem; /* scales base font size up slightly */
+}
+.text-scale-large h1 {
+  font-size: 2rem !important;
+}
+.text-scale-large h2 {
+  font-size: 1.625rem !important;
+}
+.text-scale-large h3 {
+  font-size: 1.375rem !important;
+}
+.text-scale-large h4 {
+  font-size: 1.125rem !important;
+}
+.text-scale-large p, 
+.text-scale-large span, 
+.text-scale-large button, 
+.text-scale-large select, 
+.text-scale-large input, 
+.text-scale-large label {
+  font-size: 1.025rem !important;
+}
+.text-scale-large .text-xs {
+  font-size: 0.85rem !important;
+}
+.text-scale-large .text-[10px] {
+  font-size: 0.8rem !important;
+}
+.text-scale-large .text-[11px] {
+  font-size: 0.825rem !important;
+}
+.text-scale-large .text-sm {
+  font-size: 0.95rem !important;
+}
+
+/* Accessibility: Strong Focus Indicators */
+.strong-focus-indicators-enabled *:focus-visible {
+  outline: 3px solid #FF4B4E !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px rgba(255, 75, 78, 0.45) !important;
+}
+
 
 
 

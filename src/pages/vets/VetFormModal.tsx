@@ -3,6 +3,7 @@ import { useAppStore } from '../../store';
 import { VetContact, VetPhone, VetContactRole, EmergencyAvailability } from './vetsTypes';
 import { X, Plus, Trash2, Phone, Tag, Shield, Star, Stethoscope, Briefcase, Globe, MapPin, Clipboard, Check, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { MotionDialog } from '../../motion/MotionDialog';
 import { Button } from '../../components/Button';
 import { toPersian } from '../../lib/persian';
 
@@ -195,27 +196,13 @@ export const VetFormModal: React.FC<VetFormModalProps> = ({ isOpen, onClose, vet
     onClose();
   };
 
-  if (!isOpen) return null;
-
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto" dir="rtl">
-        {/* Backdrop overlay */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
-        />
-
-        {/* Modal content container */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-2xl bg-white rounded-[32px] shadow-2xl overflow-hidden border border-slate-100 z-10 text-right my-8 max-h-[90vh] flex flex-col"
-        >
+    <MotionDialog
+      isOpen={isOpen}
+      onClose={onClose}
+      size="lg"
+      className="max-h-[90vh] flex flex-col"
+    >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
             <div className="flex items-center gap-3">
@@ -524,8 +511,8 @@ export const VetFormModal: React.FC<VetFormModalProps> = ({ isOpen, onClose, vet
                           onClick={() => handleToggleTag(tag)}
                           className={`px-3 py-1.5 rounded-xl text-[10px] font-black border transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-slate-800 border-slate-800 text-white'
-                              : 'bg-slate-50 border-slate-200/70 text-slate-500 hover:border-slate-300'
+                              ? 'bg-coral border-coral text-white shadow-md shadow-coral/30 scale-102'
+                              : 'bg-peach/60 border-coral-light/40 text-coral hover:bg-[#FFD4BA] hover:text-coral-deep hover:border-coral-light'
                           }`}
                         >
                           {tag}
@@ -590,8 +577,6 @@ export const VetFormModal: React.FC<VetFormModalProps> = ({ isOpen, onClose, vet
 
             </form>
           </div>
-        </motion.div>
-      </div>
-    </AnimatePresence>
+    </MotionDialog>
   );
 };

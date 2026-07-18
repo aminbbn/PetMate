@@ -16,7 +16,6 @@ export const GrowthEmptyState: React.FC<GrowthEmptyStateProps> = ({
     <div className="py-12 flex justify-center items-center w-full" dir="rtl">
       <Card
         glow
-        glowColor="sunny"
         className="max-w-md w-full bg-gradient-to-b from-white to-sunny/5 border-sunny/10 text-center p-10 flex flex-col items-center justify-center space-y-6"
       >
         <div className="group flex flex-col items-center">

@@ -46,7 +46,6 @@ export const WeightHistory: React.FC<WeightHistoryProps> = ({ onEditEntry }) => 
   return (
     <Card
       hoverLift={false}
-      glowColor="blue"
       className="p-6 md:p-8 border border-coral-light/10 shadow-sm w-full"
     >
       {/* Section Header */}

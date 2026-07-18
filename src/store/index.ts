@@ -321,6 +321,8 @@ interface AppState {
   removeFromCart: (productId: string) => void;
   clearCart: () => void;
   toggleFavorite: (productId: string) => void;
+  cartMigratedNotice?: boolean;
+  dismissCartMigratedNotice: () => void;
 
   // Nutrition & Feeding Support
   foods: PetFood[];
@@ -575,6 +577,8 @@ export const useAppStore = create<AppState>()(
       // E-commerce Shop state & actions
       cart: { items: [], updatedAt: new Date().toISOString() },
       favorites: [],
+      cartMigratedNotice: false,
+      dismissCartMigratedNotice: () => set({ cartMigratedNotice: false }),
 
       foods: [],
       feedingPlans: [],
@@ -605,7 +609,6 @@ export const useAppStore = create<AppState>()(
             productId: input.productId,
             variantId: input.variantId,
             quantity: qtyToAdd,
-            currency: 'IRT',
             addedAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
           });
@@ -780,6 +783,11 @@ export const useAppStore = create<AppState>()(
         const nextBehaviorAssessments = (state.behaviorAssessments || []).filter(a => a.petId !== id);
         const nextTrainingGoals = (state.trainingGoals || []).filter(g => g.petId !== id);
         const nextTrainingSessions = (state.trainingSessions || []).filter(s => s.petId !== id);
+        const nextFoodSensitivities = (state.foodSensitivities || []).filter(s => s.petId !== id);
+        const nextVets = (state.vets || []).map(v => ({
+          ...v,
+          petIds: (v.petIds || []).filter(pid => pid !== id)
+        }));
 
         let nextSelectedId = state.selectedPetId;
         let nextProfile = state.profile;
@@ -809,7 +817,9 @@ export const useAppStore = create<AppState>()(
           behaviorObservations: nextBehaviorObservations,
           behaviorAssessments: nextBehaviorAssessments,
           trainingGoals: nextTrainingGoals,
-          trainingSessions: nextTrainingSessions
+          trainingSessions: nextTrainingSessions,
+          foodSensitivities: nextFoodSensitivities,
+          vets: nextVets
         };
       }),
 
@@ -1017,6 +1027,7 @@ export const useAppStore = create<AppState>()(
         const cleanCategory = category || 'other';
         const cleanTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const nowStr = new Date().toISOString();
+        const defaultOffset = state.preferences?.notifications?.defaultReminderOffsetMinutes ?? 15;
         
         const newReminder: Reminder = {
           id: uuidv4(),
@@ -1026,7 +1037,10 @@ export const useAppStore = create<AppState>()(
           dueAt: date,
           timeZone: cleanTimeZone,
           recurrence: recurrence || { frequency: 'once' },
-          notification: notification || { enabled: !!alarmEnabled, offsetMinutes: 0 },
+          notification: notification || { 
+            enabled: alarmEnabled !== undefined ? alarmEnabled : (state.preferences?.notifications?.inAppEnabled ?? true), 
+            offsetMinutes: defaultOffset 
+          },
           notes: notes || '',
           createdAt: nowStr,
           updatedAt: nowStr,
@@ -1453,7 +1467,7 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'petmate-storage',
-      version: 3,
+      version: 4,
       migrate: (persistedState: any, version: number) => {
         if (version === 0) {
           const records = persistedState.healthRecords || [];
@@ -1574,6 +1588,35 @@ export const useAppStore = create<AppState>()(
         persistedState.behaviorAssessments = persistedState.behaviorAssessments || [];
         persistedState.trainingGoals = persistedState.trainingGoals || [];
         persistedState.trainingSessions = persistedState.trainingSessions || [];
+
+        if (version < 4) {
+          const oldCart = persistedState.cart || { items: [] };
+          const oldFavorites = persistedState.favorites || [];
+          let hasMigration = false;
+          
+          if (oldCart.items && oldCart.items.length > 0) {
+            oldCart.items.forEach((item: any) => {
+              if (item.productId) {
+                const alreadyFav = oldFavorites.some((fav: any) => fav.productId === item.productId);
+                if (!alreadyFav) {
+                  oldFavorites.push({
+                    productId: item.productId,
+                    createdAt: new Date().toISOString()
+                  });
+                  hasMigration = true;
+                }
+              }
+            });
+            oldCart.items = [];
+            oldCart.updatedAt = new Date().toISOString();
+          }
+          
+          persistedState.cart = oldCart;
+          persistedState.favorites = oldFavorites;
+          if (hasMigration) {
+            persistedState.cartMigratedNotice = true;
+          }
+        }
 
         return persistedState;
       }

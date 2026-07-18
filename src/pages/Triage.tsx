@@ -265,7 +265,6 @@ export default function Triage() {
         >
           <Card 
             glow 
-            glowColor="coral" 
             hoverLift={false}
             className="bg-white border-coral-light/20 shadow-2xl p-8 md:p-12 flex flex-col gap-8 relative overflow-hidden"
           >
@@ -624,7 +623,6 @@ export default function Triage() {
               >
                 <Card
                   glow
-                  glowColor={config.tone}
                   hoverLift={false}
                   className={`border-2 p-5 ${config.color}`}
                 >
@@ -673,7 +671,6 @@ export default function Triage() {
           {/* Clinical Levels Guide Panel */}
           <Card 
             glow 
-            glowColor="sunny" 
             hoverLift={false}
             ambientCorner="bottom-right"
             className="bg-white border-sunny/25 shadow-warm-lg flex flex-col justify-between p-6 text-right"

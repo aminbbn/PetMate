@@ -41,6 +41,14 @@ export const Sidebar: React.FC = () => {
     return null;
   });
 
+  // Centralized flyout open state for collapsed mode
+  const [openFlyoutCategoryId, setOpenFlyoutCategoryId] = useState<SidebarCategoryId | null>(null);
+
+  // Close open flyout on location changes or collapse state toggles
+  useEffect(() => {
+    setOpenFlyoutCategoryId(null);
+  }, [location.pathname, isCollapsed]);
+
   // Automatically expand category when route changes to one of its children
   useEffect(() => {
     const currentPath = location.pathname;
@@ -165,6 +173,13 @@ export const Sidebar: React.FC = () => {
                     containsActiveRoute={containsActive}
                     onToggle={currentMode === 'mobile' ? (isDrawer ? closeMobile : undefined) as any : handleToggleCategory}
                     sidebarMode={currentMode}
+                    isFlyoutOpen={openFlyoutCategoryId === category.id}
+                    onFlyoutOpen={(id) => setOpenFlyoutCategoryId(id)}
+                    onFlyoutClose={(id) => {
+                      if (openFlyoutCategoryId === id) {
+                        setOpenFlyoutCategoryId(null);
+                      }
+                    }}
                   />
                 );
               })}

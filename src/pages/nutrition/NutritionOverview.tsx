@@ -2,9 +2,10 @@ import React from 'react';
 import { useAppStore } from '../../store';
 import { Card } from '../../components/Card';
 import { AnimatedCardIcon } from '../../components/AnimatedCardIcon';
+import { CardCornerIcon } from '../../components/card/CardCornerIcon';
 import { selectActiveFeedingPlan, selectLatestWeight, selectPetMealLogs, selectPetHydrationLogs } from './nutritionSelectors';
 import { toPersian } from '../../lib/persian';
-import { Calendar, Clock, Award, Droplet, Plus, Check } from 'lucide-react';
+import { Calendar, Clock, Award, Droplet, Plus, Check, Utensils } from 'lucide-react';
 
 interface NutritionOverviewProps {
   onAddPlan: () => void;
@@ -111,37 +112,38 @@ export const NutritionOverview: React.FC<NutritionOverviewProps> = ({ onAddPlan,
       {/* Card 1: Active Feeding Plan */}
       <Card
         glow={true}
-        glowColor="coral"
         hoverEffect={true}
-        className="bg-white p-5 flex flex-col justify-between"
+        className="bg-white border border-pm-stroke-subtle p-5 relative min-h-[140px] flex flex-col justify-between"
+        contentClassName="relative w-full h-full"
       >
-        <div className="flex items-start justify-between">
+        <CardCornerIcon icon={Utensils} animationVariant="nutrition" tone={activePlan ? 'brand' : 'neutral'} size="sm" />
+        <div className="pr-14 flex flex-col h-full justify-between">
           <div className="text-right space-y-1">
             <span className="text-[10px] text-gray-400 font-extrabold block">برنامه تغذیه فعال</span>
             <h4 className="text-sm font-black text-gray-800 line-clamp-1">{planStatusText}</h4>
             <p className="text-[11px] text-gray-500 font-bold">{planSubtext}</p>
           </div>
-          <AnimatedCardIcon variant="nutrition" tone={activePlan ? 'coral' : 'neutral'} />
-        </div>
 
-        <div className="pt-4 mt-4 border-t border-gray-50 flex justify-end">
-          <button
-            onClick={onAddPlan}
-            className="text-[10px] font-black text-coral hover:text-coral-deep cursor-pointer"
-          >
-            {activePlan ? 'مدیریت و تغییر برنامه' : 'ایجاد اولین برنامه'}
-          </button>
+          <div className="pt-4 mt-4 border-t border-pm-stroke-subtle/50 flex justify-end">
+            <button
+              onClick={onAddPlan}
+              className="text-[10px] font-black text-coral hover:text-coral-deep cursor-pointer"
+            >
+              {activePlan ? 'مدیریت و تغییر برنامه' : 'ایجاد اولین برنامه'}
+            </button>
+          </div>
         </div>
       </Card>
 
       {/* Card 2: Upcoming Meal Checklist */}
       <Card
         glow={true}
-        glowColor="sunny"
         hoverEffect={true}
-        className="bg-white p-5 flex flex-col justify-between"
+        className="bg-white border border-pm-stroke-subtle p-5 relative min-h-[140px] flex flex-col justify-between"
+        contentClassName="relative w-full h-full"
       >
-        <div className="flex items-start justify-between">
+        <CardCornerIcon icon={Clock} animationVariant="clock" tone={!allMealsLoggedToday ? 'warning' : 'neutral'} size="sm" />
+        <div className="pr-14 flex flex-col h-full justify-between">
           <div className="text-right space-y-1">
             <span className="text-[10px] text-gray-400 font-extrabold block">وعده غذایی بعدی</span>
             {allMealsLoggedToday ? (
@@ -156,32 +158,30 @@ export const NutritionOverview: React.FC<NutritionOverviewProps> = ({ onAddPlan,
               </>
             )}
           </div>
-          <AnimatedCardIcon variant="clock" tone={!allMealsLoggedToday ? 'sunny' : 'neutral'} />
-        </div>
 
-        <div className="pt-4 mt-4 border-t border-gray-50 flex justify-end">
-          {activePlan && !allMealsLoggedToday ? (
-            <button
-              onClick={handleQuickLogMeal}
-              className="text-[10px] font-black text-coral hover:text-coral-deep flex items-center gap-1 cursor-pointer"
-            >
-              ثبت مصرف این وعده
-            </button>
-          ) : (
-            <button
-              onClick={onLogNextMeal}
-              className="text-[10px] font-black text-gray-400 hover:text-gray-600 cursor-pointer"
-            >
-              ثبت وعده متفرقه دستی
-            </button>
-          )}
+          <div className="pt-4 mt-4 border-t border-pm-stroke-subtle/50 flex justify-end">
+            {activePlan && !allMealsLoggedToday ? (
+              <button
+                onClick={handleQuickLogMeal}
+                className="text-[10px] font-black text-coral hover:text-coral-deep flex items-center gap-1 cursor-pointer"
+              >
+                ثبت مصرف این وعده
+              </button>
+            ) : (
+              <button
+                onClick={onLogNextMeal}
+                className="text-[10px] font-black text-gray-400 hover:text-gray-600 cursor-pointer"
+              >
+                ثبت وعده متفرقه دستی
+              </button>
+            )}
+          </div>
         </div>
       </Card>
 
       {/* Card 3: Calorie Circle Progress */}
       <Card
         glow={true}
-        glowColor="sunny"
         hoverEffect={true}
         className="bg-white p-5 flex flex-col justify-between"
       >
@@ -233,7 +233,6 @@ export const NutritionOverview: React.FC<NutritionOverviewProps> = ({ onAddPlan,
       {/* Card 4: Hydration Circle Progress */}
       <Card
         glow={true}
-        glowColor="blue"
         hoverEffect={true}
         className="bg-white p-5 flex flex-col justify-between"
       >

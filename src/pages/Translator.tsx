@@ -264,7 +264,6 @@ export default function BehaviorGuidePage() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
         <Card 
           glow 
-          glowColor="coral" 
           hoverLift={false}
           className="col-span-12 bg-red-50/60 border border-red-200/60 rounded-3xl p-5 md:p-6 relative overflow-hidden"
         >
@@ -431,7 +430,7 @@ export default function BehaviorGuidePage() {
                 exit={{ opacity: 0, y: -15 }}
                 className="space-y-4"
               >
-                <Card glow glowColor={selectedSignal.isRedFlag ? 'coral' : 'sunny'} className="bg-white border-sunny/10 p-6 space-y-5 shadow-lg">
+                <Card glow className="bg-white border-sunny/10 p-6 space-y-5 shadow-lg">
                   <div className="flex justify-between items-start pb-3 border-b border-gray-100">
                     <div className="space-y-1">
                       <span className="text-[10px] text-sunny-deep font-black uppercase tracking-wider bg-sunny/10 px-2.5 py-1 rounded-full">
@@ -530,7 +529,7 @@ export default function BehaviorGuidePage() {
         <div className="lg:col-span-5 space-y-6">
           
           {/* Active Observation Logging Card */}
-          <Card glow glowColor="sunny" className="bg-white border-sunny/10 p-5 md:p-6 space-y-4 shadow-md">
+          <Card glow className="bg-white border-sunny/10 p-5 md:p-6 space-y-4 shadow-md">
             <div className="flex justify-between items-center pb-3 border-b border-gray-100">
               <div className="flex items-center gap-2">
                 <Plus size={18} className="text-sunny-deep" />
@@ -716,7 +715,7 @@ export default function BehaviorGuidePage() {
           </Card>
 
           {/* Behavior Assessment Engine Trigger & Result */}
-          <Card glow glowColor="coral" className="bg-white border-coral-light/10 p-5 md:p-6 space-y-4 shadow-md">
+          <Card glow className="bg-white border-coral-light/10 p-5 md:p-6 space-y-4 shadow-md">
             <div className="flex justify-between items-center pb-3 border-b border-gray-100">
               <div className="flex items-center gap-2">
                 <Sparkles size={18} className="text-coral" />

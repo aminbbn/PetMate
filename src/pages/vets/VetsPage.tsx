@@ -189,7 +189,7 @@ export default function VetsPage() {
         <div className="lg:col-span-4 space-y-6">
           
           {/* Quick Action Speed-Dial Panel */}
-          <Card glow={speedDialContacts.length > 0} glowColor="sunny" className="bg-gradient-to-br from-white to-amber-50/[0.02] border-amber-200/30 p-6 space-y-4">
+          <Card glow={speedDialContacts.length > 0} className="bg-gradient-to-br from-white to-amber-50/[0.02] border-amber-200/30 p-6 space-y-4">
             <h3 className="font-black text-slate-800 text-base flex items-center gap-2">
               <PhoneCall className="text-amber-500 animate-bounce" size={18} />
               شماره‌گیر سریع اضطراری
@@ -311,8 +311,8 @@ export default function VetsPage() {
                   className={cn(
                     "px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap",
                     activeRoleFilter === 'all'
-                      ? "bg-slate-800 text-white shadow-sm shadow-slate-900/10"
-                      : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                      ? "bg-coral-deep text-white shadow-md shadow-coral/30"
+                      : "bg-peach/60 text-coral border border-coral-light/40 hover:bg-peach hover:text-coral-deep"
                   )}
                 >
                   همه همکاران درمانی ({toPersian(vets.length)})
@@ -324,8 +324,8 @@ export default function VetsPage() {
                   className={cn(
                     "px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap",
                     activeRoleFilter === 'primary'
-                      ? "bg-coral text-white shadow-sm shadow-coral/10"
-                      : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                      ? "bg-coral text-white shadow-md shadow-coral/30"
+                      : "bg-peach/60 text-coral border border-coral-light/40 hover:bg-peach hover:text-coral-deep"
                   )}
                 >
                   پزشکان خانواده
@@ -337,8 +337,8 @@ export default function VetsPage() {
                   className={cn(
                     "px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap",
                     activeRoleFilter === 'specialist'
-                      ? "bg-blue-500 text-white shadow-sm shadow-blue-500/10"
-                      : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                      ? "bg-blue-500 text-white shadow-md shadow-blue-500/30"
+                      : "bg-peach/60 text-coral border border-coral-light/40 hover:bg-peach hover:text-coral-deep"
                   )}
                 >
                   متخصصین درمانی
@@ -350,8 +350,8 @@ export default function VetsPage() {
                   className={cn(
                     "px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer whitespace-nowrap",
                     activeRoleFilter === 'emergency_backup'
-                      ? "bg-amber-500 text-white shadow-sm shadow-amber-500/10"
-                      : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                      ? "bg-sunny text-white shadow-md shadow-sunny/30"
+                      : "bg-peach/60 text-coral border border-coral-light/40 hover:bg-peach hover:text-coral-deep"
                   )}
                 >
                   سوپاپ‌های اورژانس

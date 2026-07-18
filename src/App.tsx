@@ -2,6 +2,7 @@ import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useAppStore } from './store';
 import { AnimatePresence } from 'motion/react';
 import { Sidebar } from './components/sidebar';
+import { PreferencesProvider } from './preferences/PreferencesProvider';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -59,6 +60,7 @@ function AppContent() {
           <Route path="/navigator" element={<Navigator />} />
           <Route path="/vets" element={<Vets />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/shop/products/:slug" element={<Shop />} />
           <Route path="/nutrition" element={<Nutrition />} />
           <Route path="/translator" element={<Translator />} />
           <Route path="/settings" element={<SettingsPage />} />
@@ -70,8 +72,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <HashRouter>
-      <AppContent />
-    </HashRouter>
+    <PreferencesProvider>
+      <HashRouter>
+        <AppContent />
+      </HashRouter>
+    </PreferencesProvider>
   );
 }
