@@ -1,6 +1,7 @@
 import React from 'react';
 import { GroupedReminders } from './reminderUtils';
 import { ReminderMetricCard, ReminderMetricKind } from './ReminderMetricCard';
+import { MetricCardGrid } from '../../components/metric/MetricCardGrid';
 
 interface ReminderSummaryProps {
   grouped: GroupedReminders;
@@ -38,7 +39,7 @@ export default function ReminderSummary({ grouped, activeFilter, onFilterChange 
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" dir="rtl">
+    <MetricCardGrid density="compact" className="w-full">
       {cards.map((card) => {
         const isSelected = activeFilter === card.id;
 
@@ -53,6 +54,6 @@ export default function ReminderSummary({ grouped, activeFilter, onFilterChange 
           />
         );
       })}
-    </div>
+    </MetricCardGrid>
   );
 }

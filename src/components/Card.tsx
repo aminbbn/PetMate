@@ -18,12 +18,13 @@ export interface CardProps extends Omit<HTMLMotionProps<'div'>, 'as'> {
   as?: 'div' | 'button';
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
+  contentParallax?: boolean;
 }
 
 const THEME_CARD_GLOW = {
   rgb: '255, 111, 114',
-  innerAlpha: 0.10,
-  edgeAlpha: 0.56,
+  innerAlpha: 0.12,
+  edgeAlpha: 0.64,
 } as const;
 
 export const Card: React.FC<CardProps> = ({ 
@@ -38,6 +39,7 @@ export const Card: React.FC<CardProps> = ({
   glowIntensity = 'normal',
   contentClassName,
   selected = false,
+  contentParallax = true,
   onMouseMove,
   onMouseEnter,
   onMouseLeave,
@@ -103,7 +105,7 @@ export const Card: React.FC<CardProps> = ({
     mouseX.set(x);
     mouseY.set(y);
 
-    if (hoverEffect) {
+    if (hoverEffect && contentParallax) {
       const width = rect.width;
       const height = rect.height;
       const centerX = width / 2;
@@ -188,10 +190,10 @@ export const Card: React.FC<CardProps> = ({
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       className={cn(
-        "bg-white rounded-[24px] p-6 relative overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group",
+        "rounded-[24px] p-6 relative overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] group",
         selected 
-          ? "border border-coral shadow-[0_12px_40px_rgba(255,111,114,0.06)]"
-          : "border border-pm-stroke-subtle shadow-[0_12px_40px_rgba(232,90,93,0.03),0_4px_16px_rgba(255,179,174,0.04)]",
+          ? "bg-coral/[0.03] border border-coral shadow-[0_12px_40px_rgba(255,111,114,0.06)]"
+          : "bg-white border border-pm-stroke-subtle shadow-[0_12px_40px_rgba(232,90,93,0.03),0_4px_16px_rgba(255,179,174,0.04)]",
         glow && "shadow-[0_20px_50px_rgba(255,111,114,0.10),0_8px_24px_rgba(255,111,114,0.05)] border-coral-light/30",
         className
       )}
@@ -246,8 +248,8 @@ export const Card: React.FC<CardProps> = ({
       <motion.div 
         className={cn("relative z-10 w-full h-full", contentClassName)}
         style={{
-          x: smoothParallaxX,
-          y: smoothParallaxY,
+          x: contentParallax ? smoothParallaxX : undefined,
+          y: contentParallax ? smoothParallaxY : undefined,
         }}
       >
         {children}

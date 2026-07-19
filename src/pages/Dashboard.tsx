@@ -3,7 +3,8 @@ import { useAppStore, PetProfile, PetType, Reminder } from '../store';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { AnimatedCardIcon } from '../components/AnimatedCardIcon';
-import { CardCornerIcon } from '../components/card/CardCornerIcon';
+import { MetricCard } from '../components/metric/MetricCard';
+import { MetricCardGrid } from '../components/metric/MetricCardGrid';
 import { MotionPage, MotionDialog } from '../motion';
 import { 
   Bell, 
@@ -342,6 +343,43 @@ export default function Dashboard() {
     );
   }
 
+  const dashboardMetrics = [
+    {
+      title: "برنامه‌های امروز",
+      value: toPersian(todayRemainingCount),
+      supportingText: "کار ناتمام",
+      icon: Bell,
+      iconVariant: "bell" as const,
+      iconTone: "brand" as const,
+    },
+    {
+      title: "زمان‌گذشته (عقب‌افتاده)",
+      value: toPersian(overdueCount),
+      supportingText: overdueCount > 0 ? "نیاز به توجه" : "موردی ثبت نشده",
+      icon: AlertTriangle,
+      iconVariant: "alert" as const,
+      iconTone: "danger" as const,
+      state: (overdueCount > 0 ? "attention" : "default") as any,
+    },
+    {
+      title: "آخرین وزن ثبت شده",
+      value: toPersian(lastWeightVal),
+      unit: "کیلوگرم",
+      supportingText: weightChangeText,
+      icon: Scale,
+      iconVariant: "weight" as const,
+      iconTone: "warning" as const,
+    },
+    {
+      title: "آخرین اقدام پزشکی",
+      value: lastRecordText,
+      supportingText: lastRecordTime,
+      icon: Stethoscope,
+      iconVariant: "stethoscope" as const,
+      iconTone: "success" as const,
+    },
+  ];
+
   return (
     <MotionPage className="min-h-screen bg-gradient-to-br from-[#FFFDFB] via-[#FFF9F6] to-[#FFF3EE] bg-dot-grid p-6 lg:p-10 space-y-8 max-w-7xl mx-auto w-full relative" dir="rtl">
       {/* Background radial soft glows */}
@@ -435,60 +473,23 @@ export default function Dashboard() {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
-        className="grid grid-cols-2 lg:grid-cols-4 gap-4 relative z-10"
+        className="relative z-10 w-full"
       >
-        {/* Metric 1: Today Reminders */}
-        <Card className="bg-white border border-pm-stroke-subtle p-5 group relative" hoverEffect={true} contentClassName="relative w-full h-full">
-          <CardCornerIcon icon={Bell} animationVariant="bell" tone="brand" size="sm" />
-          <div className="pr-14">
-            <span className="text-xs text-gray-400 font-bold block">برنامه‌های امروز</span>
-            <div className="mt-4">
-              <span className="text-4xl font-black text-gray-800">{toPersian(todayRemainingCount)}</span>
-              <span className="text-xs font-bold text-gray-400 mr-1.5 inline-block">کار ناتمام</span>
-            </div>
-          </div>
-        </Card>
-
-        {/* Metric 2: Overdue */}
-        <Card className="bg-white border border-pm-stroke-subtle p-5 group relative" hoverEffect={true} contentClassName="relative w-full h-full">
-          <CardCornerIcon icon={AlertTriangle} animationVariant="alert" tone="danger" size="sm" />
-          <div className="pr-14">
-            <span className="text-xs text-gray-400 font-bold block">زمان‌گذشته (عقب‌افتاده)</span>
-            <div className="mt-4">
-              <span className="text-4xl font-black text-rose-600">{toPersian(overdueCount)}</span>
-              <span className="text-xs font-bold text-rose-400 mr-1.5 inline-block">نیاز به توجه</span>
-            </div>
-          </div>
-        </Card>
-
-        {/* Metric 3: Weight */}
-        <Card className="bg-white border border-pm-stroke-subtle p-5 group relative" hoverEffect={true} contentClassName="relative w-full h-full">
-          <CardCornerIcon icon={Scale} animationVariant="weight" tone="warning" size="sm" />
-          <div className="pr-14">
-            <span className="text-xs text-gray-400 font-bold block">آخرین وزن ثبت شده</span>
-            <div className="mt-4">
-              <span className="text-4xl font-black text-gray-800">{toPersian(lastWeightVal)}</span>
-              <span className="text-xs font-bold text-gray-400 mr-1.5 inline-block">ک‌گ</span>
-              <span className="text-[10px] font-black text-gray-400 block mt-1">{weightChangeText}</span>
-            </div>
-          </div>
-        </Card>
-
-        {/* Metric 4: Health Record */}
-        <Card className="bg-white border border-pm-stroke-subtle p-5 group relative" hoverEffect={true} contentClassName="relative w-full h-full">
-          <CardCornerIcon icon={Stethoscope} animationVariant="stethoscope" tone="success" size="sm" />
-          <div className="pr-14">
-            <span className="text-xs text-gray-400 font-bold block">آخرین اقدام پزشکی</span>
-            <div className="mt-4">
-              <span className="text-lg font-black text-gray-800 block truncate" title={lastRecordText}>
-                {lastRecordText}
-              </span>
-              <span className="text-xs font-bold text-emerald-600 block mt-1">
-                {lastRecordTime}
-              </span>
-            </div>
-          </div>
-        </Card>
+        <MetricCardGrid>
+          {dashboardMetrics.map((metric, idx) => (
+            <MetricCard
+              key={idx}
+              title={metric.title}
+              value={metric.value}
+              unit={'unit' in metric ? metric.unit : undefined}
+              supportingText={metric.supportingText}
+              icon={metric.icon}
+              iconVariant={metric.iconVariant}
+              iconTone={metric.iconTone}
+              state={'state' in metric ? metric.state : undefined}
+            />
+          ))}
+        </MetricCardGrid>
       </motion.div>
 
       {/* SECTION 3: BENTO WIDGETS (TODAY REMINDERS, WEIGHT CHART, RECENT MEDICAL LOGS) */}

@@ -177,59 +177,62 @@ export const HealthRecordPage: React.FC = () => {
         />
       </MotionSection>
 
-      {petRecords.length === 0 ? (
-        <MotionSection delay={0.1}>
-          <HealthEmptyState
-            petName={currentPetName}
-            onAddManual={() => setViewAndOpen('manual')}
-            onAddUpload={() => setViewAndOpen('upload')}
-          />
-        </MotionSection>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Main Left Workspace (Toolbar & Timeline) */}
-          <div className="lg:col-span-8 space-y-6">
-            {/* 2. Overview Stats */}
-            <MotionSection delay={0.1}>
-              <HealthOverview
-                records={petRecords}
-                onFilterChange={handleFilterChange}
-                filters={filters}
-              />
-            </MotionSection>
+      {/* 2. Overview Stats - Always rendered full-width */}
+      <MotionSection delay={0.1}>
+        <HealthOverview
+          records={petRecords}
+          onFilterChange={handleFilterChange}
+          filters={filters}
+        />
+      </MotionSection>
 
-            {/* 3. Toolbar (Search & Category Selector) */}
+      {/* 3. Lower 12-column grid layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Main Left Workspace: 8 columns */}
+        <div className="lg:col-span-8 space-y-6">
+          {petRecords.length === 0 ? (
             <MotionSection delay={0.15}>
-              <HealthToolbar
-                filters={filters}
-                onFilterChange={handleFilterChange}
-                onClearFilters={handleClearFilters}
+              <HealthEmptyState
+                petName={currentPetName}
+                onAddManual={() => setViewAndOpen('manual')}
+                onAddUpload={() => setViewAndOpen('upload')}
               />
             </MotionSection>
+          ) : (
+            <>
+              {/* Toolbar (Search & Category Selector) */}
+              <MotionSection delay={0.15}>
+                <HealthToolbar
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                  onClearFilters={handleClearFilters}
+                />
+              </MotionSection>
 
-            {/* 4. Chronological Timeline */}
-            <MotionSection delay={0.2}>
-              <HealthTimeline
-                records={filteredRecords}
-                filters={filters}
-                onEdit={handleOpenEditDialog}
-                onDelete={handleDeleteRecord}
-              />
-            </MotionSection>
-          </div>
-
-          {/* Sidebar Workspace (shortcuts, next followups) */}
-          <div className="lg:col-span-4 lg:block space-y-6">
-            <MotionSection delay={0.25}>
-              <HealthContextRail
-                upcomingRecords={upcomingFollowUps}
-                onQuickAdd={handleQuickAdd}
-                onSelectRecord={handleSelectRecord}
-              />
-            </MotionSection>
-          </div>
+              {/* Chronological Timeline */}
+              <MotionSection delay={0.2}>
+                <HealthTimeline
+                  records={filteredRecords}
+                  filters={filters}
+                  onEdit={handleOpenEditDialog}
+                  onDelete={handleDeleteRecord}
+                />
+              </MotionSection>
+            </>
+          )}
         </div>
-      )}
+
+        {/* Sidebar Workspace Context Rail: 4 columns */}
+        <aside className="lg:col-span-4 space-y-6">
+          <MotionSection delay={0.25}>
+            <HealthContextRail
+              upcomingRecords={upcomingFollowUps}
+              onQuickAdd={handleQuickAdd}
+              onSelectRecord={handleSelectRecord}
+            />
+          </MotionSection>
+        </aside>
+      </div>
 
       {/* dialog modal for create/edit */}
       <HealthRecordDialog

@@ -9,7 +9,8 @@ export interface CardCornerIconProps {
   icon: React.ComponentType<LucideProps>;
   animationVariant: AnimatedCardIconVariant;
   tone?: CardCornerIconTone;
-  size?: 'sm' | 'md';
+  density?: 'standard' | 'compact';
+  size?: 'sm' | 'md' | 'lg' | string;
   className?: string;
 }
 
@@ -19,22 +20,28 @@ const TONE_MAPPING: Record<CardCornerIconTone, AnimatedCardIconTone> = {
   info: 'blue',
   success: 'mint',
   warning: 'sunny',
-  danger: 'coral', // Maps to coral family
+  danger: 'coral',
 };
 
 export const CardCornerIcon: React.FC<CardCornerIconProps> = ({
   icon,
   animationVariant,
   tone = 'neutral',
-  size = 'md',
+  density,
+  size,
   className,
 }) => {
   const animatedTone = TONE_MAPPING[tone];
+  
+  // Backward compatibility mapping for size property
+  const resolvedDensity = density || (size === 'sm' ? 'compact' : 'standard');
+  const isCompact = resolvedDensity === 'compact';
 
   return (
     <div 
       className={cn(
-        "absolute top-4 right-4 z-20 pointer-events-none select-none",
+        "absolute z-20 pointer-events-none select-none",
+        isCompact ? "top-4 right-4" : "top-[18px] right-[18px]",
         className
       )}
       aria-hidden="true"
@@ -43,8 +50,13 @@ export const CardCornerIcon: React.FC<CardCornerIconProps> = ({
         variant={animationVariant}
         icon={icon}
         tone={animatedTone}
-        size={size}
         decorative={true}
+        size="sm"
+        className={cn(
+          isCompact 
+            ? "!w-9 !h-9 !rounded-xl" 
+            : "!w-10 !h-10 !rounded-2xl"
+        )}
       />
     </div>
   );

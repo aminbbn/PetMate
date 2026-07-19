@@ -2,11 +2,11 @@ import React from 'react';
 import { PetService, ServiceCoordinates } from './navigatorTypes';
 import { ServiceCard } from './ServiceCard';
 import { calculateDistanceKm, CATEGORY_LABELS } from './navigatorUtils';
-import { Map, Database } from 'lucide-react';
+import { Map, Database, AlertCircle } from 'lucide-react';
 import { Card } from '../../components/Card';
+import { CardCornerIcon } from '../../components/card/CardCornerIcon';
 import { toPersian } from '../../lib/persian';
 import { motion } from 'motion/react';
-import { AlertCircle } from 'lucide-react';
 
 interface ServiceResultsProps {
   services: PetService[];
@@ -52,11 +52,15 @@ export const ServiceResults: React.FC<ServiceResultsProps> = ({
   return (
     <div className="w-full space-y-6 text-right" dir="rtl">
       {/* List-First Fallback Mode Geographic Summary Panel */}
-      <Card className="w-full border border-blue/15 bg-gradient-to-br from-white to-blue/[0.015]" hoverEffect={false}>
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <Card 
+        className="w-full bg-gradient-to-br from-white to-blue-50/10 relative p-6 border border-pm-stroke-subtle" 
+        contentClassName="relative w-full h-full"
+        hoverEffect={false}
+      >
+        <CardCornerIcon icon={Map} animationVariant="map" tone="info" size="sm" />
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pr-14">
           <div className="space-y-2 flex-1">
             <div className="flex items-center gap-2.5 text-blue">
-              <Map className="w-5 h-5 animate-pulse" />
               <h4 className="font-sans font-black text-base text-gray-900">پنل موقعیت و خلاصه‌ساز جغرافیایی</h4>
             </div>
             <p className="text-sm text-gray-500 leading-relaxed max-w-3xl">
@@ -88,7 +92,7 @@ export const ServiceResults: React.FC<ServiceResultsProps> = ({
             </div>
           </div>
         </div>
-        <div className="mt-4 pt-3 border-t border-dashed border-gray-100 flex items-center justify-between text-[11px] text-gray-400 font-sans">
+        <div className="mt-4 pt-3 border-t border-dashed border-gray-100 flex items-center justify-between text-[11px] text-gray-400 font-sans pr-14">
           <span>سرویس‌گیرنده: مرورگر کاربر نهایی (Privacy-First Session)</span>
           <span className="font-semibold text-blue/95">نمایش نقشه پس از اتصال سرویس نقشه فعال می‌شود.</span>
         </div>
