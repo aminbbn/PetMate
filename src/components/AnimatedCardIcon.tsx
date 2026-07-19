@@ -54,16 +54,37 @@ export interface AnimatedCardIconProps {
   icon?: React.ComponentType<LucideProps>;
   tone?: AnimatedCardIconTone;
   size?: 'sm' | 'md' | 'lg';
+  frameSize?: 'compact' | 'metric' | 'medium' | 'large';
   className?: string;
   decorative?: boolean;
 }
 
-const TONE_CLASSES: Record<AnimatedCardIconTone, string> = {
-  coral: 'bg-coral/10 text-coral border-coral/20',
-  sunny: 'bg-sunny/10 text-sunny border-sunny/20',
-  mint: 'bg-green-50 text-green-600 border-green-100',
-  blue: 'bg-blue-50 text-blue-500 border-blue-100',
-  neutral: 'bg-gray-50 text-gray-400 border-gray-100',
+const TONE_CLASSES: Record<AnimatedCardIconTone, { bg: string; border: string; text: string }> = {
+  coral: {
+    bg: 'bg-coral/[0.09]',
+    border: 'border-coral/[0.38]',
+    text: 'text-coral',
+  },
+  sunny: {
+    bg: 'bg-sunny/[0.09]',
+    border: 'border-sunny/[0.38]',
+    text: 'text-sunny',
+  },
+  mint: {
+    bg: 'bg-mint/[0.08]',
+    border: 'border-mint/[0.28]',
+    text: 'text-mint',
+  },
+  blue: {
+    bg: 'bg-blue/[0.08]',
+    border: 'border-blue/[0.28]',
+    text: 'text-blue',
+  },
+  neutral: {
+    bg: 'bg-gray-500/[0.08]',
+    border: 'border-gray-300',
+    text: 'text-gray-500',
+  },
 };
 
 const DEFAULT_ICONS: Record<AnimatedCardIconVariant, React.ComponentType<LucideProps>> = {
@@ -92,24 +113,44 @@ export const AnimatedCardIcon: React.FC<AnimatedCardIconProps> = ({
   icon: CustomIcon,
   tone = 'coral',
   size = 'md',
+  frameSize,
   className,
   decorative = true,
 }) => {
   const IconComponent = CustomIcon || DEFAULT_ICONS[variant] || Sparkles;
 
-  const sizeClasses = {
-    sm: 'w-8 h-8 rounded-lg text-xs',
-    md: 'w-12 h-12 rounded-2xl text-base',
-    lg: 'w-14 h-14 rounded-3xl text-lg',
+  // Support both explicit frameSize and backward-compatible size prop
+  const resolvedSize = frameSize || (
+    size === 'sm' ? 'compact' :
+    size === 'md' ? 'medium' :
+    size === 'lg' ? 'large' : 'medium'
+  );
+
+  const sizeConfig = {
+    compact: {
+      stageClass: 'w-9 h-9',
+      radiusClass: 'rounded-[9px]',
+      iconSize: 18,
+    },
+    metric: {
+      stageClass: 'w-10 h-10',
+      radiusClass: 'rounded-[10px]',
+      iconSize: 20,
+    },
+    medium: {
+      stageClass: 'w-12 h-12',
+      radiusClass: 'rounded-[12px]',
+      iconSize: 22,
+    },
+    large: {
+      stageClass: 'w-14 h-14',
+      radiusClass: 'rounded-[14px]',
+      iconSize: 26,
+    }
   };
 
-  const iconSizes = {
-    sm: 16,
-    md: 22,
-    lg: 26,
-  };
-
-  const iconSize = iconSizes[size];
+  const config = sizeConfig[resolvedSize] || sizeConfig.medium;
+  const iconSize = config.iconSize;
 
   // Render original star shards decoration
   const renderSparkleShards = () => (
@@ -203,7 +244,7 @@ export const AnimatedCardIcon: React.FC<AnimatedCardIconProps> = ({
   const renderFireEmbers = () => (
     <>
       <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-amber-500 rounded-full opacity-0 pointer-events-none animate-ember-1" aria-hidden="true" />
-      <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-sunny rounded-full opacity-0 pointer-events-none animate-ember-2" aria-hidden="true" />
+      <div className="absolute top-1/2 left-1/2 w-1 bg-sunny rounded-full opacity-0 pointer-events-none animate-ember-2" style={{ width: '4px', height: '4px' }} aria-hidden="true" />
       <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-coral rounded-full opacity-0 pointer-events-none animate-ember-3" aria-hidden="true" />
     </>
   );
@@ -240,10 +281,10 @@ export const AnimatedCardIcon: React.FC<AnimatedCardIconProps> = ({
 
   return (
     <div 
+      data-slot="card-icon-stage"
       className={cn(
-        "relative flex items-center justify-center shrink-0 overflow-visible transition-all duration-300 border border-transparent petmate-card-icon select-none group/card-icon",
-        TONE_CLASSES[tone],
-        sizeClasses[size],
+        "relative shrink-0 overflow-visible select-none transition-all duration-300 group/card-icon petmate-card-icon",
+        config.stageClass,
         className
       )}
       role={decorative ? "presentation" : undefined}
@@ -473,93 +514,150 @@ export const AnimatedCardIcon: React.FC<AnimatedCardIconProps> = ({
         }
       `}</style>
 
-      {/* Decorative Particles & Layer Panels */}
-      {variant === 'sparkles' && renderSparkleShards()}
-      {variant === 'calendar' && renderCalendarNumbers()}
-      {variant === 'success' && renderMintSuccess()}
-      {variant === 'alert' && renderAlertRadar()}
-      {variant === 'heart' && renderHeartBubbles()}
-      {variant === 'flame' && renderFireEmbers()}
+      {/* Frame Background & Border Layer */}
+      <div
+        data-slot="card-icon-frame"
+        className={cn(
+          "absolute inset-0 border border-solid transition-all duration-300 z-0",
+          TONE_CLASSES[tone].bg,
+          TONE_CLASSES[tone].border,
+          config.radiusClass
+        )}
+        aria-hidden="true"
+      />
 
-      {/* Primary Icon Representation */}
-      {variant === 'clock' ? (
-        renderClockFace()
-      ) : variant === 'trend' ? (
-        renderTrendDrawing()
-      ) : variant === 'weight' ? (
-        renderScaleFace()
-      ) : variant === 'document' ? (
-        renderDocumentVisual()
-      ) : variant === 'bell' ? (
-        <div className="relative pointer-events-none petmate-bell-icon">
-          <IconComponent size={iconSize} />
-          {/* Wave Left/Right lines */}
-          <svg viewBox="0 0 24 24" className="absolute w-4 h-4 text-current opacity-0 left-[-8px] top-[15%] pointer-events-none petmate-bell-left-wave" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <path d="M12 8A6 6 0 0 0 6 12" />
-          </svg>
-          <svg viewBox="0 0 24 24" className="absolute w-4 h-4 text-current opacity-0 right-[-8px] top-[15%] pointer-events-none petmate-bell-right-wave" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <path d="M12 8a6 6 0 0 1 6 4" />
-          </svg>
-        </div>
-      ) : variant === 'map' ? (
-        <div className="relative flex items-center justify-center w-full h-full pointer-events-none">
-          <div className="petmate-map-pin z-10 text-current">
+      {/* Main Glyph Layer */}
+      <div
+        data-slot="card-icon-glyph"
+        className={cn(
+          "relative z-10 flex h-full w-full items-center justify-center text-current transition-colors duration-300",
+          TONE_CLASSES[tone].text
+        )}
+      >
+        {variant === 'clock' ? (
+          renderClockFace()
+        ) : variant === 'trend' ? (
+          renderTrendDrawing()
+        ) : variant === 'weight' ? (
+          renderScaleFace()
+        ) : variant === 'document' ? (
+          renderDocumentVisual()
+        ) : variant === 'bell' ? (
+          <div className="relative pointer-events-none petmate-bell-icon">
             <IconComponent size={iconSize} />
           </div>
+        ) : variant === 'map' ? (
+          <div className="relative flex items-center justify-center w-full h-full pointer-events-none">
+            <div className="petmate-map-pin z-10 text-current">
+              <IconComponent size={iconSize} />
+            </div>
+          </div>
+        ) : variant === 'shop' ? (
+          <div className="relative pointer-events-none">
+            <div className="petmate-shop-bag">
+              <IconComponent size={iconSize} />
+            </div>
+          </div>
+        ) : variant === 'bot' ? (
+          <div className="relative pointer-events-none">
+            <div className="petmate-bot text-current">
+              <IconComponent size={iconSize} />
+            </div>
+          </div>
+        ) : variant === 'stethoscope' ? (
+          <div className="relative pointer-events-none petmate-steth-icon">
+            <IconComponent size={iconSize} />
+          </div>
+        ) : variant === 'nutrition' ? (
+          <div className="relative pointer-events-none">
+            <IconComponent size={iconSize} className="petmate-primary-icon-standard" />
+          </div>
+        ) : variant === 'behavior' ? (
+          <div className="relative pointer-events-none">
+            <IconComponent size={iconSize} className="petmate-primary-icon-standard text-sunny" />
+          </div>
+        ) : variant === 'training' ? (
+          <div className="relative flex items-center justify-center w-full h-full pointer-events-none">
+            <div className="petmate-medal z-10 text-current">
+              <IconComponent size={iconSize} />
+            </div>
+          </div>
+        ) : (
+          <IconComponent 
+            size={iconSize} 
+            className={cn(
+              "pointer-events-none petmate-primary-icon-standard transition-transform duration-300",
+              variant === 'calendar' && "animate-calendar-page-turn"
+            )} 
+          />
+        )}
+      </div>
+
+      {/* Animation Effects Layer */}
+      <div
+        data-slot="card-icon-effects"
+        className={cn(
+          "pointer-events-none absolute inset-0 z-20 overflow-visible",
+          TONE_CLASSES[tone].text
+        )}
+        aria-hidden="true"
+      >
+        {variant === 'sparkles' && renderSparkleShards()}
+        {variant === 'calendar' && renderCalendarNumbers()}
+        {variant === 'success' && renderMintSuccess()}
+        {variant === 'alert' && renderAlertRadar()}
+        {variant === 'heart' && renderHeartBubbles()}
+        {variant === 'flame' && renderFireEmbers()}
+
+        {variant === 'bell' && (
+          <>
+            <svg viewBox="0 0 24 24" className="absolute w-4 h-4 text-current opacity-0 left-[-8px] top-[15%] pointer-events-none petmate-bell-left-wave" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M12 8A6 6 0 0 0 6 12" />
+            </svg>
+            <svg viewBox="0 0 24 24" className="absolute w-4 h-4 text-current opacity-0 right-[-8px] top-[15%] pointer-events-none petmate-bell-right-wave" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M12 8a6 6 0 0 1 6 4" />
+            </svg>
+          </>
+        )}
+
+        {variant === 'map' && (
           <div className="absolute bottom-[10%] w-6 h-3 border-2 border-current rounded-full opacity-0 pointer-events-none petmate-map-ripple z-0" />
-        </div>
-      ) : variant === 'shop' ? (
-        <div className="relative pointer-events-none">
-          <div className="petmate-shop-bag">
-            <IconComponent size={iconSize} />
-          </div>
+        )}
+
+        {variant === 'shop' && (
           <svg viewBox="0 0 24 24" className="absolute top-[-4px] left-[35%] w-3.5 h-3.5 text-sunny opacity-0 pointer-events-none petmate-shop-item" fill="currentColor">
             <path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
           </svg>
-        </div>
-      ) : variant === 'bot' ? (
-        <div className="relative pointer-events-none">
-          <div className="petmate-bot text-current">
-            <IconComponent size={iconSize} />
-          </div>
+        )}
+
+        {variant === 'bot' && (
           <div className="absolute top-[4px] left-[calc(50%-1.5px)] w-[3px] h-[3px] rounded-full bg-sunny opacity-0 petmate-bot-light" />
-        </div>
-      ) : variant === 'stethoscope' ? (
-        <div className="relative pointer-events-none petmate-steth-icon">
-          <IconComponent size={iconSize} />
+        )}
+
+        {variant === 'stethoscope' && (
           <div className="absolute right-[-2px] top-[-2px] w-2.5 h-2.5 rounded-full bg-coral border-2 border-white opacity-0 petmate-steth-dot" />
-        </div>
-      ) : variant === 'nutrition' ? (
-        <div className="relative pointer-events-none">
-          <IconComponent size={iconSize} className="petmate-primary-icon-standard" />
+        )}
+
+        {variant === 'nutrition' && (
           <svg viewBox="0 0 24 24" className="absolute w-3.5 h-3.5 text-green-500 opacity-0 pointer-events-none petmate-leaf bottom-[-3px] right-[-3px]" fill="currentColor">
             <path d="M17 8c.31-.26.68-.42 1.09-.46 1.04-.1 1.9.77 1.8 1.81-.04.41-.2.78-.46 1.09L11 19H5v-6L17 8z" />
           </svg>
-        </div>
-      ) : variant === 'behavior' ? (
-        <div className="relative pointer-events-none">
-          <IconComponent size={iconSize} className="petmate-primary-icon-standard text-sunny" />
-          <div className="absolute w-2 h-2 rounded-full bg-sunny opacity-0 pointer-events-none petmate-emo-1 bottom-1 left-[-2px]" />
-          <div className="absolute w-2.5 h-2.5 rounded-full bg-coral opacity-0 pointer-events-none petmate-emo-2 top-0 right-[-3px]" />
-        </div>
-      ) : variant === 'training' ? (
-        <div className="relative flex items-center justify-center w-full h-full pointer-events-none">
-          <div className="petmate-medal z-10 text-current">
-            <IconComponent size={iconSize} />
-          </div>
+        )}
+
+        {variant === 'behavior' && (
+          <>
+            <div className="absolute w-2 h-2 rounded-full bg-sunny opacity-0 pointer-events-none petmate-emo-1 bottom-1 left-[-2px]" />
+            <div className="absolute w-2.5 h-2.5 rounded-full bg-coral opacity-0 pointer-events-none petmate-emo-2 top-0 right-[-3px]" />
+          </>
+        )}
+
+        {variant === 'training' && (
           <svg className="absolute w-[95%] h-[95%] text-sunny/60 pointer-events-none z-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
             <circle cx="12" cy="12" r="7" className="petmate-medal-ring" style={{ strokeDasharray: 44, strokeDashoffset: 44 }} />
           </svg>
-        </div>
-      ) : (
-        <IconComponent 
-          size={iconSize} 
-          className={cn(
-            "pointer-events-none petmate-primary-icon-standard transition-transform duration-300",
-            variant === 'calendar' && "animate-calendar-page-turn"
-          )} 
-        />
-      )}
+        )}
+      </div>
     </div>
   );
 };
+
