@@ -5,6 +5,7 @@ import { VetCard } from './VetCard';
 import { VetFormModal } from './VetFormModal';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
+import { MetricCard, MetricCardGrid } from '../../components/metric-card';
 import { 
   Heart, 
   Plus, 
@@ -128,59 +129,43 @@ export default function VetsPage() {
       </div>
 
       {/* Bento Stats Matrix */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Stat 1: Total Vets */}
-        <Card className="bg-slate-50/50 border-slate-100 p-5 text-right flex flex-col justify-between h-28" hoverLift={false}>
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-400 font-bold">کل پزشکان ثبت شده</span>
-            <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center">
-              <Layers size={14} />
-            </div>
-          </div>
-          <span className="text-2xl font-black text-slate-800">
-            {toPersian(stats.total)} <span className="text-xs font-bold text-slate-400">مخاطب فعال</span>
-          </span>
-        </Card>
-
-        {/* Stat 2: Pinned */}
-        <Card className="bg-coral/5 border-coral-light/10 p-5 text-right flex flex-col justify-between h-28" hoverLift={false}>
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-500 font-black">سنجاق شده به بالای صفحه</span>
-            <div className="w-8 h-8 rounded-xl bg-coral/10 text-coral flex items-center justify-center">
-              <Star size={14} fill="currentColor" />
-            </div>
-          </div>
-          <span className="text-2xl font-black text-slate-800">
-            {toPersian(stats.pinned)} <span className="text-xs font-bold text-slate-400">مورد سنجاق شده</span>
-          </span>
-        </Card>
-
-        {/* Stat 3: Emergency */}
-        <Card className="bg-amber-500/[0.04] border-amber-200/50 p-5 text-right flex flex-col justify-between h-28" hoverLift={false}>
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-amber-800 font-black">پشتیبانان اورژانسی ۲۴ ساعته</span>
-            <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
-              <ShieldAlert size={14} />
-            </div>
-          </div>
-          <span className="text-2xl font-black text-slate-800">
-            {toPersian(stats.emergency)} <span className="text-xs font-bold text-slate-400">پزشک آماده‌باش</span>
-          </span>
-        </Card>
-
-        {/* Stat 4: Primary Family Vet */}
-        <Card className="bg-indigo-50/50 border-indigo-100/50 p-5 text-right flex flex-col justify-between h-28" hoverLift={false}>
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-indigo-700 font-black">پزشک خانواده {profile ? profile.name : 'پت'}</span>
-            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center">
-              <Stethoscope size={14} />
-            </div>
-          </div>
-          <span className="text-base font-black text-slate-800 truncate" title={stats.primaryName}>
-            {stats.primaryName}
-          </span>
-        </Card>
-      </div>
+      <MetricCardGrid density="standard" className="mb-6">
+        <MetricCard
+          title="کل پزشکان ثبت شده"
+          value={toPersian(stats.total)}
+          valueKind="number"
+          unit="مخاطب فعال"
+          icon={Layers}
+          iconVariant="document"
+          iconTone="neutral"
+        />
+        <MetricCard
+          title="سنجاق شده به بالای صفحه"
+          value={toPersian(stats.pinned)}
+          valueKind="number"
+          unit="مورد سنجاق شده"
+          icon={Star}
+          iconVariant="sparkles"
+          iconTone="coral"
+        />
+        <MetricCard
+          title="پشتیبانان اورژانسی ۲۴ ساعته"
+          value={toPersian(stats.emergency)}
+          valueKind="number"
+          unit="پزشک آماده‌باش"
+          icon={ShieldAlert}
+          iconVariant="alert"
+          iconTone="sunny"
+        />
+        <MetricCard
+          title={`پزشک خانواده ${profile ? profile.name : 'پت'}`}
+          value={stats.primaryName}
+          valueKind={stats.primaryName && stats.primaryName !== "ثبت نشده" ? "text" : "empty"}
+          icon={Stethoscope}
+          iconVariant="stethoscope"
+          iconTone="mint"
+        />
+      </MetricCardGrid>
 
       {/* Main Content Layout Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

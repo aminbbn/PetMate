@@ -1,6 +1,5 @@
 import React from 'react';
-import { MetricCard } from '../../components/metric/MetricCard';
-import { MetricCardGrid } from '../../components/metric/MetricCardGrid';
+import { MetricCard, MetricCardGrid } from '../../components/metric-card';
 import { useAppStore } from '../../store';
 import { selectSortedEntries, selectLatestEntry, selectPreviousEntry, selectWeightGoal } from './growthSelectors';
 import { compareWeightEntries } from './growthUtils';
@@ -43,11 +42,12 @@ export const WeightOverview: React.FC<WeightOverviewProps> = ({ onSetGoal }) => 
       <MetricCard
         title="آخرین وزن"
         value={toPersian(latestWeight.toFixed(1))}
+        valueKind="number"
         unit="کیلوگرم"
         footer={latestWeightLabel}
         icon={Scale}
         iconVariant="weight"
-        iconTone="warning"
+        iconTone="sunny"
       />
 
       {/* 2. تغییر اخیر */}
@@ -57,7 +57,7 @@ export const WeightOverview: React.FC<WeightOverviewProps> = ({ onSetGoal }) => 
           changeDetails ? (
             <span className="flex items-center gap-1.5 leading-none" dir="rtl">
               <span>{toPersian(changeDetails.diffKg.toFixed(1))} ک‌گ</span>
-              {changeDetails.direction === 'increase' && <ArrowUp size={16} className="text-coral shrink-0 animate-pulse" />}
+              {changeDetails.direction === 'increase' && <ArrowUp size={16} className="text-coral shrink-0" />}
               {changeDetails.direction === 'decrease' && <ArrowDown size={16} className="text-blue-500 shrink-0" />}
               {changeDetails.direction === 'no_change' && <Minus size={16} className="text-gray-400 shrink-0" />}
             </span>
@@ -65,7 +65,8 @@ export const WeightOverview: React.FC<WeightOverviewProps> = ({ onSetGoal }) => 
             "ثبت دیگری لازم است"
           )
         }
-        state={changeDetails ? "default" : "empty"}
+        valueKind={changeDetails ? "number" : "status"}
+        state="default"
         footer={
           changeDetails 
             ? `${toPersian(changeDetails.days)} روز فاصله نسبت به ثبت قبلی`
@@ -73,18 +74,19 @@ export const WeightOverview: React.FC<WeightOverviewProps> = ({ onSetGoal }) => 
         }
         icon={TrendingUp}
         iconVariant="trend"
-        iconTone="brand"
+        iconTone="coral"
       />
 
       {/* 3. تعداد ثبت‌ها */}
       <MetricCard
         title="تعداد ثبت‌ها"
         value={toPersian(entriesCount)}
+        valueKind="number"
         unit="بار"
         footer="ثبت‌های فعال برای این حیوان خانگی"
         icon={FileText}
         iconVariant="document"
-        iconTone="info"
+        iconTone="blue"
       />
 
       {/* 4. هدف وزن */}
@@ -101,7 +103,8 @@ export const WeightOverview: React.FC<WeightOverviewProps> = ({ onSetGoal }) => 
             "هدف وزنی ثبت نشده"
           )
         }
-        state={goal ? "default" : "empty"}
+        valueKind={goal ? "text" : "empty"}
+        state="default"
         footer={
           <span className="flex items-center justify-between w-full font-bold">
             <span>
@@ -114,7 +117,7 @@ export const WeightOverview: React.FC<WeightOverviewProps> = ({ onSetGoal }) => 
         }
         icon={Check}
         iconVariant="success"
-        iconTone="success"
+        iconTone="mint"
         interactive={true}
         onClick={onSetGoal}
       />

@@ -3,8 +3,7 @@ import { useAppStore, PetProfile, PetType, Reminder } from '../store';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { AnimatedCardIcon } from '../components/AnimatedCardIcon';
-import { MetricCard } from '../components/metric/MetricCard';
-import { MetricCardGrid } from '../components/metric/MetricCardGrid';
+import { MetricCard, MetricCardGrid } from '../components/metric-card';
 import { MotionPage, MotionDialog } from '../motion';
 import { 
   Bell, 
@@ -347,36 +346,40 @@ export default function Dashboard() {
     {
       title: "برنامه‌های امروز",
       value: toPersian(todayRemainingCount),
+      valueKind: "number" as const,
       supportingText: "کار ناتمام",
       icon: Bell,
       iconVariant: "bell" as const,
-      iconTone: "brand" as const,
+      iconTone: "coral" as const,
     },
     {
       title: "زمان‌گذشته (عقب‌افتاده)",
       value: toPersian(overdueCount),
+      valueKind: (overdueCount > 0 ? "number" : "empty") as any,
       supportingText: overdueCount > 0 ? "نیاز به توجه" : "موردی ثبت نشده",
       icon: AlertTriangle,
       iconVariant: "alert" as const,
-      iconTone: "danger" as const,
+      iconTone: "coral" as const,
       state: (overdueCount > 0 ? "attention" : "default") as any,
     },
     {
       title: "آخرین وزن ثبت شده",
-      value: toPersian(lastWeightVal),
-      unit: "کیلوگرم",
+      value: lastWeightVal > 0 ? toPersian(lastWeightVal) : "ثبت نشده",
+      valueKind: (lastWeightVal > 0 ? "number" : "empty") as any,
+      unit: lastWeightVal > 0 ? "کیلوگرم" : undefined,
       supportingText: weightChangeText,
       icon: Scale,
       iconVariant: "weight" as const,
-      iconTone: "warning" as const,
+      iconTone: "sunny" as const,
     },
     {
       title: "آخرین اقدام پزشکی",
       value: lastRecordText,
+      valueKind: (lastRecordText && lastRecordText !== "موردی ثبت نشده" ? "text" : "empty") as any,
       supportingText: lastRecordTime,
       icon: Stethoscope,
       iconVariant: "stethoscope" as const,
-      iconTone: "success" as const,
+      iconTone: "mint" as const,
     },
   ];
 
@@ -481,12 +484,13 @@ export default function Dashboard() {
               key={idx}
               title={metric.title}
               value={metric.value}
+              valueKind={metric.valueKind}
               unit={'unit' in metric ? metric.unit : undefined}
               supportingText={metric.supportingText}
               icon={metric.icon}
               iconVariant={metric.iconVariant}
               iconTone={metric.iconTone}
-              state={'state' in metric ? metric.state : undefined}
+              state={'state' in metric ? (metric.state as any) : undefined}
             />
           ))}
         </MetricCardGrid>

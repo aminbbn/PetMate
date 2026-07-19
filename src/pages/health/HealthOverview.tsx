@@ -1,6 +1,5 @@
 import React from 'react';
-import { MetricCard } from '../../components/metric/MetricCard';
-import { MetricCardGrid } from '../../components/metric/MetricCardGrid';
+import { MetricCard, MetricCardGrid } from '../../components/metric-card';
 import { toPersian, formatPersianDate } from '../../lib/persian';
 import { HealthRecord, FilterState } from './healthTypes';
 import { FileText, Calendar, Clock } from 'lucide-react';
@@ -41,10 +40,11 @@ export const HealthOverview: React.FC<HealthOverviewProps> = ({
       <MetricCard
         title="کل سوابق"
         value={toPersian(totalCount)}
+        valueKind="number"
         unit="مورد"
         icon={FileText}
         iconVariant="document"
-        iconTone="brand"
+        iconTone="coral"
         interactive={true}
         selected={isTotalActive}
         onClick={() => onFilterChange({ kind: 'all', onlyHasFiles: false, search: '' })}
@@ -54,11 +54,12 @@ export const HealthOverview: React.FC<HealthOverviewProps> = ({
       <MetricCard
         title="آخرین ثبت"
         value={latestEntry ? latestEntry.title : "ثبت نشده"}
+        valueKind={latestEntry ? "text" : "empty"}
         supportingText={latestEntry ? formatPersianDate(latestEntry.occurredAt) : undefined}
-        state={latestEntry ? "default" : "empty"}
+        state="default"
         icon={Calendar}
         iconVariant="calendar"
-        iconTone="info"
+        iconTone="blue"
         interactive={true}
         onClick={() => onFilterChange({ kind: 'all', onlyHasFiles: false, search: '' })}
       />
@@ -67,11 +68,12 @@ export const HealthOverview: React.FC<HealthOverviewProps> = ({
       <MetricCard
         title="پیگیری پیش رو"
         value={nextFollowUp ? nextFollowUp.title : "ثبت نشده"}
+        valueKind={nextFollowUp ? "text" : "empty"}
         supportingText={nextFollowUp && nextFollowUp.followUpAt ? formatPersianDate(nextFollowUp.followUpAt) : undefined}
-        state={nextFollowUp ? "default" : "empty"}
+        state="default"
         icon={Clock}
         iconVariant="clock"
-        iconTone="warning"
+        iconTone="sunny"
         interactive={true}
         selected={!!nextFollowUp}
         onClick={() => {
@@ -85,10 +87,11 @@ export const HealthOverview: React.FC<HealthOverviewProps> = ({
       <MetricCard
         title="فایل‌ها و تصاویر"
         value={toPersian(fileCount)}
+        valueKind="number"
         unit="فایل مدرک"
         icon={FileText}
         iconVariant="document"
-        iconTone="success"
+        iconTone="mint"
         interactive={true}
         selected={filters.onlyHasFiles}
         onClick={() => onFilterChange({ onlyHasFiles: !filters.onlyHasFiles })}

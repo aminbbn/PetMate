@@ -216,6 +216,7 @@ export const Card: React.FC<CardProps> = ({
       {/* 2. Cursor-Tracking Soft Radial Hover Glow */}
       {hoverEffect && isCursorGlowActive && (
         <motion.div 
+          data-slot="card-cursor-glow"
           className="absolute inset-0 pointer-events-none z-0"
           style={{
             opacity: smoothOpacity,
@@ -227,6 +228,7 @@ export const Card: React.FC<CardProps> = ({
       {/* 3. Localized Edge/Border Glow Overlay */}
       {hoverEffect && isEdgeGlowActive && (
         <motion.div
+          data-slot="card-edge-glow"
           style={{
             position: 'absolute',
             inset: 0,

@@ -9,7 +9,8 @@
     "start": "node dist/server.cjs",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit && node scripts/check-modal-regression.js"
+    "lint": "tsc --noEmit && node scripts/check-modal-regression.js",
+    "check:metric-cards": "node scripts/check-metric-card-usage.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

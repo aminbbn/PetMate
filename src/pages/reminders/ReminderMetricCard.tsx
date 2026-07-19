@@ -1,5 +1,5 @@
 import React from 'react';
-import { MetricCard } from '../../components/metric/MetricCard';
+import { MetricCard } from '../../components/metric-card';
 import { AlertCircle, Clock, Calendar, CheckCircle } from 'lucide-react';
 import { toPersian } from '../../lib/persian';
 
@@ -26,25 +26,25 @@ export const ReminderMetricCard: React.FC<ReminderMetricCardProps> = ({
         return {
           icon: AlertCircle,
           variant: 'alert' as const,
-          tone: 'danger' as const,
+          tone: 'coral' as const,
         };
       case 'today':
         return {
           icon: Clock,
           variant: 'clock' as const,
-          tone: 'info' as const,
+          tone: 'blue' as const,
         };
       case 'upcoming':
         return {
           icon: Calendar,
           variant: 'calendar' as const,
-          tone: 'warning' as const,
+          tone: 'sunny' as const,
         };
       case 'done':
         return {
           icon: CheckCircle,
           variant: 'success' as const,
-          tone: 'success' as const,
+          tone: 'mint' as const,
         };
     }
   };
@@ -55,6 +55,7 @@ export const ReminderMetricCard: React.FC<ReminderMetricCardProps> = ({
     <MetricCard
       title={label}
       value={toPersian(count)}
+      valueKind="number"
       icon={iconConfig.icon}
       iconVariant={iconConfig.variant}
       iconTone={iconConfig.tone}

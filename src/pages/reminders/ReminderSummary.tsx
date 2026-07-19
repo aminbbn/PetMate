@@ -1,7 +1,7 @@
 import React from 'react';
 import { GroupedReminders } from './reminderUtils';
 import { ReminderMetricCard, ReminderMetricKind } from './ReminderMetricCard';
-import { MetricCardGrid } from '../../components/metric/MetricCardGrid';
+import { MetricCardGrid } from '../../components/metric-card';
 
 interface ReminderSummaryProps {
   grouped: GroupedReminders;
