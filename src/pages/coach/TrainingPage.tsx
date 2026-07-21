@@ -8,6 +8,7 @@ import { TrainingHeader } from './TrainingHeader';
 import { ActiveSessionView } from './ActiveSessionView';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
+import DialogActionFooter from '../../components/dialog/DialogActionFooter';
 import { toPersian } from '../../lib/persian';
 import { motion, AnimatePresence } from 'motion/react';
 import { MotionDialog } from '../../motion/MotionDialog';
@@ -354,12 +355,45 @@ export const TrainingPage: React.FC = () => {
             </div>
 
             {currentPetGoals.length === 0 ? (
-              <div className="text-center py-16 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                <p className="text-gray-500 font-medium text-xs mb-4">هیچ هدف تمرینی فعالی ثبت نشده است.</p>
-                <Button variant="primary" size="sm" onClick={() => setShowGoalModal(true)}>
-                  ایجاد اولین هدف تمرینی
-                </Button>
-              </div>
+              <Card className="p-8 md:p-12 border-dashed border-gray-200 bg-gray-50/30 flex flex-col items-center text-center relative overflow-hidden" id="empty-goals-card">
+                <div className="absolute top-6 right-6">
+                  <div className="w-12 h-12 rounded-2xl bg-brand/5 border border-brand/10 flex items-center justify-center text-brand">
+                    <Bookmark size={20} className="stroke-[1.5]" />
+                  </div>
+                </div>
+
+                <div className="max-w-md mx-auto space-y-4 pt-4 pb-2 flex flex-col items-center">
+                  <div className="w-16 h-16 rounded-full bg-gray-50 border border-gray-150 flex items-center justify-center text-gray-400 mb-2">
+                    <Bookmark size={28} className="stroke-[1.5]" />
+                  </div>
+                  
+                  <h4 className="text-base font-black text-gray-900">هیچ هدف تمرینی فعالی ثبت نشده است</h4>
+                  <p className="text-gray-500 text-xs leading-relaxed font-semibold">
+                    برای شروع مربیگری و ردیابی یادگیری {profile.name}، می‌توانید یکی از برنامه‌های استاندارد اخلاقی را از سربرگ اول انتخاب کرده یا یک هدف تمرینی سفارشی و علمی ایجاد کنید.
+                  </p>
+
+                  <div className="flex gap-2 justify-center pt-2">
+                    <Button 
+                      variant="primary" 
+                      size="sm" 
+                      onClick={() => setShowGoalModal(true)}
+                      className="font-black text-xs px-5 bg-brand hover:bg-brand-deep text-white"
+                      id="btn-create-goal"
+                    >
+                      ایجاد هدف تمرینی جدید
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setActiveTab('lessons')}
+                      className="font-black text-xs px-5"
+                      id="btn-lessons-tab"
+                    >
+                      انتخاب از برنامه‌های آماده
+                    </Button>
+                  </div>
+                </div>
+              </Card>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {currentPetGoals.map((goal) => {
@@ -467,9 +501,37 @@ export const TrainingPage: React.FC = () => {
             </div>
 
             {currentPetSessions.length === 0 ? (
-              <div className="text-center py-16 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                <p className="text-gray-500 text-xs font-medium">هنوز هیچ جلسه تمرینی برای {profile.name} ثبت نشده است.</p>
-              </div>
+              <Card className="p-8 md:p-12 border-dashed border-gray-200 bg-gray-50/30 flex flex-col items-center text-center relative overflow-hidden" id="empty-history-card">
+                <div className="absolute top-6 right-6">
+                  <div className="w-12 h-12 rounded-2xl bg-brand/5 border border-brand/10 flex items-center justify-center text-brand">
+                    <History size={20} className="stroke-[1.5]" />
+                  </div>
+                </div>
+
+                <div className="max-w-md mx-auto space-y-4 pt-4 pb-2 flex flex-col items-center">
+                  <div className="w-16 h-16 rounded-full bg-gray-50 border border-gray-150 flex items-center justify-center text-gray-400 mb-2">
+                    <History size={28} className="stroke-[1.5]" />
+                  </div>
+                  
+                  <h4 className="text-base font-black text-gray-900">هیچ سابقه ثبت‌شده‌ای وجود ندارد</h4>
+                  <p className="text-gray-500 text-xs leading-relaxed font-semibold">
+                    جلسات تمرینی برگزار شده، میزان پیشرفت مهارتی و جزئیات پاسخ به رفتارهای داوطلبانه {profile.name} پس از برگزاری هر جلسه در این بایگانی ثبت و تحلیل خواهند شد.
+                  </p>
+                  <p className="text-[10px] text-gray-400 font-bold bg-white px-3 py-1.5 rounded-lg border border-gray-100">
+                    💡 با تمرین مستمر، اعتماد و ارتباط عاطفی خود با حیوان دلبندتان را ارتقا دهید.
+                  </p>
+
+                  <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    onClick={() => setActiveTab('goals')}
+                    className="mt-2 font-black text-xs px-5 border-gray-200 hover:border-brand/30 hover:text-brand"
+                    id="btn-goals-tab"
+                  >
+                    مشاهده اهداف تمرینی فعال و شروع جلسه
+                  </Button>
+                </div>
+              </Card>
             ) : (
               <div className="space-y-4">
                 {currentPetSessions.map((session) => {
@@ -584,30 +646,60 @@ export const TrainingPage: React.FC = () => {
             </div>
 
             {/* Emergency and Veterinary Routing Section */}
-            <div className="bg-gradient-to-l from-slate-900 to-slate-850 text-white rounded-2xl p-6 shadow-md space-y-4">
-              <div className="space-y-1">
-                <h4 className="text-lg font-black text-brand flex items-center gap-2">
-                  <Stethoscope className="text-coral" size={22} />
+            <Card className="p-6 md:p-8 border-brand/20 bg-white/50 hover:shadow-xl transition-all shadow-md shadow-brand/5 relative overflow-hidden space-y-6" id="safety-warning-frame">
+              {/* Subtle coral glow element */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-brand/5 rounded-full filter blur-2xl pointer-events-none" />
+
+              <div className="space-y-1.5 relative">
+                <h4 className="text-base md:text-lg font-black text-gray-950 flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-coral/10 text-coral flex items-center justify-center">
+                    <Stethoscope size={18} />
+                  </div>
                   {EMERGENCIES_AND_VET_ROUTING.title}
                 </h4>
-                <p className="text-slate-400 text-xs">{EMERGENCIES_AND_VET_ROUTING.subtitle}</p>
+                <p className="text-gray-500 text-xs font-bold leading-relaxed pr-10">{EMERGENCIES_AND_VET_ROUTING.subtitle}</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                {EMERGENCIES_AND_VET_ROUTING.conditions.map((cond, i) => (
-                  <div key={i} className="bg-slate-800 p-4 rounded-xl border border-white/10 space-y-2">
-                    <div className="text-xs font-extrabold text-amber-400 flex items-start gap-1">
-                      <span className="bg-amber-400/10 text-amber-400 px-1.5 py-0.5 rounded text-xxs shrink-0">رویداد</span>
-                      <span>{cond.trigger}</span>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                {EMERGENCIES_AND_VET_ROUTING.conditions.map((cond, i) => {
+                  const cardTheme = 
+                    i === 0 
+                      ? { bg: 'bg-rose-50/40', border: 'border-rose-100', text: 'text-rose-700', badge: 'bg-rose-100 text-rose-800 border-rose-200' }
+                      : i === 1
+                      ? { bg: 'bg-amber-50/40', border: 'border-amber-100', text: 'text-amber-700', badge: 'bg-amber-100 text-amber-800 border-amber-200' }
+                      : { bg: 'bg-sky-50/40', border: 'border-sky-100', text: 'text-sky-700', badge: 'bg-sky-100 text-sky-800 border-sky-200' };
+
+                  return (
+                    <div 
+                      key={i} 
+                      className={`p-5 rounded-2xl border ${cardTheme.bg} ${cardTheme.border} hover:shadow-md transition-all flex flex-col justify-between gap-4`}
+                    >
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className={`text-[9px] font-black px-2 py-0.5 rounded-full border ${cardTheme.badge}`}>
+                            رویداد {toPersian(i + 1)}
+                          </span>
+                          <AlertTriangle size={14} className={cardTheme.text} />
+                        </div>
+                        
+                        <h5 className="text-xs font-black text-gray-800 leading-relaxed min-h-[36px]">
+                          {cond.trigger}
+                        </h5>
+                      </div>
+
+                      <div className="bg-white/85 border border-gray-100 p-3 rounded-xl space-y-1">
+                        <span className="text-[9px] font-black text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md border border-emerald-100">
+                          مسیر اقدام علمی
+                        </span>
+                        <p className="text-[11px] text-gray-600 leading-relaxed font-bold pt-1">
+                          {cond.action}
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-xxs text-slate-300 leading-relaxed flex items-start gap-1">
-                      <span className="bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded text-xxs shrink-0">مسیر اقدام علمی</span>
-                      <span>{cond.action}</span>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
-            </div>
+            </Card>
           </div>
         )}
       </div>
@@ -620,65 +712,92 @@ export const TrainingPage: React.FC = () => {
         className="max-h-[85vh] flex flex-col"
       >
         {selectedLesson && (
-          <div className="w-full h-full overflow-hidden flex flex-col">
-            <div className="bg-slate-900 text-white p-6 flex items-center justify-between">
-              <div>
-                <span className="text-brand text-xxs font-extrabold tracking-wider uppercase block">پروتکل گام‌به‌گام مهارتی</span>
-                <h3 className="text-lg font-black">{selectedLesson.title}</h3>
+          <div className="w-full h-full overflow-hidden flex flex-col bg-white rounded-2xl text-right relative" dir="rtl">
+            {/* Header */}
+            <div className="p-6 pb-4 border-b border-gray-100 flex items-start justify-between text-right relative bg-white shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-brand/10 text-brand flex items-center justify-center shrink-0">
+                  <BookOpen size={18} />
+                </div>
+                <div>
+                  <span className="text-brand text-[10px] font-black tracking-wider uppercase block">پروتکل گام‌به‌گام مهارتی</span>
+                  <h3 className="text-base md:text-lg font-black text-gray-900 mt-0.5">{selectedLesson.title}</h3>
+                </div>
               </div>
               <button
                 onClick={() => setSelectedLesson(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+                className="absolute top-6 left-6 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all cursor-pointer"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
-            <div className="p-6 space-y-5 flex-1 overflow-y-auto">
-              <p className="text-gray-600 text-xs leading-relaxed">{selectedLesson.summary}</p>
+            {/* Scrollable Body */}
+            <div className="p-6 md:p-8 space-y-6 flex-1 overflow-y-auto">
+              <div className="bg-brand/5 rounded-xl p-4 border border-brand/10">
+                <p className="text-gray-700 text-xs leading-relaxed font-medium">{selectedLesson.summary}</p>
+              </div>
 
-              <div className="space-y-2">
-                <span className="text-xs font-extrabold text-gray-800 block">پیشنیازهای اولیه تمرین:</span>
+              {/* Prerequisites */}
+              <div className="space-y-2.5">
+                <span className="text-xs font-black text-gray-800 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+                  پیش‌نیازهای اولیه تمرین:
+                </span>
                 <div className="flex flex-wrap gap-1.5">
                   {selectedLesson.prerequisites.map((req, i) => (
-                    <span key={i} className="bg-gray-100 text-gray-700 text-xxs px-2.5 py-1 rounded-md font-medium">
+                    <span key={i} className="bg-gray-50 text-gray-600 text-[11px] px-3 py-1.5 rounded-lg font-bold border border-gray-100">
                       {req}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <span className="text-xs font-extrabold text-gray-800 block">مراحل و گام‌های اجرای داوطلبانه:</span>
-                <div className="space-y-3">
+              {/* Steps */}
+              <div className="space-y-3">
+                <span className="text-xs font-black text-gray-800 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+                  مراحل و گام‌های اجرای داوطلبانه:
+                </span>
+                <div className="space-y-4">
                   {selectedLesson.steps.map((step, idx) => (
-                    <div key={step.id} className="bg-gray-50 border border-gray-100 p-3.5 rounded-xl space-y-1">
-                      <span className="text-brand text-xs font-black">
-                        گام {toPersian(idx + 1)}: {step.title}
-                      </span>
-                      <p className="text-gray-700 text-xs leading-relaxed">{step.instruction}</p>
-                      <p className="text-success text-xxs font-bold pt-1">
-                        <strong>شاخص تایید گام:</strong> {step.successCriterion}
-                      </p>
+                    <div key={step.id} className="bg-gray-50/40 border border-gray-100/80 hover:border-gray-150 p-4 rounded-xl space-y-2 transition-all relative">
+                      <div className="flex items-center justify-between">
+                        <span className="text-brand text-xs font-black flex items-center gap-1">
+                          <span className="w-5 h-5 rounded-md bg-brand/10 flex items-center justify-center text-xxs font-black">{toPersian(idx + 1)}</span>
+                          {step.title}
+                        </span>
+                      </div>
+                      <p className="text-gray-600 text-xs leading-relaxed font-semibold pr-6">{step.instruction}</p>
+                      
+                      {/* Success criterion elegantly integrated */}
+                      <div className="pr-6 pt-1">
+                        <div className="inline-flex items-center gap-1.5 bg-mint/5 border border-mint/15 px-2.5 py-1 rounded-lg text-success text-[10px] font-bold">
+                          <CheckCircle size={12} className="text-success" />
+                          <span><strong>شاخص تایید گام:</strong> {step.successCriterion}</span>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
 
+              {/* Safety/Caution Section */}
               {selectedLesson.safetyNotes && selectedLesson.safetyNotes.length > 0 && (
-                <div className="bg-coral/5 border border-coral/15 p-4 rounded-xl space-y-1.5">
-                  <span className="text-coral-deep text-xs font-bold flex items-center gap-1.5">
-                    <AlertTriangle size={15} />
+                <div className="bg-coral/5 border border-coral/15 p-4 rounded-xl space-y-2">
+                  <span className="text-coral-deep text-xs font-black flex items-center gap-1.5">
+                    <AlertTriangle size={15} className="text-coral" />
                     نکات ایمنی و حفاظتی بسیار مهم:
                   </span>
-                  <ul className="list-disc list-inside text-gray-600 text-xxs space-y-1 leading-relaxed">
+                  <ul className="list-disc list-inside text-gray-600 text-[11px] space-y-1.5 leading-relaxed pr-2">
                     {selectedLesson.safetyNotes.map((note, i) => (
-                      <li key={i}>{note}</li>
+                      <li key={i} className="font-semibold">{note}</li>
                     ))}
                   </ul>
                 </div>
               )}
 
+              {/* Reviewed By */}
               {selectedLesson.reviewedBy && (
                 <div className="flex items-center gap-2 bg-mint/5 border border-mint/20 p-3 rounded-xl text-xxs text-success font-semibold">
                   <ShieldCheck size={16} />
@@ -687,13 +806,15 @@ export const TrainingPage: React.FC = () => {
               )}
             </div>
 
-            <div className="p-4 bg-gray-50 border-t border-gray-100 flex gap-2 justify-end">
-              <Button variant="outline" size="sm" onClick={() => setSelectedLesson(null)}>
+            {/* Footer */}
+            <div className="p-4 md:p-6 bg-gray-50/50 border-t border-gray-100 flex gap-2 justify-end shrink-0">
+              <Button variant="outline" size="md" onClick={() => setSelectedLesson(null)} className="px-5 text-xs font-black">
                 بستن پنجره
               </Button>
               <Button
                 variant="primary"
-                size="sm"
+                size="md"
+                className="px-6 text-xs font-black bg-brand hover:bg-brand-deep text-white"
                 onClick={() => {
                   handleAddGoalFromLesson(selectedLesson);
                   setSelectedLesson(null);
@@ -710,78 +831,82 @@ export const TrainingPage: React.FC = () => {
       <MotionDialog
         isOpen={showGoalModal}
         onClose={() => setShowGoalModal(false)}
-        size="sm"
+        size="md"
       >
-        <div className="w-full h-full overflow-hidden flex flex-col" dir="rtl">
-          <div className="bg-slate-900 text-white p-5 flex items-center justify-between">
-            <div>
-              <h3 className="text-base font-bold">تعریف هدف تمرینی علمی جدید</h3>
-              <p className="text-slate-400 text-xxs mt-0.5">آموزش هدفمند و دور از خشونت فیزیکی</p>
+        <div className="p-6 md:p-8 space-y-6 text-right relative bg-white rounded-2xl" dir="rtl">
+          <button
+            type="button"
+            onClick={() => setShowGoalModal(false)}
+            className="absolute top-5 left-5 text-gray-400 hover:text-gray-600 p-1.5 rounded-full hover:bg-gray-50 transition-all cursor-pointer animate-none"
+          >
+            <X size={18} />
+          </button>
+
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-brand/10 text-brand flex items-center justify-center shrink-0">
+              <Award size={18} />
             </div>
-            <button
-              onClick={() => setShowGoalModal(false)}
-              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
-            >
-              <X size={18} />
-            </button>
+            <div>
+              <h3 className="font-black text-gray-900 text-lg">تعریف هدف تمرینی علمی جدید</h3>
+              <p className="text-xxs text-gray-400 font-bold mt-0.5">آموزش هدفمند، دور از خشونت و منطبق بر رفتارشناسی علمی</p>
+            </div>
           </div>
 
-          <form onSubmit={handleCreateGoalSubmit} className="p-5 space-y-4">
-            <div className="space-y-1">
-              <label className="text-xs font-extrabold text-gray-700 block">عنوان مهارت یا فرمان:</label>
+          <form onSubmit={handleCreateGoalSubmit} className="space-y-4 pt-2">
+            <div className="space-y-1.5">
+              <label className="text-xs font-black text-gray-700 block">عنوان مهارت یا فرمان:</label>
               <input
                 type="text"
                 required
                 value={goalTitle}
                 onChange={(e) => setGoalTitle(e.target.value)}
                 placeholder="مثال: آموزش داوطلبانه بیا (Recall)"
-                className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
+                className="w-full text-xs p-3 rounded-xl bg-gray-50/50 border border-gray-150 focus:border-brand/40 focus:outline-none focus:ring-4 focus:ring-brand/10 transition-all font-semibold placeholder:text-gray-400 placeholder:font-normal"
               />
             </div>
 
-            <div className="space-y-1">
-              <label className="text-xs font-extrabold text-gray-700 block">توصیف رفتار مورد نظر:</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-black text-gray-700 block">توصیف رفتار مورد نظر:</label>
               <textarea
                 required
                 value={goalBehavior}
                 onChange={(e) => setGoalBehavior(e.target.value)}
                 placeholder="مثال: آمدن سریع سگ به سمت سرپرست به محض شنیدن نام فرمان بدون تاخیر."
                 rows={2}
-                className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium resize-none"
+                className="w-full text-xs p-3 rounded-xl bg-gray-50/50 border border-gray-150 focus:border-brand/40 focus:outline-none focus:ring-4 focus:ring-brand/10 transition-all font-semibold placeholder:text-gray-400 placeholder:font-normal resize-none"
               />
             </div>
 
-            <div className="space-y-1">
-              <label className="text-xs font-extrabold text-gray-700 block">معیار یا تعریف کسب موفقیت کامل:</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-black text-gray-700 block">معیار یا تعریف کسب موفقیت کامل:</label>
               <input
                 type="text"
                 required
                 value={goalSuccessDef}
                 onChange={(e) => setGoalSuccessDef(e.target.value)}
                 placeholder="مثال: انجام موفق ۳ بار متوالی در فضای باز با بند بلند قلاده"
-                className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
+                className="w-full text-xs p-3 rounded-xl bg-gray-50/50 border border-gray-150 focus:border-brand/40 focus:outline-none focus:ring-4 focus:ring-brand/10 transition-all font-semibold placeholder:text-gray-400 placeholder:font-normal"
               />
             </div>
 
-            <div className="space-y-1">
-              <label className="text-xs font-extrabold text-gray-700 block">توضیحات فرعی یا محیط اجرا:</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-black text-gray-700 block">توضیحات فرعی یا محیط اجرا:</label>
               <input
                 type="text"
                 value={goalContext}
                 onChange={(e) => setGoalContext(e.target.value)}
                 placeholder="مثال: تمرین با سینه بند قلاده و تشویقی جگر مرغ"
-                className="w-full text-xs p-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-1 focus:ring-brand font-medium"
+                className="w-full text-xs p-3 rounded-xl bg-gray-50/50 border border-gray-150 focus:border-brand/40 focus:outline-none focus:ring-4 focus:ring-brand/10 transition-all font-semibold placeholder:text-gray-400 placeholder:font-normal"
               />
             </div>
 
-            <div className="flex gap-2 justify-end pt-2 border-t border-gray-100">
-              <Button type="button" variant="outline" size="sm" onClick={() => setShowGoalModal(false)}>
-                انصراف
-              </Button>
-              <Button type="submit" variant="primary" size="sm">
-                ذخیره و ایجاد هدف
-              </Button>
-            </div>
+            <DialogActionFooter
+              primaryLabel="ذخیره و ایجاد هدف"
+              secondaryLabel="انصراف"
+              onSecondaryClick={() => setShowGoalModal(false)}
+              align="end"
+              className="-mx-6 -mb-6 md:-mx-8 md:-mb-8 mt-6 border-t border-gray-100 rounded-b-2xl"
+            />
           </form>
         </div>
       </MotionDialog>

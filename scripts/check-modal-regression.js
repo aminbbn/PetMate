@@ -6,6 +6,8 @@ const SRC_DIR = path.resolve('./src');
 // Files explicitly exempted because they are anchored panels/drawers as authorized by the product specifications
 const EXEMPT_FILES = [
   'MotionDialog.tsx',            // The core modal primitive itself
+  'MotionDrawer.tsx',            // The core drawer primitive itself
+  'ServiceDetailDrawer.tsx',     // The shared service detail drawer
   'Sidebar.tsx',                 // Mobile sidebar drawer
   'SidebarPetSelector.tsx',      // Compact pet selector dropdown overlay
   'NavigatorPage.tsx',           // Contextual category drawer

@@ -21,7 +21,7 @@ import ReminderHeader from './ReminderHeader';
 import ReminderSummary from './ReminderSummary';
 import ReminderInsightCard from './ReminderInsightCard';
 import ReminderRow from './ReminderRow';
-import ReminderForm from './ReminderForm';
+import ReminderDialog from './ReminderDialog';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
 import { MotionDialog } from '../../motion/MotionDialog';
@@ -355,38 +355,17 @@ export default function ReminderPage() {
       </div>
 
       {/* 4. Unified Add/Edit Form Overlay Modal Dialog */}
-      <MotionDialog
-        isOpen={showForm}
-        onClose={handleCloseForm}
-        size="lg"
-      >
-        <div className="p-6 space-y-6 text-right relative">
-          <button
-            onClick={handleCloseForm}
-            className="absolute top-5 left-5 text-gray-400 hover:text-gray-600 p-1.5 rounded-full hover:bg-gray-50 transition-colors"
-          >
-            <X size={16} />
-          </button>
-
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-coral/10 text-coral flex items-center justify-center">
-              <Bell size={18} />
-            </div>
-            <div>
-              <h3 className="font-black text-gray-800 text-lg">
-                {editingReminder ? 'ویرایش و بروزرسانی یادآور' : 'تعریف برنامه مراقبتی جدید'}
-              </h3>
-              <p className="text-[10px] text-gray-400 font-bold">بازه تکرار، نوع هشدار و دستورالعمل اجرایی را وارد کنید</p>
-            </div>
-          </div>
-
-          <ReminderForm
-            initialReminder={editingReminder}
-            onSave={handleSaveReminder}
-            onCancel={handleCloseForm}
-          />
-        </div>
-      </MotionDialog>
+      <ReminderDialog
+        open={showForm}
+        onOpenChange={(open) => {
+          setShowForm(open);
+          if (!open) {
+            setEditingReminder(null);
+          }
+        }}
+        initialReminder={editingReminder}
+        onSave={handleSaveReminder}
+      />
 
       {/* 5. Deletion Confirmation Dialog */}
       <MotionDialog

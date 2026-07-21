@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../../components/Button';
+import DialogActionFooter from '../../components/dialog/DialogActionFooter';
 import { HealthRecord, HealthRecordKind, HealthAttachment } from './healthTypes';
 import { getKindLabel, gregorianToJalali, jalaliToGregorian } from './healthUtils';
 import { HealthAttachmentField } from './HealthAttachmentField';
@@ -296,24 +297,13 @@ export const HealthRecordForm: React.FC<HealthRecordFormProps> = ({
       />
 
       {/* 7. Action Buttons */}
-      <div className="flex items-center gap-3 pt-3">
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={isSubmitting}
-          className="flex-1 text-xs font-black py-3 rounded-xl"
-        >
-          {isSubmitting ? 'در حال ثبت...' : 'ذخیره پرونده'}
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={onCancel}
-          className="flex-1 text-xs font-bold py-3 rounded-xl"
-        >
-          انصراف
-        </Button>
-      </div>
+      <DialogActionFooter
+        primaryLabel={isSubmitting ? 'در حال ثبت...' : 'ذخیره پرونده'}
+        primaryDisabled={isSubmitting}
+        secondaryLabel="انصراف"
+        onSecondaryClick={onCancel}
+        className="-mx-6 -mb-6 mt-6 border-t border-gray-100 rounded-b-2xl bg-white"
+      />
     </form>
   );
 };

@@ -3,6 +3,7 @@ import { useAppStore } from '../../store';
 import { FeedingPlan, FeedingPlanMeal } from './nutritionTypes';
 import { selectPetFoods } from './nutritionSelectors';
 import { Button } from '../../components/Button';
+import DialogActionFooter from '../../components/dialog/DialogActionFooter';
 import { X, Plus, Trash2, ShieldCheck, Clock, Utensils } from 'lucide-react';
 import { toPersian } from '../../lib/persian';
 import { MotionDialog } from '../../motion/MotionDialog';
@@ -273,25 +274,15 @@ export const FeedingPlanDialog: React.FC<FeedingPlanDialogProps> = ({
                 )}
 
                 {/* Navigation actions for step 1 */}
-                <div className="flex gap-3 pt-4 border-t border-gray-100">
-                  <Button
-                    type="button"
-                    onClick={onClose}
-                    variant="secondary"
-                    className="flex-1 text-xs py-3 font-black text-gray-600 border border-gray-200 hover:bg-gray-50 bg-white"
-                  >
-                    انصراف
-                  </Button>
-                  <Button
-                    type="button"
-                    disabled={!name.trim()}
-                    onClick={() => setStep(2)}
-                    variant="primary"
-                    className="flex-1 text-xs py-3 font-black shadow-md shadow-coral/15 disabled:opacity-55"
-                  >
-                    مرحله بعد: دوز بندی وعده‌ها
-                  </Button>
-                </div>
+                <DialogActionFooter
+                  primaryLabel="مرحله بعد: دوز بندی وعده‌ها"
+                  primaryType="button"
+                  onPrimaryClick={() => setStep(2)}
+                  primaryDisabled={!name.trim()}
+                  secondaryLabel="انصراف"
+                  onSecondaryClick={onClose}
+                  className="-mx-6 -mb-6 mt-6 border-t border-gray-100 rounded-b-2xl"
+                />
               </div>
             ) : (
               <>
@@ -418,25 +409,15 @@ export const FeedingPlanDialog: React.FC<FeedingPlanDialogProps> = ({
                   </div>
 
                   {/* Step 2 buttons action */}
-                  <div className="flex gap-3 pt-4 border-t border-gray-100 mt-4">
-                    <Button
-                      type="button"
-                      onClick={() => setStep(1)}
-                      variant="secondary"
-                      className="flex-1 text-xs py-3 font-black text-gray-600 border border-gray-200 hover:bg-gray-50 bg-white"
-                    >
-                      بازگشت به مشخصات
-                    </Button>
-                    <Button
-                      type="button"
-                      disabled={meals.length === 0}
-                      onClick={handleSavePlan}
-                      variant="primary"
-                      className="flex-1 text-xs py-3 font-black shadow-md shadow-coral/15 disabled:opacity-50"
-                    >
-                      {plan ? 'بروزرسانی برنامه' : 'تأیید و فعالسازی نهایی'}
-                    </Button>
-                  </div>
+                  <DialogActionFooter
+                    primaryLabel={plan ? 'بروزرسانی برنامه' : 'تأیید و فعالسازی نهایی'}
+                    primaryType="button"
+                    onPrimaryClick={handleSavePlan}
+                    primaryDisabled={meals.length === 0}
+                    secondaryLabel="بازگشت به مشخصات"
+                    onSecondaryClick={() => setStep(1)}
+                    className="-mx-6 -mb-6 mt-6 border-t border-gray-100 rounded-b-2xl"
+                  />
                 </div>
               </>
             )}

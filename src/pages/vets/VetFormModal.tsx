@@ -5,6 +5,7 @@ import { X, Plus, Trash2, Phone, Tag, Shield, Star, Stethoscope, Briefcase, Glob
 import { motion, AnimatePresence } from 'motion/react';
 import { MotionDialog } from '../../motion/MotionDialog';
 import { Button } from '../../components/Button';
+import DialogActionFooter from '../../components/dialog/DialogActionFooter';
 import { toPersian } from '../../lib/persian';
 
 interface VetFormModalProps {
@@ -557,23 +558,13 @@ export const VetFormModal: React.FC<VetFormModalProps> = ({ isOpen, onClose, vet
               </div>
 
               {/* Action buttons footer */}
-              <div className="flex gap-3 justify-end pt-4 border-t border-slate-100">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={onClose}
-                  className="px-6 py-3 font-bold"
-                >
-                  انصراف
-                </Button>
-                <Button
-                  type="submit"
-                  variant="primary"
-                  className="px-8 py-3 text-sm font-black shadow-lg shadow-coral/15"
-                >
-                  {vetToEdit ? 'بروزرسانی مشخصات' : 'ذخیره در دفترچه مخاطبین'}
-                </Button>
-              </div>
+              <DialogActionFooter
+                primaryLabel={vetToEdit ? 'بروزرسانی مشخصات' : 'ذخیره در دفترچه مخاطبین'}
+                secondaryLabel="انصراف"
+                onSecondaryClick={onClose}
+                align="end"
+                className="-mx-6 -mb-6 mt-6 border-t border-slate-100 rounded-b-2xl bg-white"
+              />
 
             </form>
           </div>

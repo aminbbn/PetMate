@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useAppStore } from './store';
 import { AnimatePresence } from 'motion/react';
@@ -5,6 +6,7 @@ import { Sidebar } from './components/sidebar';
 import { PreferencesProvider } from './preferences/PreferencesProvider';
 
 // Pages
+import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import Onboarding from './pages/Onboarding';
 import HealthRecord from './pages/HealthRecord';
@@ -42,9 +44,20 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 function AppContent() {
   const profile = useAppStore(state => state.profile);
   const location = useLocation();
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  // Reset showOnboarding to false when user logs in/out, ensuring they see the LandingPage on logout
+  useEffect(() => {
+    if (profile) {
+      setShowOnboarding(false);
+    }
+  }, [profile]);
 
   if (!profile) {
-    return <Onboarding />;
+    if (showOnboarding) {
+      return <Onboarding />;
+    }
+    return <LandingPage onGetStarted={() => setShowOnboarding(true)} />;
   }
 
   return (

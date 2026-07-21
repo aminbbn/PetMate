@@ -31,6 +31,8 @@ import { toPersian, formatPersianDate } from '../lib/persian';
 import { cn } from '../lib/utils';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { Link } from 'react-router-dom';
+import ReminderDialog from './reminders/ReminderDialog';
+import DialogActionFooter from '../components/dialog/DialogActionFooter';
 
 export default function Dashboard() {
   const profile = useAppStore(state => state.profile);
@@ -56,6 +58,43 @@ export default function Dashboard() {
 
   // Weight entry form inside the widget if weight empty
   const [quickWeight, setQuickWeight] = useState('');
+
+  // Reminder Dialog and success message states
+  const [showReminderDialog, setShowReminderDialog] = useState(false);
+  const [successToast, setSuccessToast] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (successToast) {
+      const timer = setTimeout(() => {
+        setSuccessToast(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [successToast]);
+
+  const handleSaveReminder = (formData: {
+    title: string;
+    category: any;
+    dueAt: string;
+    recurrence: any;
+    notes: string;
+    petId: string;
+  }) => {
+    addReminder(
+      formData.title,
+      formData.dueAt,
+      false, // alarmEnabled
+      undefined, // alarmDate
+      undefined, // alarmTime
+      formData.petId,
+      formData.category,
+      formData.recurrence,
+      undefined, // notification
+      formData.notes
+    );
+    setShowReminderDialog(false);
+    setSuccessToast('برنامه مراقبتی ثبت شد');
+  };
 
   // Fallback / multi-pet normalization
   const activePets = pets.length > 0 ? pets : (profile ? [profile] : []);
@@ -321,21 +360,12 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <div className="flex gap-3 pt-3">
-              <button
-                type="button"
-                onClick={() => setShowAddPetModal(false)}
-                className="flex-1 py-3 bg-peach hover:bg-[#FFD4BA] text-coral-deep font-bold rounded-xl cursor-pointer transition-all border border-coral-light/50 shadow-md shadow-coral/5"
-              >
-                انصراف
-              </button>
-              <Button
-                type="submit"
-                className="flex-1 py-3 font-bold justify-center"
-              >
-                ایجاد پروفایل
-              </Button>
-            </div>
+            <DialogActionFooter
+              primaryLabel="ایجاد پروفایل"
+              secondaryLabel="انصراف"
+              onSecondaryClick={() => setShowAddPetModal(false)}
+              className="-mx-6 -mb-6 mt-6 border-t border-gray-100 rounded-b-2xl"
+            />
           </form>
         </div>
       </MotionDialog>
@@ -461,12 +491,23 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <Link to={briefActionPath} className="shrink-0">
-              <Button variant={briefState === 'overdue' ? 'primary' : 'secondary'} className="px-5 py-3 text-xs font-black shadow-sm">
+            {briefActionPath === '/reminders' ? (
+              <Button 
+                variant={briefState === 'overdue' ? 'primary' : 'secondary'} 
+                className="px-5 py-3 text-xs font-black shadow-sm cursor-pointer shrink-0"
+                onClick={() => setShowReminderDialog(true)}
+              >
                 {briefActionText}
                 <ArrowUpRight size={14} className="mr-1" />
               </Button>
-            </Link>
+            ) : (
+              <Link to={briefActionPath} className="shrink-0">
+                <Button variant={briefState === 'overdue' ? 'primary' : 'secondary'} className="px-5 py-3 text-xs font-black shadow-sm">
+                  {briefActionText}
+                  <ArrowUpRight size={14} className="mr-1" />
+                </Button>
+              </Link>
+            )}
           </div>
         </Card>
       </motion.div>
@@ -655,10 +696,19 @@ export default function Dashboard() {
                       <AnimatedCardIcon variant="bell" tone="sunny" size="sm" /> 
                       برنامه‌های امروز
                     </h2>
-                    <Link to="/reminders" className="text-gray-400 hover:text-coral text-xs font-bold flex items-center gap-0.5">
-                      صفحه برنامه‌ها
-                      <ArrowUpRight size={14} />
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => setShowReminderDialog(true)}
+                        className="text-coral hover:text-coral-deep text-[11px] font-black flex items-center gap-0.5 hover:bg-coral/5 px-2 py-1 rounded-lg transition-colors cursor-pointer"
+                      >
+                        <Plus size={12} className="stroke-[2.5]" />
+                        <span>برنامه جدید</span>
+                      </button>
+                      <Link to="/reminders" className="text-gray-400 hover:text-coral text-xs font-bold flex items-center gap-0.5">
+                        صفحه برنامه‌ها
+                        <ArrowUpRight size={14} />
+                      </Link>
+                    </div>
                   </div>
 
                   {/* Today Reminders List */}
@@ -668,11 +718,14 @@ export default function Dashboard() {
                         <Smile className="text-sunny/60 mb-2 stroke-[1.5]" size={36} />
                         <p className="text-gray-400 text-xs font-black">امروز هیچ برنامه‌ای ندارید.</p>
                         <p className="text-gray-400/80 text-[10px] mt-1">یک روز آرام برای حیوان دلبندتان!</p>
-                        <Link to="/reminders" className="mt-4">
-                          <Button variant="secondary" size="sm" className="py-1 px-3 text-[10px] h-auto font-black">
-                            برنامه‌ریزی جدید
-                          </Button>
-                        </Link>
+                        <Button 
+                          variant="secondary" 
+                          size="sm" 
+                          className="py-1 px-3 text-[10px] h-auto font-black mt-4 cursor-pointer"
+                          onClick={() => setShowReminderDialog(true)}
+                        >
+                          برنامه‌ریزی جدید
+                        </Button>
                       </div>
                     ) : (
                       <AnimatePresence initial={false}>
@@ -755,6 +808,30 @@ export default function Dashboard() {
       </div>
 
       {renderAddPetModal()}
+
+      {/* ReminderDialog for Quick Shortcut */}
+      <ReminderDialog
+        open={showReminderDialog}
+        onOpenChange={setShowReminderDialog}
+        onSave={handleSaveReminder}
+      />
+
+      {/* Restrained elegant Success Toast Notification */}
+      <AnimatePresence>
+        {successToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-6 right-6 bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-lg flex items-center gap-2"
+            style={{ zIndex: 9999 }}
+            dir="rtl"
+          >
+            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>{successToast}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </MotionPage>
   );
 }

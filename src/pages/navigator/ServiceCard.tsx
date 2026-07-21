@@ -107,6 +107,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   return (
     <Card 
       onClick={() => onSelect(service)}
+      data-slot="service-card"
       glow={service.emergencyCapability}
       glowIntensity="subtle"
       className={cn(

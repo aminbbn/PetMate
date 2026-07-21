@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAppStore } from '../../store';
 import { PetFood } from './nutritionTypes';
 import { Button } from '../../components/Button';
+import DialogActionFooter from '../../components/dialog/DialogActionFooter';
 import { X, Sparkles, ShieldCheck } from 'lucide-react';
 import { MotionDialog } from '../../motion/MotionDialog';
 
@@ -180,23 +181,12 @@ export const FoodDialog: React.FC<FoodDialogProps> = ({
         )}
 
         {/* Submit action */}
-        <div className="flex gap-3 pt-4 border-t border-gray-100">
-          <Button
-            type="button"
-            onClick={onClose}
-            variant="secondary"
-            className="flex-1 text-xs py-3 font-black text-gray-600 border border-gray-200 hover:bg-gray-50 bg-white"
-          >
-            انصراف
-          </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            className="flex-1 text-xs py-3 font-black shadow-md shadow-coral/15"
-          >
-            ذخیره ماده غذایی
-          </Button>
-        </div>
+        <DialogActionFooter
+          primaryLabel="ذخیره ماده غذایی"
+          secondaryLabel="انصراف"
+          onSecondaryClick={onClose}
+          className="-mx-6 -mb-6 mt-6 border-t border-gray-100 rounded-b-2xl"
+        />
       </form>
     </MotionDialog>
   );

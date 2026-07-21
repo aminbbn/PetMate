@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAppStore } from '../../store';
 import { Button } from '../../components/Button';
+import DialogActionFooter from '../../components/dialog/DialogActionFooter';
 import { WeightEntry, WeightMeasurementSource } from './growthTypes';
 import { parseWeightInput } from './growthUtils';
 import { toPersian } from '../../lib/persian';
@@ -306,24 +307,14 @@ export const WeightEntryForm: React.FC<WeightEntryFormProps> = ({
       </div>
 
       {/* Actions */}
-      <div className="flex gap-3 justify-end pt-4 border-t border-coral-light/10">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={handleCancelClick}
-          className="px-6 py-2.5 text-xs text-gray-500 font-bold hover:bg-gray-50"
-        >
-          انصراف
-        </Button>
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={isSaving || !weightStr}
-          className="px-8 py-2.5 text-xs font-bold"
-        >
-          {isSaving ? 'در حال ثبت...' : entry ? 'ذخیره تغییرات' : 'ثبت وزن'}
-        </Button>
-      </div>
+      <DialogActionFooter
+        primaryLabel={isSaving ? 'در حال ثبت...' : entry ? 'ذخیره تغییرات' : 'ثبت وزن'}
+        primaryDisabled={isSaving || !weightStr}
+        secondaryLabel="انصراف"
+        onSecondaryClick={handleCancelClick}
+        align="end"
+        className="-mx-6 -mb-6 md:-mx-8 md:-mb-8 mt-6 border-t border-coral-light/10 rounded-b-2xl bg-white"
+      />
     </form>
   );
 };

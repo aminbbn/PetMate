@@ -5,7 +5,7 @@ import { Button } from '../components/Button';
 import { 
   User, Bell, Shield, Eye, HardDrive, 
   Plus, Check, Settings, Accessibility, 
-  ChevronRight, Smile, Trash2, Save, Calendar, Sparkles
+  ChevronRight, Smile, Trash2, Save, Calendar, Sparkles, LogOut
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { usePreferences } from '../preferences/PreferencesProvider';
@@ -36,6 +36,7 @@ export default function SettingsPage() {
   const [successToast, setSuccessToast] = useState<string | null>(null);
   const [showAddPetForm, setShowAddPetForm] = useState(false);
   const [petToDeleteId, setPetToDeleteId] = useState<string | null>(null);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   // Forms
   const [editPetForm, setEditPetForm] = useState<Partial<PetProfile>>({
@@ -180,6 +181,18 @@ export default function SettingsPage() {
               </button>
             );
           })}
+
+          {/* Divider */}
+          <div className="h-[1px] bg-coral-light/10 my-3" />
+
+          {/* Logout Button */}
+          <button
+            onClick={() => setShowLogoutConfirm(true)}
+            className="w-full text-right px-4.5 py-3.5 rounded-xl font-bold text-xs flex items-center gap-3.5 transition-all duration-200 border cursor-pointer bg-white border-red-100/50 text-red-500 hover:bg-red-50/30 hover:border-red-200 group outline-none focus-visible:ring-2 focus-visible:ring-red-500/20"
+          >
+            <LogOut size={16} className="text-red-500 group-hover:scale-110 transition-transform duration-200" />
+            <span className="flex-1">خروج از حساب</span>
+          </button>
         </div>
 
         {/* Content Pane (9 cols) */}
@@ -552,6 +565,43 @@ export default function SettingsPage() {
               className="w-full py-3 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-xl text-xs font-black cursor-pointer active:scale-95 transition-all border border-gray-100"
             >
               خیر، لغو اقدام
+            </button>
+          </div>
+        </div>
+      </MotionDialog>
+
+      {/* Logout Confirmation Modal */}
+      <MotionDialog
+        isOpen={showLogoutConfirm}
+        onClose={() => setShowLogoutConfirm(false)}
+        size="sm"
+      >
+        <div className="p-6 text-center space-y-4">
+          <div className="w-12 h-12 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mx-auto">
+            <LogOut size={24} className="rotate-180 text-red-500" />
+          </div>
+          <div className="space-y-1.5">
+            <h4 className="font-black text-gray-800 text-base">خروج از حساب کاربری</h4>
+            <p className="text-xs text-gray-400 font-bold leading-relaxed">
+              آیا واقعاً می‌خواهید از حساب کاربری خود خارج شوید؟ با خروج، موقتاً به صفحه خوش‌آمدگویی هدایت می‌شوید اما داده‌های شما در این دستگاه محفوظ می‌ماند.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            <button
+              onClick={() => {
+                setShowLogoutConfirm(false);
+                // Clear the profile in store
+                useAppStore.setState({ profile: null });
+              }}
+              className="w-full py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-black cursor-pointer shadow-md shadow-red-500/10 active:scale-95 transition-all"
+            >
+              بله، خارج می‌شوم
+            </button>
+            <button
+              onClick={() => setShowLogoutConfirm(false)}
+              className="w-full py-3 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-xl text-xs font-black cursor-pointer active:scale-95 transition-all border border-gray-100"
+            >
+              خیر، انصراف
             </button>
           </div>
         </div>

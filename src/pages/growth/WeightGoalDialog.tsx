@@ -232,13 +232,13 @@ export const WeightGoalDialog: React.FC<WeightGoalDialogProps> = ({
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2 justify-between pt-4 border-t border-coral-light/10">
+        <div className="flex gap-3 justify-between items-center pt-4 border-t border-coral-light/10 flex-row max-[350px]:flex-col max-[350px]:items-stretch">
           {currentGoal ? (
             <Button
               type="button"
               variant="ghost"
               onClick={handleDelete}
-              className="text-coral hover:bg-coral/5 px-4 text-xs font-bold rounded-xl"
+              className="text-coral hover:bg-coral/5 px-4 h-11 text-xs font-bold rounded-xl max-[350px]:w-full"
             >
               حذف هدف
             </Button>
@@ -246,19 +246,19 @@ export const WeightGoalDialog: React.FC<WeightGoalDialogProps> = ({
             <div />
           )}
 
-          <div className="flex gap-2">
+          <div className="flex gap-3 flex-row max-[350px]:flex-col-reverse max-[350px]:items-stretch">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="px-5 py-2 text-xs text-gray-500 font-bold"
+              className="h-11 min-w-[96px] max-w-[150px] w-auto rounded-[14px] px-5 text-sm font-bold text-gray-500 hover:bg-gray-50 max-[350px]:w-full max-[350px]:min-w-0 max-[350px]:max-w-none"
             >
               انصراف
             </Button>
             <Button
               type="submit"
               variant="primary"
-              className="px-6 py-2 text-xs font-bold"
+              className="h-11 min-w-[148px] max-w-[210px] w-auto rounded-[14px] px-5 text-sm font-black max-[350px]:w-full max-[350px]:min-w-0 max-[350px]:max-w-none"
             >
               ثبت هدف
             </Button>
