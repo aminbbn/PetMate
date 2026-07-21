@@ -13,7 +13,7 @@ export const ShopHeader: React.FC = () => {
             transition={{ duration: 0.4 }}
             className="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight"
           >
-            فروشگاه ملزومات پت‌میت
+            فروشگاه ملزومات پت میت
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: -5 }}

@@ -111,7 +111,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[#FFFDFB] to-[#FFF3EE]" dir="rtl">
         <Heart className="text-coral animate-pulse mb-4" size={50} />
-        <h2 className="text-2xl font-black text-gray-800">به پت‌میت خوش آمدید! 🐾</h2>
+        <h2 className="text-2xl font-black text-gray-800">به پت میت خوش آمدید! 🐾</h2>
         <p className="text-gray-500 mt-2">لطفاً برای شروع یک پروفایل برای حیوان خانگی خود بسازید.</p>
         <button
           onClick={() => setShowAddPetModal(true)}

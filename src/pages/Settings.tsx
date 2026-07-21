@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore, PetProfile, DEFAULT_PREFERENCES } from '../store';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
@@ -20,6 +21,7 @@ import { MotionDialog } from '../motion';
 type ActiveTab = 'pets' | 'notifications' | 'motion' | 'accessibility' | 'display' | 'ai' | 'data';
 
 export default function SettingsPage() {
+  const navigate = useNavigate();
   const profile = useAppStore(state => state.profile);
   const pets = useAppStore(state => state.pets || []);
   const selectedPetId = useAppStore(state => state.selectedPetId);
@@ -592,6 +594,7 @@ export default function SettingsPage() {
                 setShowLogoutConfirm(false);
                 // Clear the profile in store
                 useAppStore.setState({ profile: null });
+                navigate('/');
               }}
               className="w-full py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-black cursor-pointer shadow-md shadow-red-500/10 active:scale-95 transition-all"
             >

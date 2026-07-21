@@ -12,14 +12,14 @@ export const LandingFooter: React.FC = () => {
             <div className="w-9 h-9 bg-coral rounded-xl flex items-center justify-center text-white shadow-md">
               <Heart className="w-4.5 h-4.5 fill-current" />
             </div>
-            <span className="font-black text-xl text-gray-900 tracking-tight">پت‌میت</span>
+            <span className="font-black text-xl text-gray-900 tracking-tight">پت میت</span>
           </div>
           <p className="text-xs text-gray-500 leading-relaxed max-w-sm">
-            پت‌میت پلتفرم هوشمند مراقبت، پایش رشد و سلامت الکترونیکی حیوانات خانگی است که دغدغه‌های روزمره نگهداری را به لذتی ماندگار تبدیل می‌کند.
+            پت میت پلتفرم هوشمند مراقبت، پایش رشد و سلامت الکترونیکی حیوانات خانگی است که دغدغه‌های روزمره نگهداری را به لذتی ماندگار تبدیل می‌کند.
           </p>
           <div className="flex items-center gap-2 pt-2 text-xs font-bold text-gray-400">
             <ShieldCheck className="w-4 h-4 text-emerald-500" />
-            <span>پشتیبانی شبانه‌روزی حامیان پت‌میت</span>
+            <span>پشتیبانی شبانه‌روزی حامیان پت میت</span>
           </div>
         </div>
 
@@ -50,7 +50,7 @@ export const LandingFooter: React.FC = () => {
 
       {/* Under-footer credits */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 mt-12 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
-        <span>© {new Date().getFullYear()} پت‌میت. تمامی حقوق محفوظ و متعلق به حامیان حیوانات خانگی است.</span>
+        <span>© {new Date().getFullYear()} پت میت. تمامی حقوق محفوظ و متعلق به حامیان حیوانات خانگی است.</span>
         <div className="flex items-center gap-1.5 font-bold">
           <span>طراحی شده با عشق در ایران</span>
           <Heart className="w-3.5 h-3.5 text-coral fill-current" />

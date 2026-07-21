@@ -9,6 +9,7 @@ import { ServiceShowcaseSection } from '../components/landing/ServiceShowcaseSec
 import { TrustSection } from '../components/landing/TrustSection';
 import { CTASection } from '../components/landing/CTASection';
 import { LandingFooter } from '../components/landing/LandingFooter';
+import { HeroReactiveBackground } from '../components/landing/HeroReactiveBackground';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -23,6 +24,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
   return (
     <div className="min-h-screen bg-[#FFFDFB] text-gray-800 flex flex-col relative overflow-x-hidden selection:bg-coral/20 selection:text-coral-deep" dir="rtl">
       
+      {/* Immersive site-wide reactive background backdrop */}
+      <HeroReactiveBackground />
+
       {/* Premium Navigation Header */}
       <LandingNavbar onGetStarted={onGetStarted} />
 

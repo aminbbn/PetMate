@@ -20,21 +20,20 @@ export const FloatingFeatureCard: React.FC<FloatingFeatureCardProps> = ({
       initial={{ opacity: 0, y: 30 }}
       animate={{ 
         opacity: 1, 
-        y: [0, -yOffset, 0],
+        y: 0,
       }}
       transition={{
         opacity: { duration: 0.8, delay },
         y: {
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: delay + 0.5,
+          type: "spring",
+          stiffness: 100,
+          damping: 15,
+          delay,
         }
       }}
       whileHover={{ 
         scale: 1.05, 
-        rotate: [0, -1, 1, 0],
-        transition: { duration: 0.3 } 
+        transition: { duration: 0.2 } 
       }}
       className={cn(
         "bg-white/80 backdrop-blur-md border border-coral-light/10 shadow-warm-md hover:shadow-warm-lg p-4 rounded-2xl select-none text-right transition-all duration-300",

@@ -129,7 +129,7 @@ export const NavigatorPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-5">
         <div>
-          <h1 className="font-sans font-black text-3xl text-gray-900 tracking-tight">مسیریاب خدمات پت‌میت</h1>
+          <h1 className="font-sans font-black text-3xl text-gray-900 tracking-tight">مسیریاب خدمات پت میت</h1>
           <p className="text-sm text-gray-500 mt-1">
             کشف مراکز درمانی، بیمارستان‌ها، پت‌شاپ‌ها و پارک‌های تفریحی معتبر تاییدشده در تهران بزرگ
           </p>

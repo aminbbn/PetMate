@@ -24,7 +24,7 @@ export const LandingNavbar: React.FC<LandingNavbarProps> = ({ onGetStarted }) =>
     { label: 'هوش مصنوعی', href: '#ai' },
     { label: 'مراقبت روزانه', href: '#workflow' },
     { label: 'خدمات شهری', href: '#services' },
-    { label: 'درباره پتمیت', href: '#trust' },
+    { label: 'درباره پت میت', href: '#trust' },
   ];
 
   return (
@@ -35,7 +35,7 @@ export const LandingNavbar: React.FC<LandingNavbarProps> = ({ onGetStarted }) =>
         transition={{ duration: 0.6 }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-[#FFFDFB]/80 backdrop-blur-md border-b border-coral-light/10 shadow-warm-sm py-3'
+            ? 'bg-[#FFFDFB]/85 backdrop-blur-md border-b border-coral-light/10 shadow-warm-sm py-3'
             : 'bg-transparent py-5'
         }`}
         dir="rtl"
@@ -51,7 +51,7 @@ export const LandingNavbar: React.FC<LandingNavbarProps> = ({ onGetStarted }) =>
               </div>
             </div>
             <span className="font-black text-2xl tracking-tight text-gray-900 font-sans">
-              پت<span className="text-coral">میت</span>
+              پت <span className="text-coral">میت</span>
             </span>
           </div>
 
@@ -61,7 +61,7 @@ export const LandingNavbar: React.FC<LandingNavbarProps> = ({ onGetStarted }) =>
               <a
                 key={index}
                 href={item.href}
-                className="text-sm font-bold text-gray-600 hover:text-coral transition-colors duration-200 relative group py-2"
+                className="text-sm font-bold text-gray-600 hover:text-coral focus-visible:text-coral focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral/40 rounded-lg px-2 py-1 transition-colors duration-200 relative group"
               >
                 {item.label}
                 <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-coral origin-right scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
@@ -132,7 +132,7 @@ export const LandingNavbar: React.FC<LandingNavbarProps> = ({ onGetStarted }) =>
                     <div className="w-8 h-8 bg-coral rounded-lg flex items-center justify-center text-white">
                       <Heart className="w-4 h-4 fill-current" />
                     </div>
-                    <span className="font-bold text-xl text-gray-900">پتمیت</span>
+                    <span className="font-bold text-xl text-gray-900">پت میت</span>
                   </div>
                   <button
                     onClick={() => setMobileMenuOpen(false)}
